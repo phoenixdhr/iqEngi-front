@@ -4,6 +4,7 @@ import { InMemoryCache } from '@apollo/client/cache';
 import { loadEnv } from 'vite';
 
 const env = loadEnv(import.meta.env.MODE, process.cwd(), '');
+// console.log("ENV=============== ",env.PUBLIC_GRAPHQL_URL)
 
 // Creamos y exportamos una instancia de ApolloClient con la configuración necesaria.
 export const clientGql = new ApolloClient({

@@ -4,14 +4,19 @@ import { clientGql } from "../graphql-astro/apolloClient";
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 
-const { data } = await clientGql.query({
-  query: CursosDocument,
-  variables: { offset: 0, limit: 10 },
-});
-console.log("=======================")
+let cursos: Curso[] = [];
 
-console.log(data)
-const cursos: Curso[]= data?.Cursos || [];
+try {
+  const response = await clientGql.query({
+    query: CursosDocument,
+    variables: { offset: 0, limit: 10 },
+  });
+
+  cursos = response?.data?.Cursos || [];
+} catch (error) {
+  console.error("Error en GraphQL:", error);
+}
+
 
 ---
 
