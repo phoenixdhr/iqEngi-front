@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { clientGql } from '@graphql-astro/apolloClient';
+
+import '@styles/global.css';
+import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
+import Layout from '@layouts/Layout.astro';
+import { getCourseJsonLd } from 'src/utils/jsonld';
+export const prerender = true;
+
+interface Props extends Curso {
+    isBig: boolean; // Agregando una nueva propiedad
+}
+
+export const getStaticPaths = (async () => {
+    const { data } = await clientGql.query({
+        query: CursosDocument,
+        variables: { offset: 0, limit: 10 },
+    });
+
+    const cursos: Curso[] = data?.Cursos;
+
+    console.log('cursos:     xxxx', cursos);
+
+    const prospParams = cursos.map((curso) => ({
+        props: { ...curso },
+        params: { slugCurso: `${curso.slug!}` }, // Aseguramos que slug sea un string
+    }));
+    return prospParams;
+}) satisfies GetStaticPaths;
+
+const {
+    courseTitle,
+    imagenURL,
+    descripcionCorta,
+    // duracionHoras,
+    // precio,
+    // _id,
+    slug,
+} = Astro.props as Curso;
+
+const slugCurso = slug;
+
+const courseJsonLd = getCourseJsonLd(Astro.props);
+---
+
+<Layout
+    tituloPagina={courseTitle}
+    description={descripcionCorta}
+    slug={`${slugCurso}`}
+    image={imagenURL?.url}
+    type="article"
+    seoJsonLd={courseJsonLd}
+>
+    <h1></h1>
+    <h1
+        class="flex flex-col justify-center items-center"
+        transition:name=`${courseTitle}-text`
+    >
+        {courseTitle}
+    </h1>
+
+    <div class="flex justify-between m-4">
+        <h2>{descripcionCorta}</h2>
+        <img
+            src={imagenURL?.url}
+            alt={imagenURL?.alt}
+            transition:name=`${courseTitle}-image`
+        />
+    </div>
+</Layout>

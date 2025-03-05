@@ -1,44 +1,24 @@
 ---
-import { CursosDocument, type Curso } from "src/graphql-astro/generated/graphql";
-import { clientGql } from "../graphql-astro/apolloClient";
-import Layout from "../layouts/Layout.astro";
-import "../styles/global.css";
+import Cards from '@components/Cards.astro';
+import { clientGql } from '@graphql-astro/apolloClient';
+import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
+import Layout from '@layouts/Layout.astro';
+import { getCoursesJsonLd } from '@utils/jsonld';
+export const prerender = true;
 
-let cursos: Curso[] = [];
-
-try {
-  const response = await clientGql.query({
+const { data } = await clientGql.query({
     query: CursosDocument,
     variables: { offset: 0, limit: 10 },
-  });
+});
 
-  cursos = response?.data?.Cursos || [];
-} catch (error) {
-  console.error("Error en GraphQL:", error);
-}
-
-
+const cursos: Curso[] = data?.Cursos;
+const coursesJsonLd = getCoursesJsonLd(cursos);
 ---
 
-<Layout tituloPagina="Cursos">
-  <h1 class="text-2xl font-bold text-center my-6">Catálogo de Cursos</h1>
+<Layout tituloPagina="Cursos" seoJsonLd={coursesJsonLd}>
+    <h1 class="text-2xl font-bold text-center my-6">Catálogo de Cursos</h1>
 
-<section class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
-  {cursos.map((curso) => 
-    <article id = {curso._id} class="border rounded-lg p-4 shadow">
-      <h2 class="text-xl font-bold">{curso.courseTitle}</h2>
-      <hr>
-      <img src={(curso?.imagenURL?.url)} alt={curso?.imagenURL?.alt} class="w-full h-40 object-cover rounded-lg" />
-      <p class="text-gray-700">{curso?.descripcionCorta}</p>
-      <p class="text-gray-500">Duración: {curso?.duracionHoras} horas</p>
-      <p class="text-blue-600 font-bold">Precio: ${curso?.precio}</p>
-      
-      <button class="bg-blue-500 text-white px-4 py-2 mt-3 rounded w-full">Comprar</button>
-    </article>
-  )}
-</section>
-
-
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
+        {cursos.map((curso) => <Cards {...curso} isBig={false} />)}
+    </section>
 </Layout>
-
-

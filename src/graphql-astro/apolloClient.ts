@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 
 import { ApolloClient } from '@apollo/client/core';
 import { InMemoryCache } from '@apollo/client/cache';

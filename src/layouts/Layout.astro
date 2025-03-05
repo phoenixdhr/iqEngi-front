@@ -1,21 +1,41 @@
 ---
-import "../styles/global.css";
+import { ClientRouter } from 'astro:transitions';
+import '@styles/global.css';
+import Seo from '@components/Seo.astro';
 interface Props {
-	tituloPagina:string
+    tituloPagina: string;
+    description?: string;
+    slug?: string;
+    image?: string;
+    type?: string;
+    seoJsonLd: object;
 }
-
-const { tituloPagina } = Astro.props
-
+const {
+    tituloPagina,
+    description,
+    slug,
+    image,
+    type,
+    seoJsonLd: courseJsonLd,
+} = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{tituloPagina}</title>
-</head>
-<body class="bg-slate-800 text-slate-100 m-auto max-w-3xl border-4 border-amber-500">
-	<slot/>
-</body>
+    <head>
+        <ClientRouter />
+        <Seo
+            titleWeb={tituloPagina}
+            descriptionWeb={description}
+            slug={slug}
+            imageWeb={image}
+            typeWeb={type}
+            courseJsonLd={courseJsonLd}
+        />
+    </head>
+    <body
+        class="bg-slate-800 text-slate-100 m-auto max-w-3xl border-4 border-amber-500"
+    >
+        <slot />
+    </body>
 </html>
