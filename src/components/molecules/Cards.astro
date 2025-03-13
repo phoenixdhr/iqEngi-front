@@ -29,7 +29,11 @@ const slugCurso = slug;
     >
         <!-- Imagen del curso con transición de vista -->
         <figure transition:name={`card-figure-${_id.toString()}`}>
-            <img src={imagenURL?.url} alt={imagenURL?.alt} />
+            <img
+                src={imagenURL?.url}
+                alt={imagenURL?.alt}
+                transition:name=`${courseTitle}-image`
+            />
         </figure>
 
         <div class="card-body" transition:name={`card-text-${_id.toString()}`}>

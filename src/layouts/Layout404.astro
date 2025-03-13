@@ -1,0 +1,40 @@
+---
+import '@styles/global.css';
+
+/* 
+  Este es un Layout (diseño base) para las páginas de Astro.
+  Recibe un título dinámico a través de props.
+*/
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Importa la fuente 'Arvo' desde Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Arvo&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Aplica la fuente 'Arvo' al cuerpo del documento -->
+        <style>
+            body {
+                font-family: 'Arvo', serif;
+            }
+        </style>
+
+        <!-- Título dinámico de la página -->
+        <title>{title}</title>
+    </head>
+    <body>
+        <!-- Contenedor principal con fondo blanco y espaciado -->
+        <main class="py-10 bg-white">
+            <!-- Slot: Aquí se insertará el contenido de otras páginas -->
+            <slot />
+        </main>
+    </body>
+</html>
