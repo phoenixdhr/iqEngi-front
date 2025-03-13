@@ -1,7 +1,10 @@
 ---
+/**
+ * Definición de las propiedades esperadas para este layout.
+ */
 import { ClientRouter } from 'astro:transitions';
 import '@styles/global.css';
-import Seo from '@components/Seo.astro';
+import Seo from '@components/common/Seo.astro';
 interface Props {
     tituloPagina: string;
     description?: string;
@@ -20,7 +23,6 @@ const {
 } = Astro.props;
 ---
 
-<!doctype html>
 <html lang="en">
     <head>
         <ClientRouter />
@@ -32,10 +34,37 @@ const {
             typeWeb={type}
             courseJsonLd={courseJsonLd}
         />
+        <meta
+            name="google-site-verification"
+            content="Ev2TdFXtbkht-Jxmbq-7wNtUnlUTWrJgmiPypLEEv1A"
+        />
     </head>
-    <body
-        class="bg-slate-800 text-slate-100 m-auto max-w-3xl border-4 border-amber-500"
-    >
-        <slot />
+
+    <body>
+        <div>
+            <!-- Navbar persistente en las transiciones de vista -->
+            <slot name="navbar" transition:persist />
+
+            <!-- Secciones animadas (revisar si `animate-fade-down` pertenece a una librería como Tailwind) -->
+            <slot name="FondoHero" class="animate-fade-down" />
+            <slot name="Hero" class="animate-fade-down" />
+
+            <!-- Sección de cursos destacados -->
+            <slot name="CursosDestacados" />
+
+            <!-- Espacio para contenido adicional -->
+            <slot />
+
+            <!-- Espacio adicional para otros elementos -->
+            <slot />
+
+            <!-- Footer de la página -->
+            <slot name="footer" />
+        </div>
     </body>
 </html>
+
+<script>
+    // Evento de prueba para detectar navegación (puede eliminarse en producción)
+    window.addEventListener('navigate', () => {});
+</script>

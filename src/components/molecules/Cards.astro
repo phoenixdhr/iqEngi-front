@@ -1,0 +1,56 @@
+---
+import type { Curso } from '@graphql-astro/generated/graphql';
+
+/**
+ * Extrae las propiedades del objeto `Astro.props`,
+ * que se pasan desde el componente padre.
+ */
+export interface Props extends Curso {
+    isBig: boolean; // Agregando una nueva propiedad
+}
+
+const {
+    courseTitle,
+    imagenURL,
+    descripcionCorta,
+    // duracionHoras,
+    // precio,
+    _id,
+    slug,
+} = Astro.props;
+
+const slugCurso = slug;
+---
+
+<!-- Enlace a la página del curso correspondiente -->
+<a href={`/cursos/${slugCurso}`} class="text-current no-underline">
+    <div
+        class="card bg-base-100 shadow-xl w-full hover:scale-105 transition-transform hover:shadow-2xl hover:contrast-125"
+    >
+        <!-- Imagen del curso con transición de vista -->
+        <figure transition:name={`card-figure-${_id.toString()}`}>
+            <img src={imagenURL?.url} alt={imagenURL?.alt} />
+        </figure>
+
+        <div class="card-body" transition:name={`card-text-${_id.toString()}`}>
+            <!-- Título y descripción del curso -->
+            <h2
+                class="card-title"
+                transition:name={`card-title-${_id.toString()}`}
+            >
+                {courseTitle}
+            </h2>
+            <p>{descripcionCorta}</p>
+
+            <!-- Botón para añadir el curso al carrito (puede requerir funcionalidad adicional) -->
+            <div class="card-actions justify-end">
+                <button
+                    class="btn btn-primary"
+                    transition:name={`card-button-${_id.toString()}`}
+                >
+                    Añadir a carrito
+                </button>
+            </div>
+        </div>
+    </div>
+</a>

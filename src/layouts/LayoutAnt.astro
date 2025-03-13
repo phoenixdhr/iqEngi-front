@@ -1,0 +1,45 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@styles/global.css';
+import Seo from '@components/Seo.astro';
+interface Props {
+    tituloPagina: string;
+    description?: string;
+    slug?: string;
+    image?: string;
+    type?: string;
+    seoJsonLd: object;
+}
+const {
+    tituloPagina,
+    description,
+    slug,
+    image,
+    type,
+    seoJsonLd: courseJsonLd,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <ClientRouter />
+        <Seo
+            titleWeb={tituloPagina}
+            descriptionWeb={description}
+            slug={slug}
+            imageWeb={image}
+            typeWeb={type}
+            courseJsonLd={courseJsonLd}
+        />
+        <meta
+            name="google-site-verification"
+            content="Ev2TdFXtbkht-Jxmbq-7wNtUnlUTWrJgmiPypLEEv1A"
+        />
+    </head>
+    <body
+        class="bg-slate-800 text-slate-100 m-auto max-w-3xl border-4 border-amber-500"
+    >
+        <slot />
+    </body>
+</html>

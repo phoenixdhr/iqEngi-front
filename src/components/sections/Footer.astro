@@ -1,0 +1,121 @@
+---
+/**
+ * @fileoverview Footer de la aplicación con enlaces a recursos, redes sociales y páginas legales.
+ * @module Footer
+ */
+
+ import { siteInfo } from '@const/site-info';
+
+const year = new Date().getFullYear();
+
+/**
+ * @constant {Object} footerMenu
+ * @description Contiene los enlaces de navegación del footer, organizados por categorías.
+ */
+const footerMenu = {
+    recursos: [
+        { name: 'Preguntas frecuentes', link: '/preguntas-frecuentes' },
+        { name: 'Contáctanos', link: '/contacto' },
+    ],
+    siguenos: [
+        { name: 'Youtube', link: siteInfo.social.youtube },
+        { name: 'LinkedIn', link: siteInfo.social.linkedin },
+    ],
+    legal: [
+        { name: 'Privacidad', link: '/privacidad' },
+        { name: 'Términos y condiciones', link: '/terminos-condiciones' },
+    ],
+};
+
+/**
+ * @constant {Array} socialLinks
+ * @description Lista de redes sociales con sus respectivos enlaces y SVGs.
+ */
+const socialLinks = [
+    {
+        name: 'Facebook',
+        link: siteInfo.social.facebook,
+        svg: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+        </svg>`,
+    },
+    {
+        name: 'Twitter',
+        link: siteInfo.social.twitter,
+        svg: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+        </svg>`,
+    },
+    {
+        name: 'Instagram',
+        link: siteInfo.social.instagram,
+        svg: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M16.5 5C10.16639 5 5 10.16639 5 16.5v15c0 6.33376 5.16639 11.5 11.5 11.5h15c6.33361 0 11.5-5.16624 11.5-11.5v-15C43 10.16639 37.83361 5 31.5 5H16.5zm0 3h15c5.247 0 8.5 3.253 8.5 8.5v15c0 5.247-3.253 8.5-8.5 8.5h-15C11.253 40 8 36.747 8 31.5v-15C8 11.253 11.253 8 16.5 8zm17.5 4a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM24 14a10 10 0 110 20 10 10 0 010-20zm0 3a7 7 0 100 14 7 7 0 000-14z"></path>
+        </svg>`,
+    },
+];
+---
+
+<footer class="p-4 bg-white sm:p-6 dark:bg-gray-800">
+    
+    <div class="mx-auto max-w-screen-xl">
+        <!-- Línea divisoria -->
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        
+        <div class="md:flex md:justify-between">
+            <!-- Logo y nombre del sitio -->
+            <div class="mb-6 md:mb-0">
+                <a href="/" class="flex items-center">
+                    <img src="/favicon.svg" class="mr-3 h-8" alt={`${siteInfo.titleWeb} Logo`} />
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                        {siteInfo.titleWeb}
+                    </span>
+                </a>
+            </div>
+
+            <!-- Menú de enlaces del footer -->
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                {
+                    Object.entries(footerMenu).map(([key, items]) => (
+                        <div>
+                            <!-- Título de la sección del menú -->
+                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                                {key}
+                            </h2>
+                            <ul class="text-gray-600 dark:text-gray-400">
+                                {items.map((item, idx) => (
+                                    <li class={idx < items.length - 1 ? 'mb-4' : ''}>
+                                        <a href={item.link} class="hover:underline">{item.name}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        <!-- Línea divisoria -->
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <!-- Derechos de autor -->
+            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+                © {year} Copyright by <a href={footerMenu.legal[1].link} class="hover:underline text-red">
+                    {siteInfo.titleWeb}
+                </a> - Todos los derechos reservados.
+            </span>
+
+            <!-- Enlaces a redes sociales -->
+            <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
+                {
+                    socialLinks.map((link) => (
+                        <a href={link.link} class="text-gray-500 hover:text-gray-900 dark:hover:text-white" aria-label={link.name}>
+                            <span set:html={link.svg} />
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</footer>
