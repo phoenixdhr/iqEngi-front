@@ -1,0 +1,356 @@
+---
+import Blogicon from '@components/atoms/Blog-icon.astro';
+import CalendarioIcon from '@components/atoms/Calendario-icon.astro';
+import LinkedinCirculoIcon from '@components/atoms/Linkedin-circulo-icon.astro';
+import YoutubeCirculoIcon from '@components/atoms/Youtube-circulo-icon.astro';
+
+/* Enlaces principales del menú */
+const mainLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/cursos', label: 'Cursos' },
+    { href: '#', label: 'Contáctanos' },
+];
+
+/* Items de la sección "Comunidad", cada uno con su descripción, enlace y el nombre del icono a mostrar */
+const communityItems = [
+    {
+        name: 'Blog',
+        description: 'Entérate de novedades y lo último de la industria',
+        href: '#',
+        icon: 'Blogicon', // Se asigna el componente Blogicon
+    },
+    {
+        name: 'Calendario',
+        description: 'Revisa nuestros eventos y actividades',
+        href: '#',
+        icon: 'CalendarioIcon', // Se asigna el componente CalendarioIcon
+    },
+];
+
+/* Items de redes sociales, cada uno con su enlace y el icono correspondiente */
+const socialItems = [
+    { name: 'Youtube', href: '#', icon: 'YoutubeCirculoIcon' },
+    { name: 'LinkedIn', href: '#', icon: 'LinkedinCirculoIcon' },
+];
+---
+
+<!-- Importar Alpine.js para la interactividad -->
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<header class="bg-white sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+    <nav
+        class="mx-auto flex max-w-7xl items-center justify-between px-2 py-6 lg:px-8"
+        aria-label="Global"
+    >
+        <!-- Logo y enlace a la página principal -->
+        <div class="flex lg:flex-1">
+            <a href="#" class="-m-1.5 p-1">
+                <img class="h-8 w-auto" src="/favicon.svg" alt="IqEngi" />
+                <span class="sr-only">IqEngi</span>
+            </a>
+        </div>
+
+        <!-- Sección del menú en dispositivos móviles -->
+        <div class="flex lg:hidden items-center">
+            <button
+                type="button"
+                class="text-white bg-gradient-to-br from-iq-purple-mid-600 to-iq-blue-light-100 font-medium rounded-lg text-sm px-5 py-2.5 me-4"
+            >
+                Crear Cuenta
+            </button>
+            <a
+                href="#"
+                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+            >
+                <!-- Icono "iniciar seccion" del menú en dispositivos móviles -->
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                    class="h-5 w-5 flex-none text-gray-400 hover:bg-gray-50"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
+                        clip-rule="evenodd"></path>
+                    <path
+                        fill-rule="evenodd"
+                        d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </a>
+
+            <!-- Botón para abrir el menú móvil -->
+            <button
+                type="button"
+                class="inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                @click="mobileMenuOpen = true"
+            >
+                <span class="sr-only">Open main menu</span>
+                <!-- Icono Sandwich de menú en dispositivos móviles -->
+
+                <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Menú de escritorio -->
+        <div class="hidden lg:flex lg:gap-x-12">
+            {
+                mainLinks.map((link) => (
+                    <a
+                        href={link.href}
+                        class="text-sm font-semibold leading-6 text-gray-900"
+                    >
+                        {link.label}
+                    </a>
+                ))
+            }
+
+            <!-- Sección "Comunidad" con dropdown -->
+            <div
+                class="relative"
+                x-data={JSON.stringify({
+                    open: false,
+                    communityItems,
+                    socialItems,
+                })}
+            >
+                <button
+                    @click="open = !open"
+                    class="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                >
+                    Comunidad
+                    <svg
+                        :class="{ 'rotate-180': open }"
+                        class="h-5 w-5 text-gray-400 transition-transform"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <path
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 010-1.08z"
+                        ></path>
+                    </svg>
+                </button>
+
+                <!-- Dropdown que se muestra al hacer clic -->
+                <div
+                    x-show="open"
+                    @click.away="open = false"
+                    x-cloak
+                    class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5"
+                >
+                    <div class="p-4">
+                        <!-- Iteración sobre items de "Comunidad" -->
+                        <template
+                            x-for="item in communityItems"
+                            :key="item.name"
+                        >
+                            <div
+                                class="group flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                            >
+                                <div
+                                    class="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white"
+                                >
+                                    <!-- Renderizado condicional del icono según la propiedad "icon" -->
+                                    <template
+                                        x-if="item.icon === 'CalendarioIcon'"
+                                    >
+                                        <CalendarioIcon />
+                                    </template>
+                                    <template x-if="item.icon === 'Blogicon'">
+                                        <Blogicon />
+                                    </template>
+                                </div>
+                                <div class="flex-auto">
+                                    <a
+                                        :href="item.href"
+                                        class="block font-semibold text-gray-900"
+                                        x-text="item.name"></a>
+                                    <p
+                                        class="mt-1 text-gray-600"
+                                        x-text="item.description"
+                                    >
+                                    </p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Sección de redes sociales -->
+                    <div
+                        class="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50"
+                    >
+                        <template x-for="item in socialItems" :key="item.name">
+                            <a
+                                :href="item.href"
+                                class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
+                            >
+                                <!-- Renderizado condicional del icono para cada red social -->
+                                <template
+                                    x-if="item.icon === 'YoutubeCirculoIcon'"
+                                >
+                                    <YoutubeCirculoIcon />
+                                </template>
+                                <template
+                                    x-if="item.icon === 'LinkedinCirculoIcon'"
+                                >
+                                    <LinkedinCirculoIcon />
+                                </template>
+                                <span x-text="item.name"></span>
+                            </a>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción en escritorio -->
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center">
+            <button
+                type="button"
+                class="text-white bg-gradient-to-br from-iq-purple-mid-600 to-iq-blue-light-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
+            >
+                Crear Cuenta
+            </button>
+            <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
+                Iniciar Sesión <span aria-hidden="true">&rarr;</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Menú móvil desplegable -->
+    <div x-show="mobileMenuOpen" x-cloak class="lg:hidden fixed inset-0 z-10">
+        <div
+            class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+        >
+            <div class="flex items-center justify-between">
+                <a href="#" class="-m-1.5 p-1.5">
+                    <img class="h-8 w-auto" src="/favicon.svg" alt="IqEngi" />
+                    <span class="sr-only">IqEngi</span>
+                </a>
+                <button
+                    type="button"
+                    class="-m-2.5 rounded-md p-2.5 text-gray-700"
+                    @click="mobileMenuOpen = false"
+                >
+                    <span class="sr-only">Close menu</span>
+                    <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-6 flow-root">
+                <div class="-my-6 divide-y divide-gray-500/10">
+                    <div class="space-y-2 py-6">
+                        {
+                            mainLinks.map((link) => (
+                                <a
+                                    href={link.href}
+                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                >
+                                    {link.label}
+                                </a>
+                            ))
+                        }
+                        <!-- Menú "Comunidad" en versión móvil -->
+                        <div
+                            x-data={JSON.stringify({
+                                openDisclosure: false,
+                                communityItems,
+                                socialItems,
+                            })}
+                            class="-mx-3"
+                        >
+                            <button
+                                @click="openDisclosure = !openDisclosure"
+                                class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            >
+                                Comunidad
+                                <svg
+                                    :class="{ 'rotate-180': openDisclosure }"
+                                    class="h-5 w-5 text-gray-400 transition-transform"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 010-1.08z"
+                                    ></path>
+                                </svg>
+                            </button>
+                            <div
+                                x-show="openDisclosure"
+                                x-cloak
+                                class="mt-2 space-y-2"
+                            >
+                                <template
+                                    x-for="item in [...communityItems, ...socialItems]"
+                                    :key="item.name"
+                                >
+                                    <a
+                                        :href="item.href"
+                                        class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                        x-text="item.name"></a>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Enlace de "Iniciar Sesión" en móvil -->
+                    <div class="py-6 flex items-center justify-between">
+                        <a
+                            href="#"
+                            class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        >
+                            Iniciar Sesión
+                        </a>
+                        <a
+                            href="#"
+                            class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        >
+                            <!-- Icono "Iniciar Sesión" en móvil dentro de sandwich -->
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                                data-slot="icon"
+                                class="h-5 w-5 flex-none text-gray-400 hover:bg-gray-50"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
+                                    clip-rule="evenodd"></path>
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

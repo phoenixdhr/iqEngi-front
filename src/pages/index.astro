@@ -2,7 +2,6 @@
 import { getHomeJsonLd } from '@utils/jsonld.ts';
 import Layout from '@layouts/Layout.astro';
 import CursosBannerIndex from '@components/sections/CursosBanner-index.astro';
-import Footer from '@components/sections/Footer.astro';
 
 const tituloPagina = 'IqEngi | Home';
 
@@ -11,6 +10,8 @@ const homeJsonLd = getHomeJsonLd();
 
 <Layout tituloPagina={tituloPagina} seoJsonLd={homeJsonLd}>
     <!-- <Welcome /> -->
+
+    <h1 class="text-iq-purple-light-m-200">eferferfSVFSFV</h1>
+
     <CursosBannerIndex />
-    <Footer />
 </Layout>

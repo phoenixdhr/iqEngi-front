@@ -1,2 +1,24 @@
 @import 'tailwindcss';
 @plugin 'daisyui';
+
+@theme {
+    --color-iq-white: #ffffff;
+
+    --color-iq-gray-light-100: #f8f9fa;
+    --color-iq-gray-light-200: #4b5563;
+    --color-iq-gray-dark-300: #343a40;
+
+    --color-iq-purple-light-100: #6875f5;
+    --color-iq-purple-light-mid-200: #5c47ff; /* usado en el boton de cards - promedio entre 2b7fff y 9810fa */
+    --color-iq-purple-mid-600: #9810fa; /* usado en el boton NavBar - Crear cuenta*/
+
+    --color-iq-purple-dark-300: #5521b5;
+    --color-iq-purple-dark-400: #42389d;
+
+    --color-iq-blue-light-100: #2b7fff; /* usado en el boton NavBar - Crear cuenta*/
+    --color-iq-blue-dark-200: #003366;
+
+    --color-iq-red-100: #971650;
+    --color-iq-orange-100: #fd7e14;
+    --color-iq-green-100: #28a745;
+}
