@@ -80,14 +80,17 @@ export default function Navbar() {
                     </a>
                 </div>
 
-                {/* Acciones en pantalla pequeña (Crear cuenta, login, menú) */}
+                {/* Acciones en pantalla pequeña (Acceder, login, menú) */}
                 <div className="flex lg:hidden">
-                    {/* Botón para crear cuenta */}
+                    {/* Botón para Acceder */}
                     <button
                         type="button"
+                        onClick={() =>
+                            window.dispatchEvent(new Event('open-login-modal'))
+                        }
                         className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-4 hover:scale-105 transition-transform "
                     >
-                        Crear Cuenta
+                        Acceder
                     </button>
 
                     {/* Ícono de login con flecha */}
@@ -194,18 +197,25 @@ export default function Navbar() {
                     </Popover>
                 </PopoverGroup>
 
-                {/* Botón Crear Cuenta y login (pantallas grandes) */}
+                {/* Botón Acceder y login (pantallas grandes) */}
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
                     <div className="flex">
                         <button
                             type="button"
+                            onClick={() =>
+                                window.dispatchEvent(
+                                    new Event('open-login-modal'),
+                                )
+                            }
                             className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 animate-jump hover:animate-none hover:scale-105 transition-transform "
                         >
-                            Crear Cuenta
+                            Acceder
                         </button>
                     </div>
                     <a
-                        href="#"
+                        onClick={() =>
+                            window.dispatchEvent(new Event('open-login-modal'))
+                        }
                         className="text-sm font-semibold leading-6 text-gray-900 hover:scale-105 transition-transform"
                     >
                         Iniciar Sesión <span aria-hidden="true">&rarr;</span>
