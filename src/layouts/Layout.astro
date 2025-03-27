@@ -5,8 +5,8 @@
 import { ClientRouter } from 'astro:transitions';
 import '@styles/global.css';
 import Seo from '@components/common/Seo.astro';
-import Navbar from '@components/sections/Navbar.astro';
 import Footer from '@components/sections/Footer.astro';
+import Navbar from '@components/sections/Navbar';
 interface Props {
     tituloPagina: string;
     description?: string;
@@ -42,9 +42,9 @@ const {
         />
     </head>
 
-    <body>
+    <body class="overflow-y-scroll">
         <div>
-            <Navbar />
+            <Navbar client:only="true" />
 
             <!-- Secciones animadas (revisar si `animate-fade-down` pertenece a una librería como Tailwind) -->
             <slot name="FondoHero" class="animate-fade-down" />
