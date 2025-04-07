@@ -71,7 +71,7 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     return (
-        <header className="bg-white sticky top-0 z-50">
+        <header className="bg-white sticky top-0 z-40">
             <nav
                 aria-label="Global"
                 className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
@@ -97,18 +97,20 @@ export default function Navbar() {
                         onClick={() =>
                             window.dispatchEvent(new Event('open-login-modal'))
                         }
-                        className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 h-full mr-4 hover:scale-105 transition-transform"
+                        className="gap-x-2.5 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 h-full mr-4 hover:scale-105 transition-transform"
                     >
                         Acceder
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setMobileMenuOpen(true)}
-                        className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:scale-105 transition-transform"
-                    >
-                        <span className="sr-only">Open main menu</span>
-                        <Bars3Icon aria-hidden="true" className="h-6 w-6" />
-                    </button>
+                    {!mobileMenuOpen && (
+                        <button
+                            type="button"
+                            onClick={() => setMobileMenuOpen(true)}
+                            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:scale-105 transition-transform"
+                        >
+                            <span className="sr-only">Open main menu</span>
+                            <Bars3Icon aria-hidden="true" className="h-6 w-6" />
+                        </button>
+                    )}
                 </div>
 
                 {/* Menú de navegación para pantallas grandes */}
@@ -201,20 +203,41 @@ export default function Navbar() {
                 className="lg:hidden"
             >
                 <div className="fixed inset-0 z-10" />
-                <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+                <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     {/* Encabezado del menú móvil con logo y botón cerrar */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between px-2.5">
+                        {/*logo y Nombre*/}
+
                         <a
                             href="#"
-                            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
+                            className="-m-2.5 inline-flex items-center justify-center rounded-md space-x-2"
                         >
                             <span className="sr-only">Your Contáctanos</span>
+
                             <img
-                                alt=""
-                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                                className="h-8 w-auto"
+                                className="h-8 lg:h-10 w-auto"
+                                src="/favicon.svg"
+                                alt="IqEngi"
                             />
+                            <span className="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl">
+                                IQ-ENGI
+                            </span>
                         </a>
+
+                        {/*Boton Acceder*/}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setMobileMenuOpen(false);
+                                window.dispatchEvent(
+                                    new Event('open-login-modal'),
+                                );
+                            }}
+                            className="ml-auto h-8 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5  mr-4 hover:scale-105 transition-transform"
+                        >
+                            Acceder
+                        </button>
+
                         <button
                             type="button"
                             onClick={() => setMobileMenuOpen(false)}

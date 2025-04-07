@@ -1,70 +1,95 @@
+---
+import { siteInfo } from '@const/site-info'; // Importa la información del sitio (por ejemplo, URLs y configuraciones)
+const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio de sesión con Google desde la configuración
+---
+
+<!-- Contenedor principal del modal de login, oculto por defecto (clase "hidden") -->
 <div
     id="astro-login-modal"
-    class="hidden fixed inset-0 z-50 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center"
+    class="hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center z-[9999]"
 >
+    <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
     <div
         id="astro-login-box"
-        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-full max-w-md h-[500px] relative shadow-2xl flex flex-col justify-center"
+        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-full max-w-md h-[500px] relative shadow-2xl flex flex-col"
     >
+        <!-- Botón de cierre del modal. Al hacer clic, agrega la clase "hidden" para ocultar el modal -->
         <button
             class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-xl"
             onclick="document.getElementById('astro-login-modal').classList.add('hidden')"
         >
             ✖
         </button>
-        <h2 class="text-xl font-semibold mb-6 text-center">
-            Ingresa o crea una cuenta con:
-        </h2>
-        <form class="space-y-6">
-            <input
-                type="email"
-                placeholder="Correo electrónico"
-                required
-                class="w-full h-12 px-4 bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full text-gray-900"
-            />
-            <button
-                type="submit"
-                class="w-full h-12 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium text-sm hover:scale-105 transition-transform rounded-full"
-            >
-                Continuar →
-            </button>
-            <div class="text-center text-gray-500">o</div>
-            <button
-                type="button"
-                class="w-full h-12 bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 transition rounded-full flex items-center justify-center gap-2"
-            >
-                <svg
-                    viewBox="0 0 48 48"
-                    width="20"
-                    height="20"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
+        <!-- Título del modal que indica la acción a realizar -->
+        <h2 class="text-xl mb-6">Ingresa o crea una cuenta con:</h2>
+        <!-- Contenedor del formulario de login -->
+        <div
+            id="astro-login-box"
+            class="relative flex flex-col justify-center mt-15"
+        >
+            <!-- Formulario de inicio de sesión -->
+            <form class="space-y-6">
+                <!-- Campo de entrada para el correo electrónico con estilos y validación requerida -->
+                <input
+                    type="email"
+                    placeholder="Correo electrónico"
+                    required
+                    class="w-full h-12 px-4 bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full text-gray-900 text-center placeholder:text-center"
+                />
+                <!-- Botón para enviar el formulario y continuar el proceso de inicio de sesión -->
+                <button
+                    type="submit"
+                    class="w-full h-12 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium text-sm hover:scale-105 transition-transform rounded-full"
                 >
-                    <g>
-                        <path
-                            fill="#FBBC05"
-                            d="M9.827 24c0-1.524.253-2.985.705-4.356L2.623 13.604A23.74 23.74 0 000.214 24c0 3.737.868 7.261 2.407 10.388l7.905-6.051A14.125 14.125 0 019.827 24z"
-                        ></path>
-                        <path
-                            fill="#EB4335"
-                            d="M23.714 10.133c3.311 0 6.302 1.173 8.652 3.093L39.202 6.4C35.036 2.773 29.695.533 23.714.533c-9.287 0-17.269 5.311-21.09 13.071l7.909 6.04c1.823-5.532 7.017-9.51 13.181-9.51z"
-                        ></path>
-                        <path
-                            fill="#34A853"
-                            d="M23.714 37.867c-6.164 0-11.359-3.979-13.181-9.51l-7.909 6.038c3.822 7.761 11.804 13.072 21.09 13.072 5.732 0 11.205-2.035 15.312-5.848l-7.507-5.804c-2.118 1.335-4.785 2.053-7.805 2.053z"
-                        ></path>
-                        <path
-                            fill="#4285F4"
-                            d="M46.145 24c0-1.387-.213-2.88-.534-4.267H23.714v9.067h12.605c-.63 3.091-2.346 5.467-4.8 7.014l7.508 5.804C43.34 37.614 46.145 31.649 46.145 24z"
-                        ></path>
-                    </g>
-                </svg>
-                <span>Con Google</span>
-            </button>
-        </form>
+                    Continuar →
+                </button>
+                <!-- Separador visual y textual que sugiere otra forma de iniciar sesión -->
+                <div class="text-center text-gray-500 text-sm">
+                    <span class="hidden sm:inline">────</span>────── o inicia
+                    sesión con ──────<span class="hidden sm:inline">────</span>
+                </div>
+
+                <!-- Botón de inicio de sesión alternativo usando la cuenta de Google -->
+                <a
+                    href={googleUrlLogin}
+                    type="button"
+                    class="w-full h-12 bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+                >
+                    <!-- Ícono SVG representativo de Google -->
+                    <svg
+                        viewBox="0 0 48 48"
+                        width="20"
+                        height="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                    >
+                        <g>
+                            <path
+                                fill="#FBBC05"
+                                d="M9.827 24c0-1.524.253-2.985.705-4.356L2.623 13.604A23.74 23.74 0 000.214 24c0 3.737.868 7.261 2.407 10.388l7.905-6.051A14.125 14.125 0 009.827 24z"
+                            ></path>
+                            <path
+                                fill="#EB4335"
+                                d="M23.714 10.133c3.311 0 6.302 1.173 8.652 3.093L39.202 6.4C35.036 2.773 29.695.533 23.714.533c-9.287 0-17.269 5.311-21.09 13.071l7.909 6.04c1.823-5.532 7.017-9.51 13.181-9.51z"
+                            ></path>
+                            <path
+                                fill="#34A853"
+                                d="M23.714 37.867c-6.164 0-11.359-3.979-13.181-9.51l-7.909 6.038c3.822 7.761 11.804 13.072 21.09 13.072 5.732 0 11.205-2.035 15.312-5.848l-7.507-5.804c-2.118 1.335-4.785 2.053-7.805 2.053z"
+                            ></path>
+                            <path
+                                fill="#4285F4"
+                                d="M46.145 24c0-1.387-.213-2.88-.534-4.267H23.714v9.067h12.605c-.63 3.091-2.346 5.467-4.8 7.014l7.508 5.804C43.34 37.614 46.145 31.649 46.145 24z"
+                            ></path>
+                        </g>
+                    </svg>
+                    <span>Cuenta de Google</span>
+                </a>
+            </form>
+        </div>
     </div>
 </div>
 
+<!-- Script que escucha el evento 'open-login-modal' para mostrar el modal al remover la clase "hidden" -->
 <script>
     window.addEventListener('open-login-modal', () => {
         document
