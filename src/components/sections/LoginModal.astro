@@ -6,7 +6,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 <!-- Contenedor principal del modal de login, oculto por defecto (clase "hidden") -->
 <div
     id="astro-login-modal"
-    class="hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center z-[9999]"
+    class="hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center z-50"
 >
     <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
     <div
@@ -20,15 +20,33 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
         >
             ✖
         </button>
+
+        <!-- Logo de IQ-ENGI (ejemplo) -->
+        <div class="h-12"></div>
+
+        <div class="flex items-center lg:flex-1 justify-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img
+                    class="h-8 lg:h-10 w-auto"
+                    src="/favicon.svg"
+                    alt="IqEngi"
+                />
+                <span
+                    class="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                >
+                    IQ-ENGI
+                </span>
+            </a>
+        </div>
         <!-- Título del modal que indica la acción a realizar -->
-        <h2 class="text-xl mb-6">Ingresa o crea una cuenta con:</h2>
+        <h2 class="text-xl mb-6 text-center">Ingresa o crea una cuenta con:</h2>
         <!-- Contenedor del formulario de login -->
         <div
-            id="astro-login-box"
+            id="astro-login-form"
             class="relative flex flex-col justify-center mt-15"
         >
             <!-- Formulario de inicio de sesión -->
-            <form class="space-y-6">
+            <form id="login-form" class="space-y-6">
                 <!-- Campo de entrada para el correo electrónico con estilos y validación requerida -->
                 <input
                     type="email"
@@ -43,6 +61,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
                 >
                     Continuar →
                 </button>
+
                 <!-- Separador visual y textual que sugiere otra forma de iniciar sesión -->
                 <div class="text-center text-gray-500 text-sm">
                     <span class="hidden sm:inline">────</span>────── o inicia
@@ -95,5 +114,40 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
         document
             .getElementById('astro-login-modal')
             ?.classList.remove('hidden');
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnContinuarLM = document.getElementById(
+            'btnContinuarLM',
+        ) as HTMLButtonElement;
+        const form = document.getElementById('login-form') as HTMLFormElement;
+
+        form &&
+            form.addEventListener('submit', (event: SubmitEvent) => {
+                console.log('Continuar button clickedbbb');
+
+                const loginModal = document.getElementById('astro-login-modal');
+
+                const createPasswordModal = document.getElementById(
+                    'create-password-modal',
+                );
+
+                const loginGoogleModal =
+                    document.getElementById('login-google-modal');
+
+                const loginPassword = document.getElementById(
+                    'login-password-modal',
+                );
+                // Oculta el modal de Google si está visible
+
+                if (loginModal) loginModal.classList.add('hidden');
+                // if (createPasswordModal)
+                //     createPasswordModal.classList.remove('hidden');
+                // if (l    oginGoogleModal)
+                //     loginGoogleModal.classList.remove('hidden');
+                if (loginPassword) loginPassword.classList.remove('hidden');
+
+                event.preventDefault(); // Evita el envío del formulario
+            });
     });
 </script>

@@ -8,6 +8,10 @@ import Seo from '@components/common/Seo.astro';
 import Footer from '@components/sections/Footer.astro';
 import Navbar from '@components/sections/Navbar';
 import LoginModal from '@components/sections/LoginModal.astro';
+import LoginCreatePassword from '@components/sections/LoginCreatePassword.astro';
+import LoginGoogle from '@components/sections/LoginGoogle.astro';
+import LoginPassword from '@components/sections/LoginPassword.astro';
+import ForgotPassword from '@components/sections/ForgotPassword.astro';
 interface Props {
     tituloPagina: string;
     description?: string;
@@ -47,6 +51,11 @@ const {
         <div>
             <Navbar client:only="true" />
             <LoginModal />
+            <LoginCreatePassword />
+            <LoginGoogle />
+            <LoginPassword />
+            <ForgotPassword />
+
             <!-- Secciones animadas (revisar si `animate-fade-down` pertenece a una librería como Tailwind) -->
             <slot name="FondoHero" class="animate-fade-down" />
             <slot name="Hero" class="animate-fade-down" />
