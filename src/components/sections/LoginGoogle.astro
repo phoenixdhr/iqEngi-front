@@ -3,117 +3,48 @@ import { siteInfo } from '@const/site-info'; // Importa la información del siti
 const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio de sesión con Google desde la configuración
 ---
 
-<!-- Contenedor principal del modal de login, oculto por defecto (clase "hidden") -->
+<!-- Contenedor principal del modal de login, oculto por defecto (clase "hidden") --><!-- Título del modal que indica la acción a realizar -->
+<h2 class="text-xl mb-6 text-center">
+    Hola {`"name"`} tu ingresas con tu cuenta Google:
+</h2>
+<!-- Contenedor del formulario de login -->
 <div
-    id="login-google-modal"
-    class="hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center z-50"
+    id="astro-login-form-google"
+    class="relative flex flex-col justify-center mt-15"
 >
-    <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
-    <div
-        id="astro-login-box-google"
-        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-full max-w-md h-[500px] relative shadow-2xl flex flex-col"
+    <!-- Botón de inicio de sesión alternativo usando la cuenta de Google -->
+    <a
+        href={googleUrlLogin}
+        type="button"
+        class="w-full h-12 bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
     >
-        <!-- Botón de cierre del modal. Al hacer clic, agrega la clase "hidden" para ocultar el modal -->
-        <button
-            class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-xl"
-            onclick="document.getElementById('astro-login-google-modal').classList.add('hidden')"
+        <!-- Ícono SVG representativo de Google -->
+        <svg
+            viewBox="0 0 48 48"
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
         >
-            ✖
-        </button>
-
-        <!-- Flecha para ir atrás (o cerrar, según tu preferencia) -->
-        <button
-            class="absolute top-4 left-4 text-gray-600 hover:text-gray-800 text-2xl mr-4"
-            onclick="document.getElementById('astro-login-google-modal').classList.add('hidden')"
-        >
-            ←
-        </button>
-
-        <!-- Logo de IQ-ENGI (ejemplo) -->
-        <div class="h-12"></div>
-
-        <div class="flex items-center lg:flex-1 justify-center">
-            <a href="#" class="flex items-center space-x-2">
-                <img
-                    class="h-8 lg:h-10 w-auto"
-                    src="/favicon.svg"
-                    alt="IqEngi"
-                />
-                <span
-                    class="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
-                >
-                    IQ-ENGI
-                </span>
-            </a>
-        </div>
-        <!-- Título del modal que indica la acción a realizar -->
-        <h2 class="text-xl mb-6 text-center">
-            Hola {`"name"`} tu ingresas con tu cuenta Google:
-        </h2>
-        <!-- Contenedor del formulario de login -->
-        <div
-            id="astro-login-form-google"
-            class="relative flex flex-col justify-center mt-15"
-        >
-            <!-- Botón de inicio de sesión alternativo usando la cuenta de Google -->
-            <a
-                href={googleUrlLogin}
-                type="button"
-                class="w-full h-12 bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
-            >
-                <!-- Ícono SVG representativo de Google -->
-                <svg
-                    viewBox="0 0 48 48"
-                    width="20"
-                    height="20"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                >
-                    <g>
-                        <path
-                            fill="#FBBC05"
-                            d="M9.827 24c0-1.524.253-2.985.705-4.356L2.623 13.604A23.74 23.74 0 000.214 24c0 3.737.868 7.261 2.407 10.388l7.905-6.051A14.125 14.125 0 009.827 24z"
-                        ></path>
-                        <path
-                            fill="#EB4335"
-                            d="M23.714 10.133c3.311 0 6.302 1.173 8.652 3.093L39.202 6.4C35.036 2.773 29.695.533 23.714.533c-9.287 0-17.269 5.311-21.09 13.071l7.909 6.04c1.823-5.532 7.017-9.51 13.181-9.51z"
-                        ></path>
-                        <path
-                            fill="#34A853"
-                            d="M23.714 37.867c-6.164 0-11.359-3.979-13.181-9.51l-7.909 6.038c3.822 7.761 11.804 13.072 21.09 13.072 5.732 0 11.205-2.035 15.312-5.848l-7.507-5.804c-2.118 1.335-4.785 2.053-7.805 2.053z"
-                        ></path>
-                        <path
-                            fill="#4285F4"
-                            d="M46.145 24c0-1.387-.213-2.88-.534-4.267H23.714v9.067h12.605c-.63 3.091-2.346 5.467-4.8 7.014l7.508 5.804C43.34 37.614 46.145 31.649 46.145 24z"
-                        ></path>
-                    </g>
-                </svg>
-                <span>Continuar con Google</span>
-            </a>
-        </div>
-    </div>
+            <g>
+                <path
+                    fill="#FBBC05"
+                    d="M9.827 24c0-1.524.253-2.985.705-4.356L2.623 13.604A23.74 23.74 0 000.214 24c0 3.737.868 7.261 2.407 10.388l7.905-6.051A14.125 14.125 0 009.827 24z"
+                ></path>
+                <path
+                    fill="#EB4335"
+                    d="M23.714 10.133c3.311 0 6.302 1.173 8.652 3.093L39.202 6.4C35.036 2.773 29.695.533 23.714.533c-9.287 0-17.269 5.311-21.09 13.071l7.909 6.04c1.823-5.532 7.017-9.51 13.181-9.51z"
+                ></path>
+                <path
+                    fill="#34A853"
+                    d="M23.714 37.867c-6.164 0-11.359-3.979-13.181-9.51l-7.909 6.038c3.822 7.761 11.804 13.072 21.09 13.072 5.732 0 11.205-2.035 15.312-5.848l-7.507-5.804c-2.118 1.335-4.785 2.053-7.805 2.053z"
+                ></path>
+                <path
+                    fill="#4285F4"
+                    d="M46.145 24c0-1.387-.213-2.88-.534-4.267H23.714v9.067h12.605c-.63 3.091-2.346 5.467-4.8 7.014l7.508 5.804C43.34 37.614 46.145 31.649 46.145 24z"
+                ></path>
+            </g>
+        </svg>
+        <span>Continuar con Google</span>
+    </a>
 </div>
-
-<!-- Script que escucha el evento 'open-login-modal' para mostrar el modal al remover la clase "hidden" -->
-<script>
-    // window.addEventListener('open-login-google-modal', () => {
-    //     document
-    //         .getElementById('login-google-modal')
-    //         ?.classList.remove('hidden');
-    // });
-
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     const btnContinuar = document.getElementById('btnContinuar');
-    //     btnContinuar &&
-    //         btnContinuar.addEventListener('click', () => {
-    //             const loginModal = document.getElementById('astro-login-modal');
-    //             const createPasswordModal = document.getElementById(
-    //                 'create-password-modal',
-    //             );
-
-    //             if (loginModal) loginModal.classList.add('hidden');
-    //             if (createPasswordModal)
-    //                 createPasswordModal.classList.remove('hidden');
-    //         });
-    // });
-</script>

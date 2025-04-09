@@ -70,6 +70,10 @@ export default function Navbar() {
         }
     }, [mobileMenuOpen]);
 
+    function openModalLogin() {
+        window.dispatchEvent(new Event('listener-login-modal'));
+    }
+
     return (
         <header className="bg-white sticky top-0 z-40">
             <nav
@@ -94,9 +98,7 @@ export default function Navbar() {
                 <div className="flex lg:hidden h-8">
                     <button
                         type="button"
-                        onClick={() =>
-                            window.dispatchEvent(new Event('open-login-modal'))
-                        }
+                        onClick={() => openModalLogin()}
                         className="gap-x-2.5 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 h-full mr-4 hover:scale-105 transition-transform"
                     >
                         Acceder
@@ -118,7 +120,10 @@ export default function Navbar() {
                     <a href="#" className="text-sm font-semibold text-gray-900">
                         Home
                     </a>
-                    <a href="#" className="text-sm font-semibold text-gray-900">
+                    <a
+                        href="/cursos"
+                        className="text-sm font-semibold text-gray-900"
+                    >
                         Cursos
                     </a>
                     <a href="#" className="text-sm font-semibold text-gray-900">
@@ -186,9 +191,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
                     <button
                         type="button"
-                        onClick={() =>
-                            window.dispatchEvent(new Event('open-login-modal'))
-                        }
+                        onClick={() => openModalLogin()}
                         className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 transition-transform hover:scale-105"
                     >
                         Acceder
@@ -229,9 +232,7 @@ export default function Navbar() {
                             type="button"
                             onClick={() => {
                                 setMobileMenuOpen(false);
-                                window.dispatchEvent(
-                                    new Event('open-login-modal'),
-                                );
+                                openModalLogin();
                             }}
                             className="ml-auto h-8 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5  mr-4 hover:scale-105 transition-transform"
                         >
@@ -259,7 +260,7 @@ export default function Navbar() {
                                     Home
                                 </a>
                                 <a
-                                    href="#"
+                                    href="/cursos"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                                 >
                                     Cursos
