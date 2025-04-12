@@ -68,8 +68,6 @@ export default function Navbar() {
         } else {
             document.body.style.paddingRight = '';
         }
-
-        console.log('e3333333333333333333');
     }, [mobileMenuOpen]);
 
     function openModalLogin() {

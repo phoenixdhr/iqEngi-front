@@ -113,8 +113,6 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM fully loaded and parsed');
-
         const btnContinuarLM = document.getElementById(
             'btnContinuarLM',
         ) as HTMLButtonElement;
@@ -147,10 +145,6 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
 
                 const usuario: Usuario = data.usuario_findByEmail;
 
-                console.log('usuario:  ', usuario); // Imprime el usuario en la consola para depuración
-                // console.log('data:  ', data); // Imprime el usuario en la consola para depuración
-                // console.log('email backend:   ', data.usuario_findByEmail.email); // Imprime el usuario en la consola para depuración
-
                 const loginModalDiv = document.getElementById('loginModalDiv');
 
                 const loginGoogleDiv =
@@ -167,13 +161,17 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
                         loginGoogleDiv.classList.remove('hidden');
                     if (btnBack) btnBack.classList.remove('hidden');
 
+                    const emailGoogleSpan = document.getElementById(
+                        'emailGoogleSpan',
+                    ) as HTMLSpanElement;
+                    emailGoogleSpan.textContent = usuario.email;
+
                     event.preventDefault();
 
                     return; // <-- También podrías detener aquí si lo deseas
                 }
 
                 if (usuario) {
-                    console.log('existe');
                     if (loginPasswordDiv)
                         loginPasswordDiv.classList.remove('hidden');
                     if (btnBack) btnBack.classList.remove('hidden');
