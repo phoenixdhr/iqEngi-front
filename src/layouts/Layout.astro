@@ -7,8 +7,8 @@ import '@styles/global.css';
 import Seo from '@components/common/Seo.astro';
 import Footer from '@components/sections/Footer.astro';
 import Navbar from '@components/sections/Navbar';
+import Modal from '@components/sections/Modal.astro';
 
-import Modal from '@components/Modal.astro';
 interface Props {
     tituloPagina: string;
     description?: string;
@@ -48,7 +48,6 @@ const {
         <div>
             <Navbar client:only="true" />
             <Modal />
-
             <!-- Secciones animadas (revisar si `animate-fade-down` pertenece a una librería como Tailwind) -->
             <slot name="FondoHero" class="animate-fade-down" />
             <slot name="Hero" class="animate-fade-down" />

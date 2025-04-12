@@ -198,6 +198,8 @@ export type Cuestionario = {
   published?: Maybe<Scalars['Boolean']['output']>;
 };
 
+
+
 export type Curso = {
   __typename?: 'Curso';
   _id: Scalars['ID']['output'];
@@ -1686,6 +1688,7 @@ export type Usuario = {
   email: Scalars['String']['output'];
   email_verified: Scalars['Boolean']['output'];
   firstName: Scalars['String']['output'];
+  isGoogleAuth: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
   notificaciones: Scalars['Boolean']['output'];
   perfil?: Maybe<Perfil>;
@@ -1702,6 +1705,7 @@ export type UsuarioOutput = {
   email: Scalars['String']['output'];
   email_verified: Scalars['Boolean']['output'];
   firstName: Scalars['String']['output'];
+  isGoogleAuth: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
   notificaciones: Scalars['Boolean']['output'];
   perfil?: Maybe<Perfil>;
@@ -2104,7 +2108,7 @@ export type CursosQueryVariables = Exact<{
 }>;
 
 
-export type CursosQuery = { __typename?: 'Query', Cursos: Array<{ __typename?: 'CursoOutput', _id: string, courseTitle: string, slug?: string | null, instructor?: { __typename?: 'Instructor', firstName: string } | null, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null }> };
+export type CursosQuery = { __typename?: 'Query', Cursos: Array<{ __typename?: 'CursoOutput', _id: string, courseTitle: string, instructor?: { __typename?: 'Instructor', firstName: string } | null, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null }> };
 
 export type CursoQueryVariables = Exact<{
   cursoId: Scalars['ID']['input'];
@@ -2797,6 +2801,13 @@ export type Usuario_SoftDeleteMutationVariables = Exact<{
 
 
 export type Usuario_SoftDeleteMutation = { __typename?: 'Mutation', usuario_softDelete: { __typename?: 'UsuarioOutput', status: UserStatus, roles: Array<RolEnumGql>, deleted: boolean, email: string, _id: string } };
+
+export type Usuario_FindByEmailQueryVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type Usuario_FindByEmailQuery = { __typename?: 'Query', usuario_findByEmail: { __typename?: 'UsuarioOutput', _id: string, email: string, email_verified: boolean, isGoogleAuth: boolean, roles: Array<RolEnumGql>, status: UserStatus } };
 
 
 export const ExampleQueryDocument = gql`
@@ -5375,7 +5386,6 @@ export const CursosDocument = gql`
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
-    slug
     instructor {
       firstName
     }
@@ -9863,3 +9873,48 @@ export function useUsuario_SoftDeleteMutation(baseOptions?: Apollo.MutationHookO
 export type Usuario_SoftDeleteMutationHookResult = ReturnType<typeof useUsuario_SoftDeleteMutation>;
 export type Usuario_SoftDeleteMutationResult = Apollo.MutationResult<Usuario_SoftDeleteMutation>;
 export type Usuario_SoftDeleteMutationOptions = Apollo.BaseMutationOptions<Usuario_SoftDeleteMutation, Usuario_SoftDeleteMutationVariables>;
+export const Usuario_FindByEmailDocument = gql`
+    query Usuario_findByEmail($email: String!) {
+  usuario_findByEmail(email: $email) {
+    _id
+    email
+    email_verified
+    isGoogleAuth
+    roles
+    status
+  }
+}
+    `;
+
+/**
+ * __useUsuario_FindByEmailQuery__
+ *
+ * To run a query within a React component, call `useUsuario_FindByEmailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsuario_FindByEmailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsuario_FindByEmailQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useUsuario_FindByEmailQuery(baseOptions: Apollo.QueryHookOptions<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables> & ({ variables: Usuario_FindByEmailQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>(Usuario_FindByEmailDocument, options);
+      }
+export function useUsuario_FindByEmailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>(Usuario_FindByEmailDocument, options);
+        }
+export function useUsuario_FindByEmailSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>(Usuario_FindByEmailDocument, options);
+        }
+export type Usuario_FindByEmailQueryHookResult = ReturnType<typeof useUsuario_FindByEmailQuery>;
+export type Usuario_FindByEmailLazyQueryHookResult = ReturnType<typeof useUsuario_FindByEmailLazyQuery>;
+export type Usuario_FindByEmailSuspenseQueryHookResult = ReturnType<typeof useUsuario_FindByEmailSuspenseQuery>;
+export type Usuario_FindByEmailQueryResult = Apollo.QueryResult<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>;

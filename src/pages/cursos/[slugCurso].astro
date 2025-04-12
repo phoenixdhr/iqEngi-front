@@ -20,8 +20,6 @@ export const getStaticPaths = (async () => {
 
     const cursos: Curso[] = data?.Cursos;
 
-    console.log('cursos:     xxxx', cursos);
-
     const prospParams = cursos.map((curso) => ({
         props: { ...curso },
         params: { slugCurso: `${curso.slug!}` }, // Aseguramos que slug sea un string

@@ -1,0 +1,215 @@
+---
+import ForgotPassword from '@components/molecules/login/ForgotPassword.astro';
+import CreatePassword from '@components/molecules/login/LoginCreatePassword';
+import LoginCreatePassword from '@components/molecules/login/LoginCreatePassword.astro';
+import LoginGoogle from '@components/molecules/login/LoginGoogle.astro';
+import LoginModal from '@components/molecules/login/LoginModal.astro';
+import LoginPassword from '@components/molecules/login/LoginPassword.astro';
+import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePasswordName.astro';
+---
+
+<div
+    id="login-modal"
+    class={`hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center z-50`}
+>
+    <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
+    <div
+        id="astro-login-box"
+        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-11/12 max-w-md h-[500px] relative shadow-2xl flex flex-col"
+    >
+        <!-- Botón de cierre -->
+        <button
+            type="button"
+            class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-xl"
+            onclick="document.getElementById('login-modal').classList.add('hidden');
+                    document.getElementById('loginModalDiv').classList.remove('hidden');
+                    document.getElementById('loginCreatePasswordDiv').classList.add('hidden');
+                    document.getElementById('loginGoogleDiv').classList.add('hidden');
+                    document.getElementById('loginPasswordDiv').classList.add('hidden');
+                    document.getElementById('forgotPasswordDiv').classList.add('hidden');
+                    document.getElementById('loginCreatePasswordNameDiv').classList.add('hidden')
+                    document.getElementById('btnBack').classList.add('hidden')
+
+                    document.getElementById('emailInput').value = ''
+                    document.getElementById('spanEmail').textContent = ''
+                    document.getElementById('firstNameInput').textContent = ''
+                    document.getElementById('lastNameInput').textContent = '';
+                    
+
+                    "
+        >
+            ✖
+        </button>
+        <!-- Botón de regresar (se muestra solo si se proporciona onBack) -->
+
+        <button
+            id="btnBack"
+            type="button"
+            class="hidden absolute top-4 left-4 text-gray-600 hover:text-gray-800 text-2xl mr-4"
+            onclick="document.getElementById('loginModalDiv').classList.remove('hidden')
+                    document.getElementById('loginCreatePasswordDiv').classList.add('hidden')
+                    document.getElementById('loginGoogleDiv').classList.add('hidden')
+                    document.getElementById('loginPasswordDiv').classList.add('hidden')
+                    document.getElementById('forgotPasswordDiv').classList.add('hidden')
+                    document.getElementById('btnBack').classList.add('hidden')
+                    document.getElementById('loginCreatePasswordNameDiv').classList.add('hidden')
+
+
+                    document.getElementById('emailInput').value = ''
+                    document.getElementById('spanEmail').textContent = ''
+                    document.getElementById('firstNameInput').textContent = ''
+                    document.getElementById('lastNameInput').textContent = ''
+                    
+                    ;
+
+                    // document.getElementById('loginModalDiv').classList.add('[z-9999]');"
+        >
+            ←
+        </button>
+
+        <!-- Logo de IQ-ENGI (ejemplo) -->
+        <div class="h-10"></div>
+
+        <div class="flex items-center lg:flex-1 justify-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img
+                    class="h-8 lg:h-10 w-auto"
+                    src="/favicon.svg"
+                    alt="IqEngi"
+                />
+                <span
+                    class="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                >
+                    IQ-ENGI
+                </span>
+            </a>
+        </div>
+        <!-- Contenido específico del modal -->
+
+        <div class="h-8"></div>
+
+        <div id="loginModalDiv"><LoginModal /></div>
+        <div id="loginCreatePasswordDiv" class="hidden">
+            <LoginCreatePassword />
+            <!-- <CreatePassword client:only="true" /> -->
+        </div>
+        <div id="loginGoogleDiv" class="hidden"><LoginGoogle /></div>
+        <div id="loginPasswordDiv" class="hidden"><LoginPassword /></div>
+        <div id="loginCreatePasswordNameDiv" class="hidden">
+            <LoginCreatePasswordName />
+        </div>
+        <div id="forgotPasswordDiv" class="hidden"><ForgotPassword /></div>
+    </div>
+</div>
+<script>
+    import { clientGql } from '@graphql-astro/apolloClient.ts';
+    import {
+        Usuario_FindByEmailDocument,
+        type Usuario,
+    } from '@graphql-astro/generated/graphql';
+
+    window.addEventListener('listener-login-modal', () => {
+        document.getElementById('login-modal')?.classList.remove('hidden');
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed');
+
+        const btnContinuarLM = document.getElementById(
+            'btnContinuarLM',
+        ) as HTMLButtonElement;
+        const form = document.getElementById('login-form') as HTMLFormElement;
+        const btnForgotPassword = document.getElementById(
+            'btnForgotPassword',
+        ) as HTMLButtonElement;
+
+        form.addEventListener('submit', async (event: SubmitEvent) => {
+            event.preventDefault();
+
+            const emailInput = document.getElementById(
+                'emailInput',
+            ) as HTMLInputElement;
+
+            const spanEmail = document.getElementById('spanEmail');
+            if (spanEmail) {
+                spanEmail.textContent = emailInput.value;
+                // span.className =
+                //     'text-gray-500 text-sm text-center mt-2 font-semibold';
+            }
+
+            const email = emailInput.value;
+
+            try {
+                const { data } = await clientGql.query({
+                    query: Usuario_FindByEmailDocument,
+                    variables: { email: email },
+                });
+
+                const usuario: Usuario = data.usuario_findByEmail;
+
+                console.log('usuario:  ', usuario); // Imprime el usuario en la consola para depuración
+                // console.log('data:  ', data); // Imprime el usuario en la consola para depuración
+                // console.log('email backend:   ', data.usuario_findByEmail.email); // Imprime el usuario en la consola para depuración
+
+                const loginModalDiv = document.getElementById('loginModalDiv');
+
+                const loginGoogleDiv =
+                    document.getElementById('loginGoogleDiv');
+                const loginPasswordDiv =
+                    document.getElementById('loginPasswordDiv');
+
+                const btnBack = document.getElementById('btnBack');
+
+                if (loginModalDiv) loginModalDiv.classList.add('hidden');
+
+                if (usuario.isGoogleAuth === true) {
+                    if (loginGoogleDiv)
+                        loginGoogleDiv.classList.remove('hidden');
+                    if (btnBack) btnBack.classList.remove('hidden');
+
+                    event.preventDefault();
+
+                    return; // <-- También podrías detener aquí si lo deseas
+                }
+
+                if (usuario) {
+                    console.log('existe');
+                    if (loginPasswordDiv)
+                        loginPasswordDiv.classList.remove('hidden');
+                    if (btnBack) btnBack.classList.remove('hidden');
+
+                    event.preventDefault(); // Evita el envío del formulario
+                    return; // <-- Detiene aquí la ejecución del resto
+                }
+            } catch (error) {
+                const loginModalDiv = document.getElementById('loginModalDiv');
+
+                if (loginModalDiv) loginModalDiv.classList.add('hidden');
+
+                const loginCreatePasswordDiv = document.getElementById(
+                    'loginCreatePasswordDiv',
+                );
+
+                const btnBack = document.getElementById('btnBack');
+
+                if (loginCreatePasswordDiv)
+                    loginCreatePasswordDiv.classList.remove('hidden');
+                if (btnBack) btnBack.classList.remove('hidden');
+
+                event.preventDefault();
+            }
+        });
+
+        btnForgotPassword.addEventListener('click', () => {
+            const forgotPasswordDiv =
+                document.getElementById('forgotPasswordDiv');
+
+            const loginPasswordDiv =
+                document.getElementById('loginPasswordDiv');
+
+            if (loginPasswordDiv) loginPasswordDiv.classList.add('hidden');
+
+            if (forgotPasswordDiv) forgotPasswordDiv.classList.remove('hidden');
+        });
+    });
+</script>

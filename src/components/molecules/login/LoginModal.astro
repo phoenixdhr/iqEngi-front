@@ -1,12 +1,15 @@
 ---
 import { siteInfo } from '@const/site-info'; // Importa la información del sitio (por ejemplo, URLs y configuraciones)
+
 const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio de sesión con Google desde la configuración
 ---
 
 <!-- Título del modal que indica la acción a realizar -->
-<h2 class="text-xl mb-6 text-center">Ingresa o crea una cuenta con:</h2>
+<h2 class="text-xl font-semibold mb-6 text-center">
+    Ingresa o crea una cuenta con:
+</h2>
 <!-- Contenedor del formulario de login -->
-<div id="astro-login-form" class="relative flex flex-col justify-center mt-15">
+<div id="astro-login-form" class="relative flex flex-col justify-center mt-7">
     <!-- Formulario de inicio de sesión -->
     <form id="login-form" class="space-y-6">
         <!-- Campo de entrada para el correo electrónico con estilos y validación requerida -->
@@ -68,3 +71,5 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
         </a>
     </form>
 </div>
+
+<script></script>

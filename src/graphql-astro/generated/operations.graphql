@@ -1,2546 +1,2740 @@
 # Operation 18474284-79a2-4b80-a511-c9e454e23bd3
 query ExampleQuery($usuarioId: ID!) {
-  usuario(id: $usuarioId) {
-    _id
-  }
+    usuario(id: $usuarioId) {
+        _id
+    }
 }
 
-
 # Operation 5533c7d2-2fc7-4119-bae4-67468819b077
-mutation UpdatePassword($updatePasswordId: ID!, $updatePasswordInput: UpdatePasswordInput!) {
-  updatePassword(updatePasswordInput: $updatePasswordInput) {
-    _id
-    email
-    email_verified
-    firstName
-  }
+mutation UpdatePassword(
+    $updatePasswordId: ID!
+    $updatePasswordInput: UpdatePasswordInput!
+) {
+    updatePassword(updatePasswordInput: $updatePasswordInput) {
+        _id
+        email
+        email_verified
+        firstName
+    }
 }
 
 # Operation 5f4de6ab-0bf1-423e-a2d3-0f256d9dc6d6
 mutation Login($loginUserInput: LoginUserInput!) {
-  login(loginUserInput: $loginUserInput) {
-    _id
-    roles
-    iat
-    exp
-    email
-    email_verified
-    firstName
-    lastName
-    picture
-  }
+    login(loginUserInput: $loginUserInput) {
+        _id
+        roles
+        iat
+        exp
+        email
+        email_verified
+        firstName
+        lastName
+        picture
+    }
 }
 
 # Operation 304b6378-6f4c-4003-bb23-56354b90aa4a
 mutation Signup($createUsuarioInput: CreateUsuarioInput!) {
-  signup(createUsuarioInput: $createUsuarioInput) {
-    _id
-    firstName
-    lastName
-    email
-    email_verified
-    roles
-    picture
-    perfil {
-      _id
-      bio
-      ubicacion
-      celular
-      fechaNacimiento
-      contacto
-      intereses
+    signup(createUsuarioInput: $createUsuarioInput) {
+        _id
+        firstName
+        lastName
+        email
+        email_verified
+        roles
+        picture
+        perfil {
+            _id
+            bio
+            ubicacion
+            celular
+            fechaNacimiento
+            contacto
+            intereses
+        }
+        notificaciones
+        cursosFavoritos {
+            _id
+        }
+        status
+        deleted
     }
-    notificaciones
-    cursosFavoritos {
-      _id
-    }
-    status
-    deleted
-  }
 }
 
 # Operation ed1611b8-67eb-4a11-909e-e53e51b5e93c
-mutation Calificacion_create($createCalificacionInput: CreateCalificacion_userInput!) {
-  Calificacion_create(createCalificacionInput: $createCalificacionInput) {
-    valor
-    fecha
-    comentario
-    _id
-    cursoId
-    usuarioId
-  }
+mutation Calificacion_create(
+    $createCalificacionInput: CreateCalificacion_userInput!
+) {
+    Calificacion_create(createCalificacionInput: $createCalificacionInput) {
+        valor
+        fecha
+        comentario
+        _id
+        cursoId
+        usuarioId
+    }
 }
 
 # Operation d89ff2d9-85f1-4c6e-bb6b-8f6669a673fd
 query Calificaciones {
-  Calificaciones {
-    _id
-    comentario
-    valor
-    fecha
-    cursoId
-    usuarioId
-  }
+    Calificaciones {
+        _id
+        comentario
+        valor
+        fecha
+        cursoId
+        usuarioId
+    }
 }
 
 # Operation 6ae7ecba-2f77-4461-865b-f284980a96d3
 query Calificaciones_PorUsuario($usuarioId: ID!) {
-  Calificaciones_PorUsuario(usuarioId: $usuarioId) {
-    valor
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    _id
-    deleted
-  }
+    Calificaciones_PorUsuario(usuarioId: $usuarioId) {
+        valor
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        _id
+        deleted
+    }
 }
 
 # Operation ed5393b9-4b84-460c-8ce4-3b7e709269a0
 query Calificaciones_PorCurso($cursoId: ID!) {
-  Calificaciones_PorCurso(cursoId: $cursoId) {
-    valor
-    usuarioId
-    fecha
-    cursoId
-    comentario
-    _id
-  }
+    Calificaciones_PorCurso(cursoId: $cursoId) {
+        valor
+        usuarioId
+        fecha
+        cursoId
+        comentario
+        _id
+    }
 }
 
 # Operation ace4d1b4-9e72-4dc8-a600-8cc3ce6ab195
 query Calificacion($calificacionId: ID!) {
-  Calificacion(id: $calificacionId) {
-    _id
-    usuarioId
-    cursoId
-    valor
-    comentario
-    fecha
-    deleted
-  }
+    Calificacion(id: $calificacionId) {
+        _id
+        usuarioId
+        cursoId
+        valor
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation c512dfe1-2f6a-40af-a696-2247422b699b
 query Query($cursoId: ID!) {
-  Calificacion_promedioCalificaciones(cursoId: $cursoId)
+    Calificacion_promedioCalificaciones(cursoId: $cursoId)
 }
 
 # Operation 22dcb71f-4cd2-4992-9b9b-eb34f5cc1a0a
 query Calificacion_findSoftDeleted {
-  Calificacion_findSoftDeleted {
-    _id
-    usuarioId
-    cursoId
-    valor
-    comentario
-    fecha
-    deleted
-  }
+    Calificacion_findSoftDeleted {
+        _id
+        usuarioId
+        cursoId
+        valor
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 5dde847b-6721-4e59-a2b5-b19d8240508e
-mutation Calificacion_update($calificacionUpdateId: ID!, $updateCalificacionInput: UpdateCalificacionInput!) {
-  Calificacion_update(id: $calificacionUpdateId, updateCalificacionInput: $updateCalificacionInput) {
-    _id
-    usuarioId
-    cursoId
-    valor
-    comentario
-    fecha
-    deleted
-  }
+mutation Calificacion_update(
+    $calificacionUpdateId: ID!
+    $updateCalificacionInput: UpdateCalificacionInput!
+) {
+    Calificacion_update(
+        id: $calificacionUpdateId
+        updateCalificacionInput: $updateCalificacionInput
+    ) {
+        _id
+        usuarioId
+        cursoId
+        valor
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 17762069-e96c-4869-b94f-eb8b7dcf11ea
 mutation Calificacion_softDelete($idRemove: ID!) {
-  Calificacion_softDelete(idRemove: $idRemove) {
-    _id
-    usuarioId
-    cursoId
-    valor
-    comentario
-    fecha
-    deleted
-  }
+    Calificacion_softDelete(idRemove: $idRemove) {
+        _id
+        usuarioId
+        cursoId
+        valor
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation bd6b3e15-45cf-4cee-9f42-10a34ef55ae9
 mutation Calificacion_restore($idRestore: ID!) {
-  Calificacion_restore(idRestore: $idRestore) {
-    _id
-    usuarioId
-    cursoId
-    valor
-    comentario
-    fecha
-    deleted
-  }
+    Calificacion_restore(idRestore: $idRestore) {
+        _id
+        usuarioId
+        cursoId
+        valor
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 9b9f0968-c3e6-4728-bb83-a82737a14ee9
 mutation Calificacion_hardDelete($calificacionHardDeleteId: ID!) {
-  Calificacion_hardDelete(id: $calificacionHardDeleteId) {
-    _id
-    usuarioId
-    cursoId
-    valor
-    comentario
-    fecha
-    deleted
-  }
+    Calificacion_hardDelete(id: $calificacionHardDeleteId) {
+        _id
+        usuarioId
+        cursoId
+        valor
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 14b0362e-4010-4cb3-bdab-40f8ee3596c5
 mutation Calificacion_hardDeleteAllSoftDeleted {
-  Calificacion_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    Calificacion_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation a6566673-ab32-4bdd-aef4-cbfdebf5276a
 mutation Categorias_create($createCategoriaInput: CreateCategoriaInput!) {
-  Categorias_create(createCategoriaInput: $createCategoriaInput) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categorias_create(createCategoriaInput: $createCategoriaInput) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation 0861d1d6-c515-470a-9f3c-bd9d943370c3
 query Categorias {
-  Categorias {
-    _id,
-  
-    descripcion,
-    deleted
-    nombreCategoria
-  }
+    Categorias {
+        _id
+
+        descripcion
+        deleted
+        nombreCategoria
+    }
 }
 
 # Operation 450f6eeb-a227-4fdd-b9eb-2d9cf1bf744a
 query Categoria($categoriaId: ID!) {
-  Categoria(id: $categoriaId) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categoria(id: $categoriaId) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation 14a91802-f028-4c41-892c-97f575b4ea85
 mutation Categorias_softDelete($idRemove: ID!) {
-  Categorias_softDelete(idRemove: $idRemove) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categorias_softDelete(idRemove: $idRemove) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation f74fc792-52de-4541-b5f2-87723c4ba64a
 mutation Categorias_hardDelete($categoriasHardDeleteId: ID!) {
-  Categorias_hardDelete(id: $categoriasHardDeleteId) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categorias_hardDelete(id: $categoriasHardDeleteId) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation b6cbea5d-64b6-4bc6-82a8-c23ecfdf0c91
 mutation Categorias_hardDeleteAllSoftDeleted {
-  Categorias_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    Categorias_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation 1fc40aa7-1db9-4e9e-8d70-f38fa41a1351
 query Categorias_findSoftDeleted {
-  Categorias_findSoftDeleted {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categorias_findSoftDeleted {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation 32776691-64d0-4671-bef6-b7435f502119
 mutation Categorias_restore($idRestore: ID!) {
-  Categorias_restore(idRestore: $idRestore) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categorias_restore(idRestore: $idRestore) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation ddc3c01e-30d9-4934-ba96-80659187d027
 query Categorias_findAllByNombre($search: String) {
-  Categorias_findAllByNombre(search: $search) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+    Categorias_findAllByNombre(search: $search) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation 760cdd7c-a5c2-4fde-ab08-0d0228c38768
-mutation Categorias_update($categoriasUpdateId: ID!, $updateCategoriaInput: UpdateCategoriaInput!) {
-  Categorias_update(id: $categoriasUpdateId, updateCategoriaInput: $updateCategoriaInput) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
+mutation Categorias_update(
+    $categoriasUpdateId: ID!
+    $updateCategoriaInput: UpdateCategoriaInput!
+) {
+    Categorias_update(
+        id: $categoriasUpdateId
+        updateCategoriaInput: $updateCategoriaInput
+    ) {
+        _id
+        nombreCategoria
+        descripcion
+        deleted
+    }
 }
 
 # Operation a0da3953-5d38-4841-9482-12874f7ee3f7
-mutation Comentario_update($updateComentarioInput: UpdateComentarioInput!, $comentarioUpdateId: ID!) {
-  Comentario_update(updateComentarioInput: $updateComentarioInput, id: $comentarioUpdateId) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+mutation Comentario_update(
+    $updateComentarioInput: UpdateComentarioInput!
+    $comentarioUpdateId: ID!
+) {
+    Comentario_update(
+        updateComentarioInput: $updateComentarioInput
+        id: $comentarioUpdateId
+    ) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 43a7c6a2-6ff4-41c9-bb0b-eb5020212502
 mutation Comentario_restore($idRestore: ID!) {
-  Comentario_restore(idRestore: $idRestore) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentario_restore(idRestore: $idRestore) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 43840819-995a-4be7-957c-c24d23969fc0
 mutation Comentario_hardDelete($comentarioHardDeleteId: ID!) {
-  Comentario_hardDelete(id: $comentarioHardDeleteId) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentario_hardDelete(id: $comentarioHardDeleteId) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation a8f5931c-c4e0-44ff-93e5-876d73fa7025
 query Comentarios_PorCurso($cursoId: ID!) {
-  Comentarios_PorCurso(cursoId: $cursoId) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentarios_PorCurso(cursoId: $cursoId) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation ab0e7408-ed02-4043-9714-cdf1baf3b4c3
 mutation Comentario_softDelete($idRemove: ID!) {
-  Comentario_softDelete(idRemove: $idRemove) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentario_softDelete(idRemove: $idRemove) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 18fe5b66-a688-46d3-8061-87e69a2f3752
 query Comentarios_PorUsuario($usuarioId: ID!) {
-  Comentarios_PorUsuario(usuarioId: $usuarioId) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentarios_PorUsuario(usuarioId: $usuarioId) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 4c2e5d99-91ea-4055-8fd1-2bca04d70f17
 query Comentario_findSoftDeleted {
-  Comentario_findSoftDeleted {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentario_findSoftDeleted {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 07f81dd6-e7cf-4c86-9d32-6daeef67894e
 query Comentarios($limit: Int) {
-  Comentarios(limit: $limit) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentarios(limit: $limit) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 5eddc992-57f9-40e3-b932-4f92be6412b6
 query Comentario($comentarioId: ID!) {
-  Comentario(id: $comentarioId) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+    Comentario(id: $comentarioId) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 6ed626d0-d2be-411a-a86a-77ea92e199bc
-mutation Comentario_create($createComentarioInput: CreateComentario_userInput!) {
-  Comentario_create(createComentarioInput: $createComentarioInput) {
-    _id
-    usuarioId
-    cursoId
-    comentario
-    fecha
-    deleted
-  }
+mutation Comentario_create(
+    $createComentarioInput: CreateComentario_userInput!
+) {
+    Comentario_create(createComentarioInput: $createComentarioInput) {
+        _id
+        usuarioId
+        cursoId
+        comentario
+        fecha
+        deleted
+    }
 }
 
 # Operation 8d1b05b1-fe71-4116-be46-0212e1e54b3a
 mutation Comentario_hardDeleteAllSoftDeleted {
-  Comentario_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    Comentario_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation 507c9e1b-fead-4972-aac0-f91a3d77193e
 query Cuestionarios($limit: Int) {
-  Cuestionarios(limit: $limit) {
-    _id
-    cursoId
-    
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionarios(limit: $limit) {
         _id
-        textOpcion
-        esCorrecta
-        orden
+        cursoId
+
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
+        notaMaxima
+        notaMinimaAprobar
+        fechaCreacion
         deleted
-      }
-      moduloId
-      unidadId
-      deleted
     }
-    notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
 }
 
 # Operation 7ebff3d6-8791-468e-9d58-8c559de4690b
 query Cuestionario($cuestionarioId: ID!) {
-  Cuestionario(id: $cuestionarioId) {
-    _id
-    cursoId
-    cuestionarioTitle
-    notaMaxima
-    notaMinimaAprobar
-    published
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      published
-      moduloId
-      unidadId
-      deleted
-      opciones {
+    Cuestionario(id: $cuestionarioId) {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-    }
+        cursoId
+        cuestionarioTitle
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        published
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            published
+            moduloId
+            unidadId
+            deleted
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+        }
+        notaMaxima
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation d0b455ed-fce4-4b02-9ed0-dfa92f83dcdc
-mutation Cuestionario_update($updateCuestionarioInput: UpdateCuestionarioInput!, $cuestionarioUpdateId: ID!) {
-  Cuestionario_update(updateCuestionarioInput: $updateCuestionarioInput, id: $cuestionarioUpdateId) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
+mutation Cuestionario_update(
+    $updateCuestionarioInput: UpdateCuestionarioInput!
+    $cuestionarioUpdateId: ID!
+) {
+    Cuestionario_update(
+        updateCuestionarioInput: $updateCuestionarioInput
+        id: $cuestionarioUpdateId
+    ) {
+        _id
+        cursoId
+        cuestionarioTitle
+        descripcion
 
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation 43920fbf-6cd7-423b-bfb9-5f043ef74ac4
 mutation Cuestionario_hardDelete($cuestionarioHardDeleteId: ID!) {
-  Cuestionario_hardDelete(id: $cuestionarioHardDeleteId) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionario_hardDelete(id: $cuestionarioHardDeleteId) {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation 26af0ace-b90a-45e5-b224-72257fc6a096
 mutation Cuestionario_hardDeleteAllSoftDeleted {
-  Cuestionario_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    Cuestionario_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation d687ab2b-8afd-44e2-b14c-694bbe2f3d4b
 query Cuestionario_findSoftDeleted {
-  Cuestionario_findSoftDeleted {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionario_findSoftDeleted {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation 5b6ea64d-eb6d-419b-aa89-443adb4dd428
 mutation Cuestionario_restore($idRestore: ID!) {
-  Cuestionario_restore(idRestore: $idRestore) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionario_restore(idRestore: $idRestore) {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation 44f2dcda-3781-4f23-8a00-2dedaff22072
-mutation Cuestionario_create($createCuestionarioInput: CreateCuestionarioInput!) {
-  Cuestionario_create(createCuestionarioInput: $createCuestionarioInput) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+mutation Cuestionario_create(
+    $createCuestionarioInput: CreateCuestionarioInput!
+) {
+    Cuestionario_create(createCuestionarioInput: $createCuestionarioInput) {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation 42c7feda-b5ca-4d0b-b39d-e65b5d1496dd
 mutation Cuestionario_softDelete($idRemove: ID!) {
-  Cuestionario_softDelete(idRemove: $idRemove) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionario_softDelete(idRemove: $idRemove) {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation 39355ad7-ad95-429c-b4a0-f3d55c10f6c8
 query Cuestionario_findByCursoId($cursoId: ID!) {
-  Cuestionario_findByCursoId(cursoId: $cursoId) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionario_findByCursoId(cursoId: $cursoId) {
         _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
-    published
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
+        published
         notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
 }
 
 # Operation dd4ce030-9f0c-49ee-a10b-f10bac892736
 query Cuestionario_findByCursoId($cursoId: ID!) {
-  Cuestionario_findByCursoId(cursoId: $cursoId) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
+    Cuestionario_findByCursoId(cursoId: $cursoId) {
+        _id
+        cursoId
+        cuestionarioTitle
+        descripcion
+        preguntas {
+            _id
+            enunciado
+            tipoPregunta
+            opciones {
+                _id
+                textOpcion
+                esCorrecta
+                orden
+                deleted
+            }
+            moduloId
+            unidadId
+            deleted
+        }
+        published
+        notaMaxima
+        notaMinimaAprobar
+        fechaCreacion
+        deleted
+    }
+}
+
+# Operation 0224c569-3430-46e4-9c0c-2106e7d3a041
+mutation CursoComprado_create(
+    $createCursoCompradoInput: CreateCursoComprado_userInput!
+) {
+    CursoComprado_create(createCursoCompradoInput: $createCursoCompradoInput) {
+        _id
+        usuarioId {
+            _id
+            email
+        }
+        cursoId {
+            _id
+            courseTitle
+        }
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation db95a418-2b25-4a59-849f-2039992141e7
+query CursoCompradoes {
+    CursoComprados {
+        _id
+        usuarioId {
+            _id
+        }
+        cursoId {
+            _id
+        }
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 04c13244-153f-475e-8e3e-30265a388e6f
+query CursoComprado($cursoCompradoId: ID!) {
+    CursoComprado(id: $cursoCompradoId) {
+        _id
+        usuarioId {
+            _id
+        }
+        cursoId {
+            _id
+        }
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 9ea07f64-67ae-4deb-8b09-ca379fab2f95
+mutation CursoComprado_softDelete($idRemove: ID!) {
+    CursoComprado_softDelete(idRemove: $idRemove) {
+        _id
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 2a5d6c81-6367-4755-9c66-cbdb624f110c
+mutation CursoComprado_restore($idRestore: ID!) {
+    CursoComprado_restore(idRestore: $idRestore) {
+        _id
+
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 775e5597-6f54-4268-9b0b-583354a1c0e3
+mutation CursoComprado_hardDelete($cursoCompradoHardDeleteId: ID!) {
+    CursoComprado_hardDelete(id: $cursoCompradoHardDeleteId) {
+        _id
+
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 68a63cc1-9e18-40e9-b49f-e0ba12c3b009
+mutation CursoComprado_hardDeleteAllSoftDeleted {
+    CursoComprado_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
+}
+
+# Operation 45b6eb82-0aec-4ec7-b47f-3f5ae1c05d1a
+query CursoCompradoes_PorUsuario($usuarioId: ID!) {
+    CursoCompradoes_PorUsuario(usuarioId: $usuarioId) {
+        _id
+        cursoId {
+            _id
+        }
+
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+        usuarioId {
+            _id
+        }
+    }
+}
+
+# Operation 11e81729-4a41-4f25-8d13-c7a3591a80af
+query CursoCompradoes_PorCurso($cursoId: ID!) {
+    CursoCompradoes_PorCurso(cursoId: $cursoId) {
+        _id
+        usuarioId {
+            _id
+        }
+        cursoId {
+            _id
+        }
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 47a07817-1811-495f-9a9d-7fe5960c45ba
+query CursoComprado_findSoftDeleted($offset: Int, $limit: Int) {
+    CursoComprado_findSoftDeleted(offset: $offset, limit: $limit) {
+        _id
+        usuarioId {
+            _id
+        }
+        cursoId {
+            _id
+        }
+        courseTitle
+        fechaCompra
+        fechaExpiracion
+        estadoAcceso
+        progreso
+        cursoCompletado
+        ultimaNota
+        deleted
+    }
+}
+
+# Operation 05a99bad-6ab0-408e-80db-04c25a3b1a19
+mutation Mutation($createCursoInput: CreateCursoInput!) {
+    Curso_create(createCursoInput: $createCursoInput) {
+        _id
+        courseTitle
+        precio
+        objetivos
+        nivel
+        fechaLanzamiento
+        categorias {
+            nombreCategoria
+            descripcion
+            _id
+        }
+        descripcionCorta
+        imagenURL {
+            url
+            alt
+        }
+    }
+}
+
+# Operation 4e4cca26-4859-4ae8-b527-c3bda057a41c
+query Cursos($offset: Int, $limit: Int) {
+    Cursos(offset: $offset, limit: $limit) {
+        _id
+        courseTitle
+        instructor {
+            firstName
+        }
+        imagenURL {
+            url
+            alt
+        }
+    }
+}
+
+# Operation 058eac60-139f-4aea-aecf-ede879a893e7
+query Curso($cursoId: ID!) {
+    Curso(id: $cursoId) {
+        _id
+        courseTitle
+        descripcionCorta
+        descripcionLarga
+        nivel
+        instructor {
+            firstName
+        }
+        duracionHoras
+        imagenURL {
+            alt
+            url
+        }
+        precio
+        currency
+        descuento
+        calificacionPromedio
+        numeroCalificaciones
+        aprenderas
+        objetivos
+        dirigidoA
+
+        fechaLanzamiento
+
+        slug
+        deleted
+        modulosIds
+    }
+}
+
+# Operation 512dc6f9-9fb7-4528-8f95-2f9a06bdd1ff
+mutation Curso_update(
+    $cursoUpdateId: ID!
+    $updateCursoInput: UpdateCursoInput!
+) {
+    Curso_update(id: $cursoUpdateId, updateCursoInput: $updateCursoInput) {
+        _id
+        courseTitle
+        descripcionCorta
+        descripcionLarga
+        nivel
+        instructor {
+            _id
+            firstName
+        }
+        duracionHoras
+        imagenURL {
+            alt
+            url
+        }
+        precio
+        currency
+        descuento
+        calificacionPromedio
+        numeroCalificaciones
+        aprenderas
+        objetivos
+        dirigidoA
+
+        fechaLanzamiento
+        categorias {
+            _id
+            nombreCategoria
+            descripcion
+            deleted
+        }
+        cuestionarioId {
+            _id
+        }
+        slug
+        deleted
+    }
+}
+
+# Operation f689965d-156b-42f2-8341-0424287981d2
+mutation Curso_softDelete($idRemove: ID!) {
+    Curso_softDelete(idRemove: $idRemove) {
+        courseTitle
+        _id
+        descripcionCorta
+    }
+}
+
+# Operation 96acacb5-c3e6-4734-8ebd-7cac50c76591
+query Curso_findSoftDeleted {
+    Curso_findSoftDeleted {
+        courseTitle
+        cuestionarioId {
+            _id
+        }
+        _id
+        descripcionCorta
+    }
+}
+
+# Operation c8486941-cd51-410a-a135-8b5dafe9471b
+mutation Curso_restore($idRestore: ID!) {
+    Curso_restore(idRestore: $idRestore) {
+        courseTitle
+        _id
+        descripcionCorta
+    }
+}
+
+# Operation 19cc1d8e-c503-4666-a057-ec2809c14030
+mutation Curso_hardDeleteAllSoftDeleted {
+    Curso_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
+}
+
+# Operation cf10609b-e8f4-4dec-87a0-95cdb825f51a
+mutation Curso_hardDelete($cursoHardDeleteId: ID!) {
+    Curso_hardDelete(id: $cursoHardDeleteId) {
+        courseTitle
+        _id
+    }
+}
+
+# Operation 054ef230-4aac-4bac-afb9-c52c9633683f
+query Curso_findAllByTitle($search: String) {
+    Curso_findAllByTitle(search: $search) {
+        duracionHoras
+        courseTitle
+        precio
+        _id
+    }
+}
+
+# Operation 9bea1464-650c-4b2d-8303-da640dfbc6f8
+mutation Instructor_create($createInstructorInput: CreateInstructorInput!) {
+    Instructor_create(createInstructorInput: $createInstructorInput) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation 54f1f052-9516-4dcb-becd-eff23cd4a42a
+query Instructor($instructorId: ID!) {
+    Instructor(id: $instructorId) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation a572d711-d0f5-4c4b-9a23-f40d9444e31d
+query Instructores($limit: Int) {
+    Instructores(limit: $limit) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation e3bfcdaf-979e-4043-9057-94842a9e3929
+mutation Instructor_hardDelete($instructorHardDeleteId: ID!) {
+    Instructor_hardDelete(id: $instructorHardDeleteId) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation 436e7eef-fcb1-41e1-b0f5-f67c818bd6cd
+query Instructor_findAllByNombre($search: String) {
+    Instructor_findAllByNombre(search: $search) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation 67669147-e00a-4d0f-b365-2a9b02772e94
+mutation Instructor_restore($idRestore: ID!) {
+    Instructor_restore(idRestore: $idRestore) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation cfa2840b-2dfb-4901-9c2a-b9c1a83dac93
+mutation Instructor_update(
+    $updateInstructorInput: UpdateInstructorInput!
+    $instructorUpdateId: ID!
+) {
+    Instructor_update(
+        updateInstructorInput: $updateInstructorInput
+        id: $instructorUpdateId
+    ) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation aa8c9e9c-ff67-41b3-b46f-e93f7a733730
+mutation Instructor_softDelete($idRemove: ID!) {
+    Instructor_softDelete(idRemove: $idRemove) {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation 61d49cf0-aed0-48e0-bc7a-e0d95dedab0f
+query Instructor_findSoftDeleted {
+    Instructor_findSoftDeleted {
+        _id
+        firstName
+        lastName
+        profesion
+        especializacion
+        calificacionPromedio
+        pais
+        deleted
+    }
+}
+
+# Operation 79a4afd9-3572-4e4d-9b03-864df2348850
+mutation Instructor_hardDeleteAllSoftDeleted {
+    Instructor_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
+}
+
+# Operation 26d90cf3-4a14-4dc2-aee4-b156296166dc
+mutation Material_create(
+    $idModulo: ID!
+    $idUnidad: ID!
+    $createOpcionInput: CreateMaterialInput!
+) {
+    Material_create(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        createOpcionInput: $createOpcionInput
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+    }
+}
+
+# Operation f3eb1ae3-3f58-4aa5-b6d6-e2fc59c94565
+query Materiales($idModulo: ID!, $idUnidad: ID!) {
+    Materiales(idModulo: $idModulo, idUnidad: $idUnidad) {
+        _id
+        materialTitle
+        descripcion
+        url
+    }
+}
+
+# Operation 0376b922-8045-414c-a684-2ac0a025958a
+query Material($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
+    Material(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        idMaterial: $idMaterial
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation 0c16e43e-8644-4b8e-bb5d-bc3fba950ae9
+mutation Material_update(
+    $idModulo: ID!
+    $idUnidad: ID!
+    $idMaterial: ID!
+    $updateOpcionInput: UpdateMaterialInput!
+) {
+    Material_update(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        idMaterial: $idMaterial
+        updateOpcionInput: $updateOpcionInput
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation 3710f5d1-cdcb-4a7f-848a-d7a41071a0f6
+mutation Material_softDelete($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
+    Material_softDelete(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        idMaterial: $idMaterial
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation f1db377e-a7a7-44d0-bc30-442cfb9783a3
+query Material_findSoftDeleted($idModulo: ID!, $idUnidad: ID!) {
+    Material_findSoftDeleted(idModulo: $idModulo, idUnidad: $idUnidad) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation 011eeece-cc47-4d35-9787-d8a724a3517f
+mutation Material_restore($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
+    Material_restore(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        idMaterial: $idMaterial
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation cf81dac9-1b41-450d-9947-f9426339c85a
+mutation Material_hardDelete($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
+    Material_hardDelete(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        idMaterial: $idMaterial
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation dd178570-c8a4-4a75-bc0a-2b6f0dba0e83
+mutation Material_hardDeleteAllSoftDeleted($idModulo: ID!, $idUnidad: ID!) {
+    Material_hardDeleteAllSoftDeleted(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+    ) {
+        _id
+        materialTitle
+        descripcion
+        url
+        deleted
+    }
+}
+
+# Operation e315462b-478e-40f0-b5d0-d4d26d55ebac
+mutation Modulo_create($createModuloInput: CreateModuloInput!) {
+    Modulo_create(createModuloInput: $createModuloInput) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 784d1c55-75be-4591-bfcf-61da4e17e719
+query Modulos {
+    Modulos {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 28be3e1f-dbf6-4c46-9d4f-cd103efcddb6
+query Modulo($moduloId: ID!) {
+    Modulo(id: $moduloId) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 7d5f0edc-27ae-4306-9ec3-70ee5b0bd1ab
+query Modulo_findByCursoId($cursoId: ID!) {
+    Modulo_findByCursoId(cursoId: $cursoId) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 35244c4f-75e5-4729-934f-1844f4c9e512
+query Modulo_findSoftDeleted {
+    Modulo_findSoftDeleted {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 20a6555f-da52-447f-93ee-013f5ad9a84c
+mutation Modulo_update(
+    $updateCuestionarioInput: UpdateModuloInput!
+    $moduloUpdateId: ID!
+) {
+    Modulo_update(
+        updateCuestionarioInput: $updateCuestionarioInput
+        id: $moduloUpdateId
+    ) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 31e93aa3-3d5e-4fc5-aee8-96e585d199c2
+mutation Modulo_softDelete($idRemove: ID!) {
+    Modulo_softDelete(idRemove: $idRemove) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 92b1207e-8bf2-474b-aad4-6c7987c9683f
+mutation Modulo_restore($idRestore: ID!) {
+    Modulo_restore(idRestore: $idRestore) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 7a132f78-a929-4899-9081-e5b4e16053ac
+mutation Modulo_hardDelete($moduloHardDeleteId: ID!) {
+    Modulo_hardDelete(id: $moduloHardDeleteId) {
+        _id
+        cursoId
+        numeroModulo
+        moduloTitle
+        descripcion
+        unidades {
+            _id
+            moduloId
+            numeroUnidad
+            unidadTitle
+            descripcion
+            urlVideo
+            materiales {
+                _id
+                materialTitle
+                descripcion
+                url
+            }
+            deleted
+        }
+        deleted
+    }
+}
+
+# Operation 213e312d-131b-4ba1-9e6d-927dcb008d3b
+mutation Modulo_hardDeleteAllSoftDeleted {
+    Modulo_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
+}
+
+# Operation 1e2a7326-56c3-484b-a7b7-bf467e0dda1b
+mutation Opcion_create(
+    $idCuestionario: ID!
+    $idPregunta: ID!
+    $createOpcionInput: CreateOpcionInput!
+) {
+    Opcion_create(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        createOpcionInput: $createOpcionInput
+    ) {
         _id
         textOpcion
         esCorrecta
         orden
         deleted
-      }
-      moduloId
-      unidadId
-      deleted
     }
-    published
-        notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
-}
-
-# Operation 0224c569-3430-46e4-9c0c-2106e7d3a041
-mutation CursoComprado_create($createCursoCompradoInput: CreateCursoComprado_userInput!) {
-  CursoComprado_create(createCursoCompradoInput: $createCursoCompradoInput) {
-    _id
-    usuarioId {
-      _id
-      email
-    }
-    cursoId {
-      _id
-      courseTitle
-    }
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation db95a418-2b25-4a59-849f-2039992141e7
-query CursoCompradoes {
-  CursoComprados {
-    _id
-    usuarioId {
-      _id
-    }
-    cursoId {
-      _id
-    }
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 04c13244-153f-475e-8e3e-30265a388e6f
-query CursoComprado($cursoCompradoId: ID!) {
-  CursoComprado(id: $cursoCompradoId) {
-    _id
-    usuarioId {
-      _id
-    }
-    cursoId {
-      _id
-    }
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 9ea07f64-67ae-4deb-8b09-ca379fab2f95
-mutation CursoComprado_softDelete($idRemove: ID!) {
-  CursoComprado_softDelete(idRemove: $idRemove) {
-    _id
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 2a5d6c81-6367-4755-9c66-cbdb624f110c
-mutation CursoComprado_restore($idRestore: ID!) {
-  CursoComprado_restore(idRestore: $idRestore) {
-    _id
-
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 775e5597-6f54-4268-9b0b-583354a1c0e3
-mutation CursoComprado_hardDelete($cursoCompradoHardDeleteId: ID!) {
-  CursoComprado_hardDelete(id: $cursoCompradoHardDeleteId) {
-    _id
-
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 68a63cc1-9e18-40e9-b49f-e0ba12c3b009
-mutation CursoComprado_hardDeleteAllSoftDeleted {
-  CursoComprado_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
-}
-
-# Operation 45b6eb82-0aec-4ec7-b47f-3f5ae1c05d1a
-query CursoCompradoes_PorUsuario($usuarioId: ID!) {
-  CursoCompradoes_PorUsuario(usuarioId: $usuarioId) {
-    _id
-    cursoId {
-      _id
-    }
-
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-    usuarioId {
-      _id
-    }
-  }
-}
-
-# Operation 11e81729-4a41-4f25-8d13-c7a3591a80af
-query CursoCompradoes_PorCurso($cursoId: ID!) {
-  CursoCompradoes_PorCurso(cursoId: $cursoId) {
-    _id
-    usuarioId {
-      _id
-    }
-    cursoId {
-      _id
-    }
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 47a07817-1811-495f-9a9d-7fe5960c45ba
-query CursoComprado_findSoftDeleted($offset: Int, $limit: Int) {
-  CursoComprado_findSoftDeleted(offset: $offset, limit: $limit) {
-    _id
-    usuarioId {
-      _id
-    }
-    cursoId {
-      _id
-    }
-    courseTitle
-    fechaCompra
-    fechaExpiracion
-    estadoAcceso
-    progreso
-    cursoCompletado
-    ultimaNota
-    deleted
-  }
-}
-
-# Operation 05a99bad-6ab0-408e-80db-04c25a3b1a19
-mutation Mutation($createCursoInput: CreateCursoInput!) {
-  Curso_create(createCursoInput: $createCursoInput) {
-    _id
-    courseTitle
-    precio
-    objetivos
-    nivel
-    fechaLanzamiento
-    categorias {
-      nombreCategoria
-      descripcion
-      _id
-    }
-    descripcionCorta
-    imagenURL {
-      url
-      alt
-    }
-  }
-}
-
-# Operation 4e4cca26-4859-4ae8-b527-c3bda057a41c
-query Cursos($offset: Int, $limit: Int) {
-  Cursos(offset: $offset, limit: $limit) {
-    _id
-    courseTitle,
-    slug
-    instructor {
-      firstName
-    },
-    imagenURL {
-      url
-      alt
-    }
-  }
-}
-
-# Operation 058eac60-139f-4aea-aecf-ede879a893e7
-query Curso($cursoId: ID!) {
-  Curso(id: $cursoId) {
-    _id
-    courseTitle
-    descripcionCorta
-    descripcionLarga
-    nivel
-    instructor {
-      firstName
-    }
-    duracionHoras
-    imagenURL {
-      alt
-      url
-    }
-    precio
-    currency
-    descuento
-    calificacionPromedio
-    numeroCalificaciones
-    aprenderas
-    objetivos
-    dirigidoA
-
-    fechaLanzamiento
-
-    slug
-    deleted
-    modulosIds
-  }
-}
-
-# Operation 512dc6f9-9fb7-4528-8f95-2f9a06bdd1ff
-mutation Curso_update($cursoUpdateId: ID!, $updateCursoInput: UpdateCursoInput!) {
-  Curso_update(id: $cursoUpdateId, updateCursoInput: $updateCursoInput) {
-    _id
-    courseTitle
-    descripcionCorta
-    descripcionLarga
-    nivel
-    instructor {
-      _id
-      firstName
-    }
-    duracionHoras
-    imagenURL {
-      alt
-      url
-    }
-    precio
-    currency
-    descuento
-    calificacionPromedio
-    numeroCalificaciones
-    aprenderas
-    objetivos
-    dirigidoA
-   
-    fechaLanzamiento
-    categorias {
-      _id
-      nombreCategoria
-      descripcion
-      deleted
-    }
-    cuestionarioId {
-      _id
-    }
-    slug
-    deleted
-  }
-}
-
-# Operation f689965d-156b-42f2-8341-0424287981d2
-mutation Curso_softDelete($idRemove: ID!) {
-  Curso_softDelete(idRemove: $idRemove) {
-    courseTitle
-    _id
-    descripcionCorta
-  }
-}
-
-# Operation 96acacb5-c3e6-4734-8ebd-7cac50c76591
-query Curso_findSoftDeleted {
-  Curso_findSoftDeleted {
-    courseTitle
-    cuestionarioId {
-      _id
-    }
-    _id
-    descripcionCorta
-  }
-}
-
-# Operation c8486941-cd51-410a-a135-8b5dafe9471b
-mutation Curso_restore($idRestore: ID!) {
-  Curso_restore(idRestore: $idRestore) {
-    courseTitle
-    _id
-    descripcionCorta
-  }
-}
-
-# Operation 19cc1d8e-c503-4666-a057-ec2809c14030
-mutation Curso_hardDeleteAllSoftDeleted {
-  Curso_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
-}
-
-# Operation cf10609b-e8f4-4dec-87a0-95cdb825f51a
-mutation Curso_hardDelete($cursoHardDeleteId: ID!) {
-  Curso_hardDelete(id: $cursoHardDeleteId) {
-    courseTitle
-    _id
-  }
-}
-
-# Operation 054ef230-4aac-4bac-afb9-c52c9633683f
-query Curso_findAllByTitle($search: String) {
-  Curso_findAllByTitle(search: $search) {
-    duracionHoras
-    courseTitle
-    precio
-    _id
-  }
-}
-
-# Operation 9bea1464-650c-4b2d-8303-da640dfbc6f8
-mutation Instructor_create($createInstructorInput: CreateInstructorInput!) {
-  Instructor_create(createInstructorInput: $createInstructorInput) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation 54f1f052-9516-4dcb-becd-eff23cd4a42a
-query Instructor($instructorId: ID!) {
-  Instructor(id: $instructorId) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation a572d711-d0f5-4c4b-9a23-f40d9444e31d
-query Instructores($limit: Int) {
-  Instructores(limit: $limit) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation e3bfcdaf-979e-4043-9057-94842a9e3929
-mutation Instructor_hardDelete($instructorHardDeleteId: ID!) {
-  Instructor_hardDelete(id: $instructorHardDeleteId) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation 436e7eef-fcb1-41e1-b0f5-f67c818bd6cd
-query Instructor_findAllByNombre($search: String) {
-  Instructor_findAllByNombre(search: $search) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation 67669147-e00a-4d0f-b365-2a9b02772e94
-mutation Instructor_restore($idRestore: ID!) {
-  Instructor_restore(idRestore: $idRestore) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation cfa2840b-2dfb-4901-9c2a-b9c1a83dac93
-mutation Instructor_update($updateInstructorInput: UpdateInstructorInput!, $instructorUpdateId: ID!) {
-  Instructor_update(updateInstructorInput: $updateInstructorInput, id: $instructorUpdateId) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation aa8c9e9c-ff67-41b3-b46f-e93f7a733730
-mutation Instructor_softDelete($idRemove: ID!) {
-  Instructor_softDelete(idRemove: $idRemove) {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation 61d49cf0-aed0-48e0-bc7a-e0d95dedab0f
-query Instructor_findSoftDeleted {
-  Instructor_findSoftDeleted {
-    _id
-    firstName
-    lastName
-    profesion
-    especializacion
-    calificacionPromedio
-    pais
-    deleted
-  }
-}
-
-# Operation 79a4afd9-3572-4e4d-9b03-864df2348850
-mutation Instructor_hardDeleteAllSoftDeleted {
-  Instructor_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
-}
-
-# Operation 26d90cf3-4a14-4dc2-aee4-b156296166dc
-mutation Material_create($idModulo: ID!, $idUnidad: ID!, $createOpcionInput: CreateMaterialInput!) {
-  Material_create(idModulo: $idModulo, idUnidad: $idUnidad, createOpcionInput: $createOpcionInput) {
-    _id
-    materialTitle
-    descripcion
-    url
-  }
-}
-
-# Operation f3eb1ae3-3f58-4aa5-b6d6-e2fc59c94565
-query Materiales($idModulo: ID!, $idUnidad: ID!) {
-  Materiales(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    materialTitle
-    descripcion
-    url
-  }
-}
-
-# Operation 0376b922-8045-414c-a684-2ac0a025958a
-query Material($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
-  Material(idModulo: $idModulo, idUnidad: $idUnidad, idMaterial: $idMaterial) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation 0c16e43e-8644-4b8e-bb5d-bc3fba950ae9
-mutation Material_update($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!, $updateOpcionInput: UpdateMaterialInput!) {
-  Material_update(idModulo: $idModulo, idUnidad: $idUnidad, idMaterial: $idMaterial, updateOpcionInput: $updateOpcionInput) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation 3710f5d1-cdcb-4a7f-848a-d7a41071a0f6
-mutation Material_softDelete($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
-  Material_softDelete(idModulo: $idModulo, idUnidad: $idUnidad, idMaterial: $idMaterial) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation f1db377e-a7a7-44d0-bc30-442cfb9783a3
-query Material_findSoftDeleted($idModulo: ID!, $idUnidad: ID!) {
-  Material_findSoftDeleted(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation 011eeece-cc47-4d35-9787-d8a724a3517f
-mutation Material_restore($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
-  Material_restore(idModulo: $idModulo, idUnidad: $idUnidad, idMaterial: $idMaterial) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation cf81dac9-1b41-450d-9947-f9426339c85a
-mutation Material_hardDelete($idModulo: ID!, $idUnidad: ID!, $idMaterial: ID!) {
-  Material_hardDelete(idModulo: $idModulo, idUnidad: $idUnidad, idMaterial: $idMaterial) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation dd178570-c8a4-4a75-bc0a-2b6f0dba0e83
-mutation Material_hardDeleteAllSoftDeleted($idModulo: ID!, $idUnidad: ID!) {
-  Material_hardDeleteAllSoftDeleted(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    materialTitle
-    descripcion
-    url
-    deleted
-  }
-}
-
-# Operation e315462b-478e-40f0-b5d0-d4d26d55ebac
-mutation Modulo_create($createModuloInput: CreateModuloInput!) {
-  Modulo_create(createModuloInput: $createModuloInput) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 784d1c55-75be-4591-bfcf-61da4e17e719
-query Modulos {
-  Modulos {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 28be3e1f-dbf6-4c46-9d4f-cd103efcddb6
-query Modulo($moduloId: ID!) {
-  Modulo(id: $moduloId) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 7d5f0edc-27ae-4306-9ec3-70ee5b0bd1ab
-query Modulo_findByCursoId($cursoId: ID!) {
-  Modulo_findByCursoId(cursoId: $cursoId) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 35244c4f-75e5-4729-934f-1844f4c9e512
-query Modulo_findSoftDeleted {
-  Modulo_findSoftDeleted {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 20a6555f-da52-447f-93ee-013f5ad9a84c
-mutation Modulo_update($updateCuestionarioInput: UpdateModuloInput!, $moduloUpdateId: ID!) {
-  Modulo_update(updateCuestionarioInput: $updateCuestionarioInput, id: $moduloUpdateId) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 31e93aa3-3d5e-4fc5-aee8-96e585d199c2
-mutation Modulo_softDelete($idRemove: ID!) {
-  Modulo_softDelete(idRemove: $idRemove) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 92b1207e-8bf2-474b-aad4-6c7987c9683f
-mutation Modulo_restore($idRestore: ID!) {
-  Modulo_restore(idRestore: $idRestore) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 7a132f78-a929-4899-9081-e5b4e16053ac
-mutation Modulo_hardDelete($moduloHardDeleteId: ID!) {
-  Modulo_hardDelete(id: $moduloHardDeleteId) {
-    _id
-    cursoId
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      moduloId
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-      deleted
-    }
-    deleted
-  }
-}
-
-# Operation 213e312d-131b-4ba1-9e6d-927dcb008d3b
-mutation Modulo_hardDeleteAllSoftDeleted {
-  Modulo_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
-}
-
-# Operation 1e2a7326-56c3-484b-a7b7-bf467e0dda1b
-mutation Opcion_create($idCuestionario: ID!, $idPregunta: ID!, $createOpcionInput: CreateOpcionInput!) {
-  Opcion_create(idCuestionario: $idCuestionario, idPregunta: $idPregunta, createOpcionInput: $createOpcionInput) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
 }
 
 # Operation ebccaa8d-05aa-4e13-b9c0-62898331ca0f
 query Opcion_findById($idCuestionario: ID!, $idPregunta: ID!, $idOpcion: ID!) {
-  Opcion(idCuestionario: $idCuestionario, idPregunta: $idPregunta, idOpcion: $idOpcion) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+    Opcion(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        idOpcion: $idOpcion
+    ) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 898b492c-2dc4-407b-83e1-c7677af46f6b
-mutation Opcion_update($idCuestionario: ID!, $idPregunta: ID!, $idOpcion: ID!, $updateOpcionInput: UpdateOpcionInput!) {
-  Opcion_update(idCuestionario: $idCuestionario, idPregunta: $idPregunta, idOpcion: $idOpcion, updateOpcionInput: $updateOpcionInput) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+mutation Opcion_update(
+    $idCuestionario: ID!
+    $idPregunta: ID!
+    $idOpcion: ID!
+    $updateOpcionInput: UpdateOpcionInput!
+) {
+    Opcion_update(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        idOpcion: $idOpcion
+        updateOpcionInput: $updateOpcionInput
+    ) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 523dbf0b-7d6e-4fe9-b6b5-936b13230a96
 query Opciones($idCuestionario: ID!, $idPregunta: ID!) {
-  Opciones(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+    Opciones(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 9ef45965-33fb-4584-b388-f87cc709a11d
-mutation Opcion_softDelete($idCuestionario: ID!, $idPregunta: ID!, $idOpcion: ID!) {
-  Opcion_softDelete(idCuestionario: $idCuestionario, idPregunta: $idPregunta, idOpcion: $idOpcion) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+mutation Opcion_softDelete(
+    $idCuestionario: ID!
+    $idPregunta: ID!
+    $idOpcion: ID!
+) {
+    Opcion_softDelete(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        idOpcion: $idOpcion
+    ) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 114c1209-2089-4d7c-b4de-ce61dd66c184
-mutation Opcion_restore($idCuestionario: ID!, $idPregunta: ID!, $idOpcion: ID!) {
-  Opcion_restore(idCuestionario: $idCuestionario, idPregunta: $idPregunta, idOpcion: $idOpcion) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+mutation Opcion_restore(
+    $idCuestionario: ID!
+    $idPregunta: ID!
+    $idOpcion: ID!
+) {
+    Opcion_restore(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        idOpcion: $idOpcion
+    ) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 0a26e128-0143-4d66-bbd9-b6d9ca26733c
 query Opcion_findSoftDeleted($idCuestionario: ID!, $idPregunta: ID!) {
-  Opcion_findSoftDeleted(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+    Opcion_findSoftDeleted(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+    ) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 86bf6aef-694e-443a-a994-1011480a0134
-mutation Opcion_hardDelete($idCuestionario: ID!, $idPregunta: ID!, $idOpcion: ID!) {
-  Opcion_hardDelete(idCuestionario: $idCuestionario, idPregunta: $idPregunta, idOpcion: $idOpcion) {
-    _id
-    textOpcion
-    esCorrecta
-    orden
-    deleted
-  }
+mutation Opcion_hardDelete(
+    $idCuestionario: ID!
+    $idPregunta: ID!
+    $idOpcion: ID!
+) {
+    Opcion_hardDelete(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        idOpcion: $idOpcion
+    ) {
+        _id
+        textOpcion
+        esCorrecta
+        orden
+        deleted
+    }
 }
 
 # Operation 31687892-2502-4632-a593-a296ed2b3f1f
 query Ordenes {
-  Ordenes {
-    _id
-    usuarioId
-    listaCursos {
-      precio
-      courseTitle
-      descuento
-      cursoId
+    Ordenes {
+        _id
+        usuarioId
+        listaCursos {
+            precio
+            courseTitle
+            descuento
+            cursoId
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 9e27b6fb-6ae7-4607-87f1-46d96b4ff141
 mutation Ordenes_create($arrayCursosIds: [ID!]!) {
-  Ordenes_create(arrayCursosIds: $arrayCursosIds) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_create(arrayCursosIds: $arrayCursosIds) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 7b44d05d-054b-4f03-9d33-56d998433701
 query Orden($ordenId: ID!) {
-  Orden(id: $ordenId) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Orden(id: $ordenId) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation b217730c-e074-4b8a-952e-35488b05730c
 query Ordenes_findAllByUsuarioId($idUsuario: ID!) {
-  Ordenes_findAllByUsuarioId(idUsuario: $idUsuario) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_findAllByUsuarioId(idUsuario: $idUsuario) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation d1482be4-6102-46cf-acf5-47a4e2b42fb5
 query Ordenes_findAllByCursoId($idCurso: ID!) {
-  Ordenes_findAllByCursoId(idCurso: $idCurso) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_findAllByCursoId(idCurso: $idCurso) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 9aa155e5-b5e6-4607-9e1a-21f370b84489
-mutation Ordenes_update($ordenesUpdateId: ID!, $updateCategoriaInput: UpdateOrdenInput!, $updateOrdenInput: UpdateOrdenInput!) {
-  Ordenes_update(id: $ordenesUpdateId,  updateOrdenInput: $updateOrdenInput) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+mutation Ordenes_update(
+    $ordenesUpdateId: ID!
+    $updateCategoriaInput: UpdateOrdenInput!
+    $updateOrdenInput: UpdateOrdenInput!
+) {
+    Ordenes_update(id: $ordenesUpdateId, updateOrdenInput: $updateOrdenInput) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 7d1cd5e0-a5a8-4699-9373-9b65a15593f9
 query Ordenes_findSoftDeleted {
-  Ordenes_findSoftDeleted {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_findSoftDeleted {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation db5d0668-fbb8-4aa3-a350-39152da1685f
 mutation Ordenes_softDelete($idRemove: ID!) {
-  Ordenes_softDelete(idRemove: $idRemove) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_softDelete(idRemove: $idRemove) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 399e1581-3cbc-4025-934b-94b30690b523
 mutation Ordenes_restore($idRestore: ID!) {
-  Ordenes_restore(idRestore: $idRestore) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_restore(idRestore: $idRestore) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation b6bf6fba-5e34-440a-8af4-d406de702b06
 mutation Ordenes_hardDelete($ordenesHardDeleteId: ID!) {
-  Ordenes_hardDelete(id: $ordenesHardDeleteId) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_hardDelete(id: $ordenesHardDeleteId) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 71c52343-e510-49ec-be01-b37ea937811f
 mutation Ordenes_hardDeleteAllSoftDeleted {
-  Ordenes_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    Ordenes_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation e4c19426-375c-4c9c-9522-9111a8ed81dc
 mutation Ordenes_pullCurso($ordenId: ID!, $arrayCursosIds: [ID!]!) {
-  Ordenes_pullCurso(ordenId: $ordenId, arrayCursosIds: $arrayCursosIds) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_pullCurso(ordenId: $ordenId, arrayCursosIds: $arrayCursosIds) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation 58f533c1-e3c5-4d1b-bc87-a8cb177482f1
 mutation Ordenes_pushCurso($ordenId: ID!, $arrayCursosIds: [ID!]!) {
-  Ordenes_pushCurso(ordenId: $ordenId, arrayCursosIds: $arrayCursosIds) {
-    _id
-    usuarioId
-    listaCursos {
-      cursoId
-      precio
-      courseTitle
-      descuento
+    Ordenes_pushCurso(ordenId: $ordenId, arrayCursosIds: $arrayCursosIds) {
+        _id
+        usuarioId
+        listaCursos {
+            cursoId
+            precio
+            courseTitle
+            descuento
+        }
+        montoTotal
+        estado_orden
+        deleted
     }
-    montoTotal
-    estado_orden
-    deleted
-  }
 }
 
 # Operation c03a8378-7303-45e2-a834-7065d9325114
-mutation Pregunta_update($idCuestionario: ID!, $idPregunta: ID!, $updatePreguntaInput: UpdatePreguntaInput!) {
-  Pregunta_update(idCuestionario: $idCuestionario, idPregunta: $idPregunta, updatePreguntaInput: $updatePreguntaInput) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+mutation Pregunta_update(
+    $idCuestionario: ID!
+    $idPregunta: ID!
+    $updatePreguntaInput: UpdatePreguntaInput!
+) {
+    Pregunta_update(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+        updatePreguntaInput: $updatePreguntaInput
+    ) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation 4c7af529-7513-4abb-aad6-f6a6c51c924e
 query Preguntas($idCuestionario: ID!) {
-  Preguntas(idCuestionario: $idCuestionario) {
+    Preguntas(idCuestionario: $idCuestionario) {
+        enunciado
+        tipoPregunta
 
-    enunciado
-    tipoPregunta
-
-    moduloId
-    unidadId
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+        moduloId
+        unidadId
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        deleted
+        _id
     }
-    deleted
-    _id
-  }
 }
 
 # Operation 01f01e72-08db-414e-b912-e1bd7005d237
 mutation Pregunta_softDelete($idCuestionario: ID!, $idPregunta: ID!) {
-  Pregunta_softDelete(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+    Pregunta_softDelete(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+    ) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation 1ff5a558-8748-4344-ab3b-3971e53bc574
 mutation Pregunta_restore($idCuestionario: ID!, $idPregunta: ID!) {
-  Pregunta_restore(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+    Pregunta_restore(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
-} 
+}
 
 # Operation c7ab8104-410b-459d-9406-375eed0c901b
 mutation Pregunta_hardDeleteAllSoftDeleted($idCuestionario: ID!) {
-  Pregunta_hardDeleteAllSoftDeleted(idCuestionario: $idCuestionario) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+    Pregunta_hardDeleteAllSoftDeleted(idCuestionario: $idCuestionario) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation f8ab9d7f-1007-45ec-8463-ac57009a0787
 mutation Pregunta_hardDelete($idCuestionario: ID!, $idPregunta: ID!) {
-  Pregunta_hardDelete(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+    Pregunta_hardDelete(
+        idCuestionario: $idCuestionario
+        idPregunta: $idPregunta
+    ) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation e5b5748f-61b2-4e30-a961-39eeb977d8c0
-mutation Pregunta_create($idCuestionario: ID!, $createPreguntaInput: CreatePreguntaInput!) {
-  Pregunta_create(idCuestionario: $idCuestionario, createPreguntaInput: $createPreguntaInput) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+mutation Pregunta_create(
+    $idCuestionario: ID!
+    $createPreguntaInput: CreatePreguntaInput!
+) {
+    Pregunta_create(
+        idCuestionario: $idCuestionario
+        createPreguntaInput: $createPreguntaInput
+    ) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation 50b0700b-9320-4a7f-9ac7-14325cbfaaf4
 query Pregunta_findSoftDeleted($idCuestionario: ID!) {
-  Pregunta_findSoftDeleted(idCuestionario: $idCuestionario) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+    Pregunta_findSoftDeleted(idCuestionario: $idCuestionario) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation 61d548f5-9a1d-4924-856b-44edbdb66ffd
- query Pregunta($idCuestionario: ID!, $idPregunta: ID!) {
-  Pregunta(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
-    _id
-    enunciado
-    tipoPregunta
-    opciones {
-      _id
-      textOpcion
-      esCorrecta
-      orden
-      deleted
+query Pregunta($idCuestionario: ID!, $idPregunta: ID!) {
+    Pregunta(idCuestionario: $idCuestionario, idPregunta: $idPregunta) {
+        _id
+        enunciado
+        tipoPregunta
+        opciones {
+            _id
+            textOpcion
+            esCorrecta
+            orden
+            deleted
+        }
+        moduloId
+        unidadId
+        deleted
     }
-    moduloId
-    unidadId
-    deleted
-  }
 }
 
 # Operation 80c47d19-11f5-417b-b1f4-62dd95ed4dc2
-mutation RespuestaCuestionario_create($createRespuestaCuestionarioInput: CreateRespuestaCuestionarioInput!) {
-  RespuestaCuestionario_create(createRespuestaCuestionarioInput: $createRespuestaCuestionarioInput) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-    respuestaId {
-      _id
-      
+mutation RespuestaCuestionario_create(
+    $createRespuestaCuestionarioInput: CreateRespuestaCuestionarioInput!
+) {
+    RespuestaCuestionario_create(
+        createRespuestaCuestionarioInput: $createRespuestaCuestionarioInput
+    ) {
+        _id
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-      respuestaAbierta
-      deleted
-    }
-    fecha
-    nota
-    estado
-    deleted
-  }
-} 
+}
 
 # Operation 67dbc0bb-952d-4c96-b71b-c61d3c738bcc
 query RespuestaCuestionarios {
-  RespuestaCuestionarios {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionarios {
         _id
-      }
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+            }
 
-      respuestaAbierta
-      deleted
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation 42693703-578b-437e-9727-67219f95d6d9
 query RespuestaCuestionario($respuestaCuestionarioId: ID!) {
-  RespuestaCuestionario(respuestaCuestionarioId: $respuestaCuestionarioId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionario(respuestaCuestionarioId: $respuestaCuestionarioId) {
         _id
-        orden
-        textOpcion
-      }
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                orden
+                textOpcion
+            }
 
-      respuestaAbierta
-      deleted
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation b679b46d-efcc-42a6-96c3-05d73e5ae52a
 query RespuestaCuestionario_byCursoID($cursoId: ID!) {
-  RespuestaCuestionario_byCursoId(cursoId: $cursoId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionario_byCursoId(cursoId: $cursoId) {
         _id
-        textOpcion
-        orden
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation b419460b-a33a-4af6-9ec6-ccf1f8175954
 query RespuestaCuestionario_byUsuarioId($usuarioId: ID!) {
-  RespuestaCuestionario_byUsuarioId(usuarioId: $usuarioId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionario_byUsuarioId(usuarioId: $usuarioId) {
         _id
-        textOpcion
-        orden
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation b08f0995-fdc6-40f8-a73c-7f7f4f59b211
 query RespuestaCuestionario_findSoftDeleted {
-  RespuestaCuestionario_findSoftDeleted {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId  {
+    RespuestaCuestionario_findSoftDeleted {
         _id
-        textOpcion
-        orden
-      
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation 245d9d1a-c4dd-408a-b26b-6eb34553d9cf
 mutation RespuestaCuestionario_softDelete($respuestaCuestionarioId: ID!) {
-  RespuestaCuestionario_softDelete(respuestaCuestionarioId: $respuestaCuestionarioId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionario_softDelete(
+        respuestaCuestionarioId: $respuestaCuestionarioId
+    ) {
         _id
-        textOpcion
-        orden
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation cd9d750b-6164-4740-8c2a-d5b22c3d22ac
 mutation RespuestaCuestionario_restore($respuestaCuestionarioId: ID!) {
-  RespuestaCuestionario_restore(respuestaCuestionarioId: $respuestaCuestionarioId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionario_restore(
+        respuestaCuestionarioId: $respuestaCuestionarioId
+    ) {
         _id
-        textOpcion
-        orden
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation b846b3f5-40d6-465e-9852-0cc99cea12a3
-mutation RespuestaCuestionario_update($updateCuestionarioInput: UpdateRespuestaCuestionarioInput!, $respuestaCuestionarioUpdateId: ID!) {
-  RespuestaCuestionario_update(updateRespuestaCuestionarioInput: $updateCuestionarioInput, respuestaCuestionarioUpdateId: $respuestaCuestionarioUpdateId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+mutation RespuestaCuestionario_update(
+    $updateCuestionarioInput: UpdateRespuestaCuestionarioInput!
+    $respuestaCuestionarioUpdateId: ID!
+) {
+    RespuestaCuestionario_update(
+        updateRespuestaCuestionarioInput: $updateCuestionarioInput
+        respuestaCuestionarioUpdateId: $respuestaCuestionarioUpdateId
+    ) {
         _id
-        textOpcion
-        orden
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation dd6098a2-714c-41d6-9711-96007af14851
 mutation RespuestaCuestionario_hardDelete($respuestaCuestionarioId: ID!) {
-  RespuestaCuestionario_hardDelete(respuestaCuestionarioId: $respuestaCuestionarioId) {
-    _id
-    usuarioId
-    cursoId
-    cuestionarioId
-    respuestas {
-      _id
-      preguntaId
-      respuestaId {
+    RespuestaCuestionario_hardDelete(
+        respuestaCuestionarioId: $respuestaCuestionarioId
+    ) {
         _id
-        textOpcion
-        orden
-      }
-      respuestaAbierta
-      deleted
+        usuarioId
+        cursoId
+        cuestionarioId
+        respuestas {
+            _id
+            preguntaId
+            respuestaId {
+                _id
+                textOpcion
+                orden
+            }
+            respuestaAbierta
+            deleted
+        }
+        fecha
+        nota
+        estado
+        deleted
     }
-    fecha
-    nota
-    estado
-    deleted
-  }
 }
 
 # Operation a08e18f9-3c4c-414d-b659-e38ce22bb3fc
 mutation RespuestaCuestionario_hardDeleteAllSoftDeleted {
-  RespuestaCuestionario_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    RespuestaCuestionario_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation af5af816-4e58-4fd2-b993-af6c0da09375
 mutation RespuestaCuestionario_calcularNota($idRespuestaCuestionario: ID!) {
-  RespuestaCuestionario_calcularNota(idRespuestaCuestionario: $idRespuestaCuestionario)
+    RespuestaCuestionario_calcularNota(
+        idRespuestaCuestionario: $idRespuestaCuestionario
+    )
 }
 
 # Operation 8cc82079-71bf-457f-a794-f149110ac1e0
-mutation RespuestaPregunta_create($idCurso: ID!, $createRespuestaPreguntaResolverInput: CreateRespuestaPregunta_ResolverInput!) {
-  RespuestaPregunta_create(idCurso: $idCurso, createRespuestaPregunta_ResolverInput: $createRespuestaPreguntaResolverInput) {
-    _id
-    preguntaId
-    respuestaId {
-      _id
-      textOpcion
-      orden
+mutation RespuestaPregunta_create(
+    $idCurso: ID!
+    $createRespuestaPreguntaResolverInput: CreateRespuestaPregunta_ResolverInput!
+) {
+    RespuestaPregunta_create(
+        idCurso: $idCurso
+        createRespuestaPregunta_ResolverInput: $createRespuestaPreguntaResolverInput
+    ) {
+        _id
+        preguntaId
+        respuestaId {
+            _id
+            textOpcion
+            orden
+        }
+        respuestaAbierta
+        deleted
     }
-    respuestaAbierta
-    deleted
-  }
-
 }
 
 # Operation 3e82ab3c-c04d-4440-bdfa-c67d3b5f18cf
 query RespuestaPregunta($idCurso: ID!, $idPregunta: ID!) {
-  RespuestaPregunta(idCurso: $idCurso, idPregunta: $idPregunta) {
-    _id
-    preguntaId
-    respuestaId {
-      _id
-      textOpcion
-      
-      orden
-      
+    RespuestaPregunta(idCurso: $idCurso, idPregunta: $idPregunta) {
+        _id
+        preguntaId
+        respuestaId {
+            _id
+            textOpcion
+
+            orden
+        }
+        respuestaAbierta
+        deleted
     }
-    respuestaAbierta
-    deleted
-  }
 }
 
 # Operation 2dab155e-8b2f-4c32-ad79-00bb87856fc4
 query RespuestaPreguntas($idRespuestaCuestionario: ID!) {
-  RespuestaPreguntas(idRespuestaCuestionario: $idRespuestaCuestionario) {
-    _id
-    preguntaId
-    respuestaId {
-      _id
-      textOpcion
-      
-      orden
-      
+    RespuestaPreguntas(idRespuestaCuestionario: $idRespuestaCuestionario) {
+        _id
+        preguntaId
+        respuestaId {
+            _id
+            textOpcion
+
+            orden
+        }
+        respuestaAbierta
+        deleted
     }
-    respuestaAbierta
-    deleted
-  }
 }
 
 # Operation 103d2a3c-483c-4178-b88b-fc00320c0878
 mutation Unidad_create($idModulo: ID!, $createUnidadInput: CreateUnidadInput!) {
-  Unidad_create(idModulo: $idModulo, createUnidadInput: $createUnidadInput) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad_create(idModulo: $idModulo, createUnidadInput: $createUnidadInput) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation 32fc2f63-d627-4354-a02e-5345b339c5d7
 query Unidades($idModulo: ID!) {
-  Unidades(idModulo: $idModulo) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidades(idModulo: $idModulo) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation eebf6ef8-ef64-457a-a2b5-fb7f6fb1743b
 query Unidad($idModulo: ID!, $idUnidad: ID!) {
-  Unidad(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad(idModulo: $idModulo, idUnidad: $idUnidad) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation 68319f74-d0f2-4d1b-ab3c-691ded160419
-mutation Unidad_update($idModulo: ID!, $idUnidad: ID!, $updateUnidadInput: UpdateUnidadInput!) {
-  Unidad_update(idModulo: $idModulo, idUnidad: $idUnidad, updateUnidadInput: $updateUnidadInput) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+mutation Unidad_update(
+    $idModulo: ID!
+    $idUnidad: ID!
+    $updateUnidadInput: UpdateUnidadInput!
+) {
+    Unidad_update(
+        idModulo: $idModulo
+        idUnidad: $idUnidad
+        updateUnidadInput: $updateUnidadInput
+    ) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation d5478b44-91f3-4664-91b3-43dffbd5d465
 mutation Unidad_softDelete($idModulo: ID!, $idUnidad: ID!) {
-  Unidad_softDelete(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad_softDelete(idModulo: $idModulo, idUnidad: $idUnidad) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation 6bd935c9-cca4-4945-a87a-92015d12a934
 mutation Unidad_hardDelete($idModulo: ID!, $idUnidad: ID!) {
-  Unidad_hardDelete(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad_hardDelete(idModulo: $idModulo, idUnidad: $idUnidad) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation abb1430e-d113-4613-8f26-86e9d612adbb
 query Unidad_findSoftDeleted($idModulo: ID!) {
-  Unidad_findSoftDeleted(idModulo: $idModulo) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad_findSoftDeleted(idModulo: $idModulo) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation 4fa5f976-66aa-4458-b7b3-0c441bc8dbc1
 mutation Unidad_hardDeleteAllSoftDeleted($idModulo: ID!) {
-  Unidad_hardDeleteAllSoftDeleted(idModulo: $idModulo) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad_hardDeleteAllSoftDeleted(idModulo: $idModulo) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation 42803e30-01de-4025-a171-0188940f692f
 mutation Unidad_restore($idModulo: ID!, $idUnidad: ID!) {
-  Unidad_restore(idModulo: $idModulo, idUnidad: $idUnidad) {
-    _id
-    moduloId
-    numeroUnidad
-    unidadTitle
-    descripcion
-    urlVideo
-    materiales {
-      _id
-      materialTitle
-      descripcion
-      url
+    Unidad_restore(idModulo: $idModulo, idUnidad: $idUnidad) {
+        _id
+        moduloId
+        numeroUnidad
+        unidadTitle
+        descripcion
+        urlVideo
+        materiales {
+            _id
+            materialTitle
+            descripcion
+            url
+        }
+        deleted
     }
-    deleted
-  }
 }
 
 # Operation 984db4ab-4410-40ce-9cc1-12d1d1243d51
 query Usuarios_findAllByFirstname($search: String) {
-  usuarios_findAllByFirstname(search: $search) {
-    status
-    roles
-    email
-    email_verified
-    deleted
-    _id
-    lastName
-    firstName
-  }
+    usuarios_findAllByFirstname(search: $search) {
+        status
+        roles
+        email
+        email_verified
+        deleted
+        _id
+        lastName
+        firstName
+    }
 }
 
 # Operation 12ac11c4-bfb1-4f22-b972-42f60cd04882
 query Usuario($usuarioId: ID!) {
-  usuario(id: $usuarioId) {
-    roles
-    status
-    email_verified
-    email
-    deleted
-    _id
-    firstName
-    lastName
-  }
+    usuario(id: $usuarioId) {
+        roles
+        status
+        email_verified
+        email
+        deleted
+        _id
+        firstName
+        lastName
+    }
 }
 
 # Operation ebae1eb4-3e49-4ea3-b246-59db49bbff51
 mutation Usuarios_hardDeleteAllSoftDeleted {
-  usuarios_hardDeleteAllSoftDeleted {
-    deletedCount
-  }
+    usuarios_hardDeleteAllSoftDeleted {
+        deletedCount
+    }
 }
 
 # Operation 86392090-3169-49cf-b753-b9a29024ee73
 mutation Usuario_softDelete($idRemove: ID!) {
-  usuario_softDelete(idRemove: $idRemove) {
-    status
-    roles
-    deleted
-    email
-    _id
-  }
+    usuario_softDelete(idRemove: $idRemove) {
+        status
+        roles
+        deleted
+        email
+        _id
+    }
 }
 
+# Operation 7750a06a-f365-4be6-b3a5-4dec022986c8
+query Usuario_findByEmail($email: String!) {
+    usuario_findByEmail(email: $email) {
+        _id
+        email
+        email_verified
+        isGoogleAuth
+        roles
+        status
+    }
+}
