@@ -72,4 +72,80 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
     </form>
 </div>
 
-<script></script>
+<script>
+    import { clientGql } from '@graphql-astro/apolloClient.ts';
+    import {
+        Usuario_FindByEmailDocument,
+        type Usuario,
+    } from '@graphql-astro/generated/graphql';
+
+    import { showElement, hideElement } from '@services/closeOpenLogin';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('login-form') as HTMLFormElement;
+        const btnForgotPassword = document.getElementById(
+            'btnForgotPassword',
+        ) as HTMLButtonElement;
+
+        form.addEventListener('submit', async (event: SubmitEvent) => {
+            event.preventDefault();
+
+            const emailInput = document.getElementById(
+                'emailInput',
+            ) as HTMLInputElement;
+
+            const spanEmail = document.getElementById('spanEmail');
+            if (spanEmail) {
+                spanEmail.textContent = emailInput.value;
+                // span.className =
+                //     'text-gray-500 text-sm text-center mt-2 font-semibold';
+            }
+
+            const email = emailInput.value;
+
+            try {
+                const { data } = await clientGql.query({
+                    query: Usuario_FindByEmailDocument,
+                    variables: { email: email },
+                });
+
+                const usuario: Usuario = data.usuario_findByEmail;
+
+                hideElement('loginModalDiv');
+
+                if (usuario.isGoogleAuth === true) {
+                    showElement('loginGoogleDiv');
+                    showElement('btnBack');
+
+                    const emailGoogleSpan = document.getElementById(
+                        'emailGoogleSpan',
+                    ) as HTMLSpanElement;
+                    emailGoogleSpan.textContent = usuario.email;
+
+                    event.preventDefault();
+
+                    return; // <-- También podrías detener aquí si lo deseas
+                }
+
+                if (usuario) {
+                    showElement('loginPasswordDiv');
+                    showElement('btnBack');
+
+                    event.preventDefault(); // Evita el envío del formulario
+                    return; // <-- Detiene aquí la ejecución del resto
+                }
+            } catch (error) {
+                hideElement('loginModalDiv');
+                showElement('btnBack');
+                showElement('loginCreatePasswordDiv');
+
+                event.preventDefault();
+            }
+        });
+
+        btnForgotPassword.addEventListener('click', () => {
+            hideElement('loginPasswordDiv');
+            showElement('forgotPasswordDiv');
+        });
+    });
+</script>
