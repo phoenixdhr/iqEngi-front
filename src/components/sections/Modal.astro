@@ -1,11 +1,11 @@
 ---
 import ForgotPassword from '@components/molecules/login/ForgotPassword.astro';
-import CreatePassword from '@components/molecules/login/LoginCreatePassword';
 import LoginCreatePassword from '@components/molecules/login/LoginCreatePassword.astro';
 import LoginGoogle from '@components/molecules/login/LoginGoogle.astro';
 import LoginModal from '@components/molecules/login/LoginModal.astro';
 import LoginPassword from '@components/molecules/login/LoginPassword.astro';
 import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePasswordName.astro';
+import Bienvenida from '@components/molecules/login/Bienvenida.astro';
 ---
 
 <div
@@ -67,6 +67,9 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
             <LoginCreatePasswordName />
         </div>
         <div id="forgotPasswordDiv" class="hidden"><ForgotPassword /></div>
+        <div id="bienvenidaDiv" class="hidden">
+            <Bienvenida />
+        </div>
     </div>
 </div>
 <script>
@@ -84,6 +87,7 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
         hideElement('forgotPasswordDiv');
         hideElement('loginCreatePasswordNameDiv');
         hideElement('btnBack');
+        hideElement('bienvenidaDiv');
 
         clearFields([
             'emailInput',
@@ -94,12 +98,25 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
             'passwordLoginInput',
             'firstNameInput',
             'lastNameInput',
+            'firstNameWelcomeSpan',
+            'errorIncorrectPasswordSpan',
         ]);
     }
 
     const btnBack = document.getElementById('btnBack');
     btnBack &&
         btnBack.addEventListener('click', () => {
+            const btnCheckPassword = document.getElementById(
+                'btnCheckPassword',
+            ) as HTMLButtonElement;
+
+            const btnCrearCuenta = document.getElementById(
+                'btnCrearCuenta',
+            ) as HTMLButtonElement;
+
+            btnCheckPassword.classList.add('opacity-50', 'cursor-not-allowed');
+            btnCrearCuenta.classList.add('opacity-50', 'cursor-not-allowed');
+
             closeModal();
         });
 
@@ -111,6 +128,7 @@ import LoginCreatePasswordName from '@components/molecules/login/LoginCreatePass
         });
 
     window.addEventListener('listener-login-modal', () => {
-        document.getElementById('login-modal')?.classList.remove('hidden');
+        showElement('login-modal');
+        showElement('loginModalDiv');
     });
 </script>

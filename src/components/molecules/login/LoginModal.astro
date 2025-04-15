@@ -17,19 +17,20 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
             id="emailInput"
             type="email"
             placeholder="Correo electrónico"
+            onblur="this.value = this.value.trim()"
             required
             class="w-full h-12 px-4 bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full text-gray-900 text-center placeholder:text-center"
         />
         <!-- Botón para enviar el formulario y continuar el proceso de inicio de sesión -->
         <button
             type="submit"
-            class="w-full h-12 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium text-sm hover:scale-105 transition-transform rounded-full"
+            class="w-full h-12 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium text-base hover:scale-105 transition-transform rounded-full"
         >
             Continuar
         </button>
 
         <!-- Separador visual y textual que sugiere otra forma de iniciar sesión -->
-        <div class="text-center text-gray-500 text-sm">
+        <div class="text-center text-gray-500 text-base">
             <span class="hidden sm:inline">────</span>────── o inicia sesión con
             ──────<span class="hidden sm:inline">────</span>
         </div>
@@ -83,9 +84,6 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('login-form') as HTMLFormElement;
-        const btnForgotPassword = document.getElementById(
-            'btnForgotPassword',
-        ) as HTMLButtonElement;
 
         form.addEventListener('submit', async (event: SubmitEvent) => {
             event.preventDefault();
@@ -96,12 +94,10 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 
             const spanEmail = document.getElementById('spanEmail');
             if (spanEmail) {
-                spanEmail.textContent = emailInput.value;
-                // span.className =
-                //     'text-gray-500 text-sm text-center mt-2 font-semibold';
+                spanEmail.textContent = emailInput.value.trim();
             }
 
-            const email = emailInput.value;
+            const email = emailInput.value.trim();
 
             try {
                 const { data } = await clientGql.query({
@@ -141,11 +137,6 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 
                 event.preventDefault();
             }
-        });
-
-        btnForgotPassword.addEventListener('click', () => {
-            hideElement('loginPasswordDiv');
-            showElement('forgotPasswordDiv');
         });
     });
 </script>

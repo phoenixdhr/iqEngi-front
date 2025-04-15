@@ -99,7 +99,7 @@ export default function Navbar() {
                     <button
                         type="button"
                         onClick={() => openModalLogin()}
-                        className="gap-x-2.5 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 h-full mr-4 hover:scale-105 transition-transform"
+                        className="gap-x-2.5 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-base px-5 h-full mr-4 hover:scale-105 transition-transform"
                     >
                         Acceder
                     </button>
@@ -117,22 +117,28 @@ export default function Navbar() {
 
                 {/* Menú de navegación para pantallas grandes */}
                 <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-                    <a href="#" className="text-sm font-semibold text-gray-900">
+                    <a
+                        href="#"
+                        className="text-base font-semibold text-gray-900"
+                    >
                         Home
                     </a>
                     <a
                         href="/cursos"
-                        className="text-sm font-semibold text-gray-900"
+                        className="text-base font-semibold text-gray-900"
                     >
                         Cursos
                     </a>
-                    <a href="#" className="text-sm font-semibold text-gray-900">
+                    <a
+                        href="#"
+                        className="text-base font-semibold text-gray-900"
+                    >
                         Contáctanos
                     </a>
 
                     {/* Menú desplegable para "Comunidad" */}
                     <Popover className="relative">
-                        <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900">
+                        <PopoverButton className="flex items-center gap-x-1 text-base font-semibold text-gray-900">
                             Comunidad
                             <ChevronDownIcon
                                 aria-hidden="true"
@@ -144,7 +150,7 @@ export default function Navbar() {
                                 {communityItems.map((item) => (
                                     <div
                                         key={item.name}
-                                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm hover:bg-gray-50"
+                                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:bg-gray-50"
                                     >
                                         <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                                             <item.icon
@@ -173,7 +179,7 @@ export default function Navbar() {
                                     <a
                                         key={item.name}
                                         href={item.href}
-                                        className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold text-gray-900 hover:bg-gray-100"
+                                        className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold text-gray-900 hover:bg-gray-100"
                                     >
                                         <item.icon
                                             className="h-5 w-5 flex-none text-gray-400"
@@ -192,7 +198,7 @@ export default function Navbar() {
                     <button
                         type="button"
                         onClick={() => openModalLogin()}
-                        className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 transition-transform hover:scale-105"
+                        className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-base px-5 py-2.5 mr-2 transition-transform hover:scale-105"
                     >
                         Acceder
                     </button>
@@ -234,7 +240,7 @@ export default function Navbar() {
                                 setMobileMenuOpen(false);
                                 openModalLogin();
                             }}
-                            className="ml-auto h-8 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-sm px-5  mr-4 hover:scale-105 transition-transform"
+                            className="ml-auto h-8 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-base px-5  mr-4 hover:scale-105 transition-transform"
                         >
                             Acceder
                         </button>
@@ -290,7 +296,7 @@ export default function Navbar() {
                                                 key={item.name}
                                                 as="a"
                                                 href={item.href}
-                                                className="block rounded-lg py-2 pr-3 pl-6 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+                                                className="block rounded-lg py-2 pr-3 pl-6 text-base font-semibold text-gray-900 hover:bg-gray-50"
                                             >
                                                 {item.name}
                                             </DisclosureButton>
