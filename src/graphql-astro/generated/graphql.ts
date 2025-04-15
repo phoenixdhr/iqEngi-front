@@ -176,8 +176,8 @@ export type CreateUnidadInput = {
 
 export type CreateUsuarioInput = {
   email: Scalars['String']['input'];
-  firstName: Scalars['String']['input'];
-  lastName: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
   notificaciones?: InputMaybe<Scalars['Boolean']['input']>;
   password: Scalars['String']['input'];
   perfil?: InputMaybe<CreatePerfilInput>;
@@ -197,8 +197,6 @@ export type Cuestionario = {
   preguntas: Array<Pregunta>;
   published?: Maybe<Scalars['Boolean']['output']>;
 };
-
-
 
 export type Curso = {
   __typename?: 'Curso';
@@ -433,12 +431,12 @@ export type Mutation = {
   Unidad_restore: Unidad;
   Unidad_softDelete: Unidad;
   Unidad_update: Unidad;
+  jwt_requestPasswordReset: Scalars['String']['output'];
+  jwt_resetPassword: Scalars['String']['output'];
+  jwt_sendVerificationEmail: UserJwtOutput;
+  jwt_updatePassword: UsuarioOutput;
   login: UserRequest;
-  requestPasswordReset: Scalars['String']['output'];
-  resetPassword: Scalars['String']['output'];
-  sendVerificationEmailAgain: UserJwtOutput;
   signup: UsuarioOutput;
-  updatePassword: UsuarioOutput;
   usuario_create: UsuarioOutput;
   usuario_hardDelete: UsuarioOutput;
   usuario_restore: UsuarioOutput;
@@ -887,28 +885,28 @@ export type MutationUnidad_UpdateArgs = {
 };
 
 
+export type MutationJwt_RequestPasswordResetArgs = {
+  requestPasswordResetInput: RequestPasswordResetInput;
+};
+
+
+export type MutationJwt_ResetPasswordArgs = {
+  resetPasswordInput: ResetPasswordInput;
+};
+
+
+export type MutationJwt_UpdatePasswordArgs = {
+  updatePasswordInput: UpdatePasswordInput;
+};
+
+
 export type MutationLoginArgs = {
   loginUserInput: LoginUserInput;
 };
 
 
-export type MutationRequestPasswordResetArgs = {
-  requestPasswordResetInput: RequestPasswordResetInput;
-};
-
-
-export type MutationResetPasswordArgs = {
-  resetPasswordInput: ResetPasswordInput;
-};
-
-
 export type MutationSignupArgs = {
   createUsuarioInput: CreateUsuarioInput;
-};
-
-
-export type MutationUpdatePasswordArgs = {
-  updatePasswordInput: UpdatePasswordInput;
 };
 
 
@@ -1687,9 +1685,9 @@ export type Usuario = {
   deleted: Scalars['Boolean']['output'];
   email: Scalars['String']['output'];
   email_verified: Scalars['Boolean']['output'];
-  firstName: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
   isGoogleAuth: Scalars['Boolean']['output'];
-  lastName: Scalars['String']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
   notificaciones: Scalars['Boolean']['output'];
   perfil?: Maybe<Perfil>;
   picture?: Maybe<Scalars['String']['output']>;
@@ -1704,9 +1702,9 @@ export type UsuarioOutput = {
   deleted: Scalars['Boolean']['output'];
   email: Scalars['String']['output'];
   email_verified: Scalars['Boolean']['output'];
-  firstName: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
   isGoogleAuth: Scalars['Boolean']['output'];
-  lastName: Scalars['String']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
   notificaciones: Scalars['Boolean']['output'];
   perfil?: Maybe<Perfil>;
   picture?: Maybe<Scalars['String']['output']>;
@@ -1721,14 +1719,6 @@ export type ExampleQueryQueryVariables = Exact<{
 
 export type ExampleQueryQuery = { __typename?: 'Query', usuario: { __typename?: 'UsuarioOutput', _id: string } };
 
-export type UpdatePasswordMutationVariables = Exact<{
-  updatePasswordId: Scalars['ID']['input'];
-  updatePasswordInput: UpdatePasswordInput;
-}>;
-
-
-export type UpdatePasswordMutation = { __typename?: 'Mutation', updatePassword: { __typename?: 'UsuarioOutput', _id: string, email: string, email_verified: boolean, firstName: string } };
-
 export type LoginMutationVariables = Exact<{
   loginUserInput: LoginUserInput;
 }>;
@@ -1741,7 +1731,7 @@ export type SignupMutationVariables = Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'UsuarioOutput', _id: string, firstName: string, lastName: string, email: string, email_verified: boolean, roles: Array<RolEnumGql>, picture?: string | null, notificaciones: boolean, status: UserStatus, deleted: boolean, perfil?: { __typename?: 'Perfil', _id: string, bio?: string | null, ubicacion?: string | null, celular?: string | null, fechaNacimiento?: any | null, contacto?: string | null, intereses?: Array<string> | null } | null, cursosFavoritos?: Array<{ __typename?: 'Curso', _id: string }> | null } };
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'UsuarioOutput', _id: string, firstName?: string | null, lastName?: string | null, email: string, email_verified: boolean, roles: Array<RolEnumGql>, picture?: string | null, notificaciones: boolean, status: UserStatus, deleted: boolean, perfil?: { __typename?: 'Perfil', _id: string, bio?: string | null, ubicacion?: string | null, celular?: string | null, fechaNacimiento?: any | null, contacto?: string | null, intereses?: Array<string> | null } | null, cursosFavoritos?: Array<{ __typename?: 'Curso', _id: string }> | null } };
 
 export type Calificacion_CreateMutationVariables = Exact<{
   createCalificacionInput: CreateCalificacion_UserInput;
@@ -2781,14 +2771,14 @@ export type Usuarios_FindAllByFirstnameQueryVariables = Exact<{
 }>;
 
 
-export type Usuarios_FindAllByFirstnameQuery = { __typename?: 'Query', usuarios_findAllByFirstname: Array<{ __typename?: 'UsuarioOutput', status: UserStatus, roles: Array<RolEnumGql>, email: string, email_verified: boolean, deleted: boolean, _id: string, lastName: string, firstName: string }> };
+export type Usuarios_FindAllByFirstnameQuery = { __typename?: 'Query', usuarios_findAllByFirstname: Array<{ __typename?: 'UsuarioOutput', status: UserStatus, roles: Array<RolEnumGql>, email: string, email_verified: boolean, deleted: boolean, _id: string, lastName?: string | null, firstName?: string | null }> };
 
 export type UsuarioQueryVariables = Exact<{
   usuarioId: Scalars['ID']['input'];
 }>;
 
 
-export type UsuarioQuery = { __typename?: 'Query', usuario: { __typename?: 'UsuarioOutput', roles: Array<RolEnumGql>, status: UserStatus, email_verified: boolean, email: string, deleted: boolean, _id: string, firstName: string, lastName: string } };
+export type UsuarioQuery = { __typename?: 'Query', usuario: { __typename?: 'UsuarioOutput', roles: Array<RolEnumGql>, status: UserStatus, email_verified: boolean, email: string, deleted: boolean, _id: string, firstName?: string | null, lastName?: string | null } };
 
 export type Usuarios_HardDeleteAllSoftDeletedMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2808,6 +2798,32 @@ export type Usuario_FindByEmailQueryVariables = Exact<{
 
 
 export type Usuario_FindByEmailQuery = { __typename?: 'Query', usuario_findByEmail: { __typename?: 'UsuarioOutput', _id: string, email: string, email_verified: boolean, isGoogleAuth: boolean, roles: Array<RolEnumGql>, status: UserStatus } };
+
+export type Jwt_RequestPasswordResetMutationVariables = Exact<{
+  requestPasswordResetInput: RequestPasswordResetInput;
+}>;
+
+
+export type Jwt_RequestPasswordResetMutation = { __typename?: 'Mutation', jwt_requestPasswordReset: string };
+
+export type Jwt_ResetPasswordMutationVariables = Exact<{
+  resetPasswordInput: ResetPasswordInput;
+}>;
+
+
+export type Jwt_ResetPasswordMutation = { __typename?: 'Mutation', jwt_resetPassword: string };
+
+export type Jwt_SendVerificationEmailMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type Jwt_SendVerificationEmailMutation = { __typename?: 'Mutation', jwt_sendVerificationEmail: { __typename?: 'UserJwtOutput', accessToken: string, user: { __typename?: 'UserRequest', _id: string, roles: Array<RolEnumGql>, iat?: number | null, exp?: number | null, email: string, email_verified: boolean, firstName: string, lastName: string, picture?: string | null } } };
+
+export type Jwt_UpdatePasswordMutationVariables = Exact<{
+  updatePasswordInput: UpdatePasswordInput;
+}>;
+
+
+export type Jwt_UpdatePasswordMutation = { __typename?: 'Mutation', jwt_updatePassword: { __typename?: 'UsuarioOutput', _id: string, firstName?: string | null, lastName?: string | null, email: string, email_verified: boolean, isGoogleAuth: boolean, roles: Array<RolEnumGql>, picture?: string | null, notificaciones: boolean, status: UserStatus, deleted: boolean } };
 
 
 export const ExampleQueryDocument = gql`
@@ -2850,43 +2866,6 @@ export type ExampleQueryQueryHookResult = ReturnType<typeof useExampleQueryQuery
 export type ExampleQueryLazyQueryHookResult = ReturnType<typeof useExampleQueryLazyQuery>;
 export type ExampleQuerySuspenseQueryHookResult = ReturnType<typeof useExampleQuerySuspenseQuery>;
 export type ExampleQueryQueryResult = Apollo.QueryResult<ExampleQueryQuery, ExampleQueryQueryVariables>;
-export const UpdatePasswordDocument = gql`
-    mutation UpdatePassword($updatePasswordId: ID!, $updatePasswordInput: UpdatePasswordInput!) {
-  updatePassword(updatePasswordInput: $updatePasswordInput) {
-    _id
-    email
-    email_verified
-    firstName
-  }
-}
-    `;
-export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
-
-/**
- * __useUpdatePasswordMutation__
- *
- * To run a mutation, you first call `useUpdatePasswordMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePasswordMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updatePasswordMutation, { data, loading, error }] = useUpdatePasswordMutation({
- *   variables: {
- *      updatePasswordId: // value for 'updatePasswordId'
- *      updatePasswordInput: // value for 'updatePasswordInput'
- *   },
- * });
- */
-export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, options);
-      }
-export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
-export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
-export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($loginUserInput: LoginUserInput!) {
   login(loginUserInput: $loginUserInput) {
@@ -9918,3 +9897,151 @@ export type Usuario_FindByEmailQueryHookResult = ReturnType<typeof useUsuario_Fi
 export type Usuario_FindByEmailLazyQueryHookResult = ReturnType<typeof useUsuario_FindByEmailLazyQuery>;
 export type Usuario_FindByEmailSuspenseQueryHookResult = ReturnType<typeof useUsuario_FindByEmailSuspenseQuery>;
 export type Usuario_FindByEmailQueryResult = Apollo.QueryResult<Usuario_FindByEmailQuery, Usuario_FindByEmailQueryVariables>;
+export const Jwt_RequestPasswordResetDocument = gql`
+    mutation Jwt_requestPasswordReset($requestPasswordResetInput: RequestPasswordResetInput!) {
+  jwt_requestPasswordReset(requestPasswordResetInput: $requestPasswordResetInput)
+}
+    `;
+export type Jwt_RequestPasswordResetMutationFn = Apollo.MutationFunction<Jwt_RequestPasswordResetMutation, Jwt_RequestPasswordResetMutationVariables>;
+
+/**
+ * __useJwt_RequestPasswordResetMutation__
+ *
+ * To run a mutation, you first call `useJwt_RequestPasswordResetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJwt_RequestPasswordResetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [jwtRequestPasswordResetMutation, { data, loading, error }] = useJwt_RequestPasswordResetMutation({
+ *   variables: {
+ *      requestPasswordResetInput: // value for 'requestPasswordResetInput'
+ *   },
+ * });
+ */
+export function useJwt_RequestPasswordResetMutation(baseOptions?: Apollo.MutationHookOptions<Jwt_RequestPasswordResetMutation, Jwt_RequestPasswordResetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Jwt_RequestPasswordResetMutation, Jwt_RequestPasswordResetMutationVariables>(Jwt_RequestPasswordResetDocument, options);
+      }
+export type Jwt_RequestPasswordResetMutationHookResult = ReturnType<typeof useJwt_RequestPasswordResetMutation>;
+export type Jwt_RequestPasswordResetMutationResult = Apollo.MutationResult<Jwt_RequestPasswordResetMutation>;
+export type Jwt_RequestPasswordResetMutationOptions = Apollo.BaseMutationOptions<Jwt_RequestPasswordResetMutation, Jwt_RequestPasswordResetMutationVariables>;
+export const Jwt_ResetPasswordDocument = gql`
+    mutation Jwt_resetPassword($resetPasswordInput: ResetPasswordInput!) {
+  jwt_resetPassword(resetPasswordInput: $resetPasswordInput)
+}
+    `;
+export type Jwt_ResetPasswordMutationFn = Apollo.MutationFunction<Jwt_ResetPasswordMutation, Jwt_ResetPasswordMutationVariables>;
+
+/**
+ * __useJwt_ResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useJwt_ResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJwt_ResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [jwtResetPasswordMutation, { data, loading, error }] = useJwt_ResetPasswordMutation({
+ *   variables: {
+ *      resetPasswordInput: // value for 'resetPasswordInput'
+ *   },
+ * });
+ */
+export function useJwt_ResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<Jwt_ResetPasswordMutation, Jwt_ResetPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Jwt_ResetPasswordMutation, Jwt_ResetPasswordMutationVariables>(Jwt_ResetPasswordDocument, options);
+      }
+export type Jwt_ResetPasswordMutationHookResult = ReturnType<typeof useJwt_ResetPasswordMutation>;
+export type Jwt_ResetPasswordMutationResult = Apollo.MutationResult<Jwt_ResetPasswordMutation>;
+export type Jwt_ResetPasswordMutationOptions = Apollo.BaseMutationOptions<Jwt_ResetPasswordMutation, Jwt_ResetPasswordMutationVariables>;
+export const Jwt_SendVerificationEmailDocument = gql`
+    mutation Jwt_sendVerificationEmail {
+  jwt_sendVerificationEmail {
+    accessToken
+    user {
+      _id
+      roles
+      iat
+      exp
+      email
+      email_verified
+      firstName
+      lastName
+      picture
+    }
+  }
+}
+    `;
+export type Jwt_SendVerificationEmailMutationFn = Apollo.MutationFunction<Jwt_SendVerificationEmailMutation, Jwt_SendVerificationEmailMutationVariables>;
+
+/**
+ * __useJwt_SendVerificationEmailMutation__
+ *
+ * To run a mutation, you first call `useJwt_SendVerificationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJwt_SendVerificationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [jwtSendVerificationEmailMutation, { data, loading, error }] = useJwt_SendVerificationEmailMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useJwt_SendVerificationEmailMutation(baseOptions?: Apollo.MutationHookOptions<Jwt_SendVerificationEmailMutation, Jwt_SendVerificationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Jwt_SendVerificationEmailMutation, Jwt_SendVerificationEmailMutationVariables>(Jwt_SendVerificationEmailDocument, options);
+      }
+export type Jwt_SendVerificationEmailMutationHookResult = ReturnType<typeof useJwt_SendVerificationEmailMutation>;
+export type Jwt_SendVerificationEmailMutationResult = Apollo.MutationResult<Jwt_SendVerificationEmailMutation>;
+export type Jwt_SendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<Jwt_SendVerificationEmailMutation, Jwt_SendVerificationEmailMutationVariables>;
+export const Jwt_UpdatePasswordDocument = gql`
+    mutation Jwt_updatePassword($updatePasswordInput: UpdatePasswordInput!) {
+  jwt_updatePassword(updatePasswordInput: $updatePasswordInput) {
+    _id
+    firstName
+    lastName
+    email
+    email_verified
+    isGoogleAuth
+    roles
+    picture
+    notificaciones
+    status
+    deleted
+  }
+}
+    `;
+export type Jwt_UpdatePasswordMutationFn = Apollo.MutationFunction<Jwt_UpdatePasswordMutation, Jwt_UpdatePasswordMutationVariables>;
+
+/**
+ * __useJwt_UpdatePasswordMutation__
+ *
+ * To run a mutation, you first call `useJwt_UpdatePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJwt_UpdatePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [jwtUpdatePasswordMutation, { data, loading, error }] = useJwt_UpdatePasswordMutation({
+ *   variables: {
+ *      updatePasswordInput: // value for 'updatePasswordInput'
+ *   },
+ * });
+ */
+export function useJwt_UpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<Jwt_UpdatePasswordMutation, Jwt_UpdatePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Jwt_UpdatePasswordMutation, Jwt_UpdatePasswordMutationVariables>(Jwt_UpdatePasswordDocument, options);
+      }
+export type Jwt_UpdatePasswordMutationHookResult = ReturnType<typeof useJwt_UpdatePasswordMutation>;
+export type Jwt_UpdatePasswordMutationResult = Apollo.MutationResult<Jwt_UpdatePasswordMutation>;
+export type Jwt_UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<Jwt_UpdatePasswordMutation, Jwt_UpdatePasswordMutationVariables>;

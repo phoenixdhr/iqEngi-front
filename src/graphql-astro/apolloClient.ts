@@ -9,6 +9,7 @@ const GRAPHQL_URL = import.meta.env.PUBLIC_GRAPHQL_URL;
 
 
 
+
 // Creamos y exportamos una instancia de ApolloClient con la configuración necesaria.
 export const clientGql = new ApolloClient({
   // Definimos la URL del servidor GraphQL al que se conectará Apollo Client.
