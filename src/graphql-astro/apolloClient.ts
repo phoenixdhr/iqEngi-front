@@ -15,6 +15,9 @@ export const clientGql = new ApolloClient({
   // Definimos la URL del servidor GraphQL al que se conectará Apollo Client.
   uri: GRAPHQL_URL,// env.PUBLIC_GRAPHQL_URL, //"https://iqengi-backend-production.up.railway.app/graphql",
 
+
+  credentials: 'include', // Esta línea asegura que se envíen las cookies
+
   // Configuramos la caché para almacenar en memoria los resultados de las consultas.
   cache: new InMemoryCache(),
 
