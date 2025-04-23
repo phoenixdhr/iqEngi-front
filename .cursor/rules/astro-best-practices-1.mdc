@@ -1,0 +1,113 @@
+---
+description: 
+globs: **/*.astro
+alwaysApply: false
+---
+**Principios Clave:**
+
+- Aplica la arquitectura de islas de Astro para optimizar el rendimiento.
+- Aprovecha eficazmente la hidratación parcial integrada en Astro.
+- Mantén los componentes Astro simples, breves y centrados en contenido.
+- Usa las colecciones de contenido de Astro (`Content Collections`) para manejar y consultar datos estructurados.
+- Añade comentarios explicativos, y si se trata de codigo js o ts usa formato estándar JSDoc para mayor claridad del código.
+
+**Estructura del Proyecto Astro:**
+
+Usa la estructura recomendada:
+
+```
+src/
+├── components/
+├── layouts/
+├── pages/
+└── styles/
+public/
+astro.config.mjs 
+```
+
+**Desarrollo de Componentes:**
+
+- Utiliza archivos `.astro` para componentes nativos.
+- Usa componentes específicos (React, Vue, Svelte) sólo cuando sea necesario.
+- Fomenta la reutilización y composición eficiente de componentes.
+- Utiliza `Astro.props` para transferencia clara de datos entre componentes.
+- Emplea componentes integrados como `<Markdown />` siempre que sea apropiado.
+
+**Rutas y Páginas:**
+
+- Utiliza el sistema basado en archivos de Astro (`src/pages/`).
+- Implementa rutas dinámicas con la sintaxis `[...slug].astro`.
+- Usa `getStaticPaths()` para generar páginas estáticas con rutas dinámicas.
+- Gestiona correctamente errores 404 mediante una página `404.astro`.
+
+**Gestión de Contenido:**
+
+- Utiliza archivos Markdown (`.md`) o MDX (`.mdx`) para páginas ricas en contenido.
+- Usa frontmatter integrado en Astro para metadatos en Markdown.
+- Organiza y consulta contenidos mediante Astro Content Collections.
+
+**Estilos y CSS:**
+
+- Aplica Tailwind CSS con clases utilitarias directamente en los componentes.
+- Aprovecha utilidades responsive de Tailwind (`sm:`, `md:`, `lg:`, etc.).
+- Usa consistentemente la paleta de colores definida en `global.css`.
+
+**Optimización de Rendimiento:**
+
+- Minimiza el uso de TypeScript del lado del cliente; favorece la generación estática.
+- Usa directivas de hidratación parcial cuidadosamente según interactividad:
+  - `client:load`: para interacciones críticas inmediatas.
+  - `client:idle`: para interacciones no críticas.
+  - `client:visible`: para hidratar componentes visibles en pantalla.
+- Implementa carga diferida (lazy loading) para imágenes y recursos.
+- Aprovecha optimización automática de recursos integrada en Astro.
+
+**Obtención de Datos:**
+
+- Emplea `Astro.props` para datos transferidos a componentes.
+- Usa `getStaticPaths()` para obtención de datos durante build-time.
+- Aprovecha `Astro.glob()` para manipulación eficiente de archivos locales.
+- Gestiona adecuadamente errores durante operaciones de obtención de datos.
+
+**SEO y Etiquetas Meta:**
+
+- Establece URLs canónicas para mejorar SEO.
+- Usa patrones de componentes como `<Seo />` para configuraciones reutilizables.
+
+**Integraciones y Plugins:**
+
+- Extiende funcionalidades usando integraciones oficiales Astro (ej. `@astrojs/image`).
+- Configura adecuadamente las integraciones desde `astro.config.mjs`.
+- Prefiere integraciones oficiales para compatibilidad garantizada.
+
+**Build y Despliegue:**
+
+- Optimiza el proceso mediante comandos oficiales de build Astro.
+- Gestiona adecuadamente variables de entorno para múltiples ambientes.
+- Implementa flujos CI/CD robustos para builds y despliegues automatizados.
+
+**Testing:**
+
+- Realiza tests unitarios para funciones y helpers específicos.
+- Usa herramientas como Cypress para pruebas E2E del sitio construido.
+- Aplica pruebas de regresión visual cuando sea pertinente.
+
+**Accesibilidad:**
+
+- Usa HTML semántico en componentes Astro.
+- Añade atributos ARIA según necesidad.
+- Garantiza navegación mediante teclado en elementos interactivos.
+
+**Convenciones Importantes:**
+
+- Sigue la guía oficial de estilo Astro para código consistente.
+- Usa TypeScript para seguridad en tipado y mejor experiencia de desarrollo.
+- Implementa gestión efectiva de errores y registro (logging).
+- Aprovecha generación automática de feeds RSS para sitios con mucho contenido.
+- Usa componentes optimizados como `Astro Image` para entregar imágenes eficientemente.
+
+**Métricas de Rendimiento:**
+
+- Prioriza métricas web vitales (LCP, FID, CLS).
+- Audita regularmente rendimiento usando Lighthouse y WebPageTest.
+- Establece y monitorea presupuestos de rendimiento.

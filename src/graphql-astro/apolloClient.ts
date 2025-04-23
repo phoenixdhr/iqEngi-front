@@ -22,12 +22,12 @@ export const clientGql = new ApolloClient({
   cache: new InMemoryCache(),
 
   // Definimos los encabezados HTTP que se enviarán con cada solicitud.
-  headers: {
+  // headers: {
     
-    // Configuramos la cabecera "Authorization" con un token JWT almacenado en localStorage.
-    // Se usa para autenticar las solicitudes al servidor GraphQL.
-    Authorization: typeof localStorage !== 'undefined' // Verificamos si localStorage está disponible.
-      ? `Bearer ${localStorage.getItem("jwt_token")}` // Si existe, obtenemos el token JWT y lo agregamos en la cabecera.
-      : '', // Si no hay token, enviamos una cadena vacía.
-  },
+  //   // Configuramos la cabecera "Authorization" con un token JWT almacenado en localStorage.
+  //   // Se usa para autenticar las solicitudes al servidor GraphQL.
+  //   Authorization: typeof localStorage !== 'undefined' // Verificamos si localStorage está disponible.
+  //     ? `Bearer ${localStorage.getItem("jwt_token")}` // Si existe, obtenemos el token JWT y lo agregamos en la cabecera.
+  //     : '', // Si no hay token, enviamos una cadena vacía.
+  // },
 });
