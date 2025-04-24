@@ -16,23 +16,36 @@ const SITE_URL = rawSiteUrl
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  site: SITE_URL.href,
+    output: 'server',
+    site: SITE_URL.href,
 
-  server: {
-      host: '0.0.0.0',
-  },
+    server: {
+        host: '0.0.0.0',
+    },
 
-  adapter: node({
-      mode: 'standalone',
-  }),
+    adapter: node({
+        mode: 'standalone',
+    }),
 
-  vite: {
-      plugins: [tailwindcss()],
-      optimizeDeps: {
-          include: ['@apollo/client'],
-      },
-  },
+    vite: {
+        plugins: [tailwindcss()],
+        optimizeDeps: {
+            include: ['@apollo/client'],
+        },
+        // Eliminar el server cuando se este en produccion
+        server: {
+            // Permitir todos los hosts, incluido el dominio de Cloudflare Tunnel
+            hmr: {
+                clientPort: 443,
+                host: 'ringtones-pete-empire-marijuana.trycloudflare.com',
+            },
+            // Permitir todos los hosts o especificar el de cloudflare
+            allowedHosts: [
+                'ringtones-pete-empire-marijuana.trycloudflare.com',
+                'all',
+            ],
+        },
+    },
 
-  integrations: [react()],
+    integrations: [react()],
 });

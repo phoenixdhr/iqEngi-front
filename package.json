@@ -7,7 +7,11 @@
     "start": "node ./dist/server/entry.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx,.astro src",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx,.astro src --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,astro,css,scss,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,astro,css,scss,md}\""
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",

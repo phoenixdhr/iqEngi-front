@@ -39,7 +39,7 @@
 <script>
     import { hideElement, clearFields } from '@services/closeOpenLogin';
 
-    function closeModal() {
+    function closeModal_bienvenida() {
         hideElement('loginCreatePasswordDiv');
         hideElement('loginGoogleDiv');
         hideElement('loginPasswordDiv');
@@ -68,7 +68,7 @@
         btnComenzarWelcome.addEventListener('click', () => {
             // Aquí puedes agregar la lógica para redirigir al usuario a la página principal o a donde desees
 
-            closeModal();
+            closeModal_bienvenida();
             hideElement('loginModalDiv');
             hideElement('bienvenidaDiv');
             hideElement('login-modal');

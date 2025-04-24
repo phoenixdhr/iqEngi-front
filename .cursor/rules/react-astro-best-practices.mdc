@@ -1,0 +1,88 @@
+---
+description: 
+globs: src/**/*.ts,src/**/*.tsx,src/**/*.astro
+alwaysApply: false
+---
+
+
+**Estilo y Estructura del Código**
+
+- Escribe código conciso, legible y declarativo en TypeScript.
+- Añade comentarios explicativos, y si se trata de codigo de Javascript o TypeScript usa formato estándar JSDoc para mayor claridad del código.
+- Prefiere funciones puras sobre clases o funciones anidadas.
+- Evita duplicación de lógica modularizando funciones reutilizables.
+- Usa nombres descriptivos con intención semántica (ej. `is-loading`, `has-error`, `handle-submit`).
+- Evita el uso de `any` y `unknown`; usa tipos estrictos definidos en `src/types/`.
+
+
+
+**Convenciones de Nombres y Archivos**
+
+- Usa **kebab-case** para nombres de archivos (`user-profile.astro`, `use-auth.ts`, `product-card.tsx`).
+- Prefiere `named exports` para componentes, hooks y utilidades.
+- Los hooks personalizados deben iniciar con `use-` y estar ubicados en `src/components/hooks/` o similar.
+
+
+**Uso de TypeScript**
+
+- Usa `interface` en lugar de `type` cuando definas estructuras de objetos públicos.
+- Evita `enums`; usa objetos o mapas.
+- No uses `as` ni `!`, excepto donde sea absolutamente necesario (ej. interoperabilidad externa).
+- Coloca todos los tipos reutilizables en `src/types/`, divididos por dominio (ej. `user.ts`, `product.ts`).
+
+
+**Sintaxis y Formato**
+
+- Usa funciones puras con `function` en vez de funciones flecha cuando sea posible.
+- Escribe JSX limpio, evitando condicionales innecesarios y manteniendo el componente enfocado en UI.
+- Usa ternarios o `&&` en lugar de bloques `if` simples para control de renderizado.
+
+
+**UI y Estilos**
+
+- Aplica **Tailwind CSS** con enfoque mobile-first.
+- Reutiliza clases comunes mediante utilidades o clases compuestas (`@apply`) cuando sea necesario.
+- Mantén clases Tailwind legibles y en orden lógico (layout → spacing → color → typography).
+
+
+
+**Ruteo y Navegación**
+
+- Usa rutas fijas en `src/pages/` y rutas dinámicas con `[param].astro`.
+- Usa navegación declarativa en componentes Astro y React según el contexto.
+- Prefiere `client:load` o `client:visible` solo para interactividad necesaria.
+
+
+
+**GraphQL y Datos**
+
+- Centraliza queries/mutations generadas automáticamente en `src/graphql-astro/generated/graphql.ts`.
+- Usa `@apollo/client` para consultas reactivas con `useQuery`, `useMutation`, etc.
+- Evita escribir queries manuales duplicadas; reutiliza fragmentos generados.
+- Implementa manejo de errores y estados de carga en cada consulta.
+
+
+
+**Contenido Estático y Collections**
+
+- Usa **Astro Content Collections** solo cuando sea estrictamente necesario.
+- Define esquemas con `zod` para contenido en `src/content/config.ts`.
+- Prefiere Markdown o MDX con frontmatter limpio para contenido estático.
+
+
+
+**Build y Despliegue**
+
+- Configura `astro.config.mjs` de forma explícita con integraciones necesarias.
+- Usa Railway para despliegue automático con CI/CD cuando aplique.
+- Mantén variables sensibles en `.env`, referenciadas desde el código y config.
+
+
+
+**Prácticas Generales**
+
+- Sigue la guía oficial de estilo Astro y configura `eslint`, `prettier` y `husky`.
+- Documenta funciones complejas con comentarios estilo JSDoc.
+- Refactoriza y valida estructuras con Zod si es necesario validar datos externos o contenido.
+- Audita el rendimiento del sitio en producción usando Lighthouse o WebPageTest.
+

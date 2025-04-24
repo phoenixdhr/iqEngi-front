@@ -13,7 +13,7 @@ alwaysApply: false
 
 **Estructura del Proyecto Astro:**
 
-Usa la estructura recomendada:
+La estructura base del proyecto es:
 
 ```
 src/

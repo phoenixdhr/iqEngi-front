@@ -10,12 +10,12 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
 
 <div
     id="login-modal"
-    class={`hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 flex items-center justify-center z-50`}
+    class={`hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 items-center justify-center z-50`}
 >
     <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
     <div
         id="astro-login-box"
-        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-11/12 max-w-md h-[500px] relative shadow-2xl flex flex-col"
+        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-11/12 max-w-md h-[520px] sm:h-[500px] relative shadow-2xl flex flex-col"
     >
         <!-- Botón de cierre -->
         <button
@@ -39,7 +39,7 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
         <div class="h-12"></div>
 
         <div class="absolute top-12 left-1/2 transform -translate-x-1/2">
-            <a href="#" class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2">
                 <img
                     class="h-8 lg:h-10 w-auto"
                     src="/favicon.svg"
@@ -50,7 +50,7 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
                 >
                     IQ-ENGI
                 </span>
-            </a>
+            </div>
         </div>
         <div class="h-10"></div>
 

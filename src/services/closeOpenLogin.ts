@@ -3,12 +3,22 @@ export const $ = (id: string): HTMLElement | null => document.getElementById(id)
 
 export const showElement = (id: string): void => {
   const element = $(id);
-  if (element) element.classList.remove('hidden');
+  if (element) {
+    element.classList.remove('hidden');
+    if (id === 'login-modal') {
+      element.classList.add('flex');
+    }
+  }
 };
 
 export const hideElement = (id: string): void => {
   const element = $(id);
-  if (element) element.classList.add('hidden');
+  if (element) {
+    element.classList.add('hidden');
+    if (id === 'login-modal') {
+      element.classList.remove('flex');
+    }
+  }
 };
 
 export const clearFields = (ids: string[]): void => {
