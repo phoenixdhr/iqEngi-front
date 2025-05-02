@@ -4,7 +4,7 @@ import { clientGql } from '@graphql-astro/apolloClient';
 
 import '@styles/global.css';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
-import Layout from '@layouts/Layout.astro';
+import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
 export const prerender = true;
 
@@ -42,7 +42,7 @@ const slugCurso = slug;
 const courseJsonLd = getCourseJsonLd(Astro.props);
 ---
 
-<Layout
+<LayoutSeo
     tituloPagina={courseTitle}
     description={descripcionCorta}
     slug={`${slugCurso}`}
@@ -66,4 +66,4 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
             transition:name=`${courseTitle}-image`
         />
     </div>
-</Layout>
+</LayoutSeo>

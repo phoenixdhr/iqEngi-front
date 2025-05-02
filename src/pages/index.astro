@@ -1,6 +1,6 @@
 ---
 import { getHomeJsonLd } from '@utils/jsonld.ts';
-import Layout from '@layouts/Layout.astro';
+import LayoutSeo from '@layouts/LayoutSeo.astro';
 import CursosBannerIndex from '@components/sections/CursosBanner-index.astro';
 
 const tituloPagina = 'IqEngi | Home';
@@ -8,7 +8,7 @@ const tituloPagina = 'IqEngi | Home';
 const homeJsonLd = getHomeJsonLd();
 ---
 
-<Layout tituloPagina={tituloPagina} seoJsonLd={homeJsonLd}>
+<LayoutSeo tituloPagina={tituloPagina} seoJsonLd={homeJsonLd}>
     <!-- <Welcome /> -->
     <CursosBannerIndex />
-</Layout>
+</LayoutSeo>
