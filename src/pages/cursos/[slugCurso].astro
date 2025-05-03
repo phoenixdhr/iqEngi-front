@@ -6,6 +6,7 @@ import '@styles/global.css';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
+import Titulo from '@components/atoms/Titulo.astro';
 export const prerender = true;
 
 interface Props extends Curso {
@@ -57,6 +58,13 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
     >
         {courseTitle}
     </h1>
+
+    <div class="flex">
+        <Titulo>{courseTitle}</Titulo>
+        <button onclick="history.back()" class="text-blue-500">
+            Regresar
+        </button>
+    </div>
 
     <div class="flex justify-between m-4">
         <h2>{descripcionCorta}</h2>

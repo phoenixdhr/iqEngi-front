@@ -1,4 +1,5 @@
 ---
+import Titulo from '@components/atoms/Titulo.astro';
 import Cards from '@components/molecules/Cards.astro';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
@@ -17,9 +18,7 @@ const cursos: Curso[] = data?.Cursos;
         class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
     >
         {/* Título de la seccion*/}
-        <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-            Cursos Recomendados
-        </h2>
+        <Titulo>Cursos Recomendados</Titulo>
 
         {
             /* Cuadrícula para mostrar los cursos, adaptándose a diferentes tamaños de pantalla */

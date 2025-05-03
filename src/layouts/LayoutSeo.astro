@@ -25,6 +25,8 @@ const {
     type,
     seoJsonLd: courseJsonLd,
 } = Astro.props;
+
+const currentUrl = Astro.url.pathname;
 ---
 
 <html lang="en">
@@ -45,8 +47,10 @@ const {
     </head>
 
     <body class="overflow-y-scroll">
-        <div>
-            <Navbar client:only="true" />
+        <Navbar client:only="true" currentUrl={currentUrl} />
+        <div
+            class="bg-white mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+        >
             <Modal />
             <!-- Secciones animadas (revisar si `animate-fade-down` pertenece a una librería como Tailwind) -->
             <slot name="FondoHero" class="animate-fade-down" />
@@ -57,9 +61,8 @@ const {
 
             <!-- Espacio para contenido adicional -->
             <slot />
-
-            <Footer />
         </div>
+        <Footer />
     </body>
 </html>
 

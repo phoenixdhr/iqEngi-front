@@ -30,17 +30,16 @@ const communityItems = [
     {
         name: 'Blog',
         description: 'Entérate de novedades y lo último de la industria',
-        href: '#',
+        href: '/blog',
         icon: NewspaperIcon,
     },
     {
         name: 'Calendario',
         description: 'Revisa nuestros eventos y actividades',
-        href: '#',
+        href: '/calendario',
         icon: CalendarIcon,
     },
 ];
-
 /**
  * Llamadas a la acción, enlaces rápidos hacia otras plataformas
  */
@@ -49,11 +48,23 @@ const callsToAction = [
     { name: 'LinkedIn', href: '#', icon: BriefcaseIcon },
 ];
 
+const mainMenuItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Cursos', href: '/cursos' },
+    { name: 'Contáctanos', href: '/contactanos' },
+    { name: 'Comunidad', isDropdown: true },
+];
+
+// Después:
+interface NavbarProps {
+    currentUrl: string;
+}
+
 /**
  * Componente Navbar principal que maneja navegación en desktop y móvil.
  * Incluye lógica de apertura del menú móvil y efectos visuales.
  */
-export default function Navbar() {
+export default function Navbar({ currentUrl }: NavbarProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     /**
@@ -117,80 +128,87 @@ export default function Navbar() {
 
                 {/* Menú de navegación para pantallas grandes */}
                 <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-                    <a
-                        href="#"
-                        className="text-base font-semibold text-gray-900"
-                    >
-                        Home
-                    </a>
-                    <a
-                        href="/cursos"
-                        className="text-base font-semibold text-gray-900"
-                    >
-                        Cursos
-                    </a>
-                    <a
-                        href="#"
-                        className="text-base font-semibold text-gray-900"
-                    >
-                        Contáctanos
-                    </a>
-
-                    {/* Menú desplegable para "Comunidad" */}
-                    <Popover className="relative">
-                        <PopoverButton className="flex items-center gap-x-1 text-base font-semibold text-gray-900">
-                            Comunidad
-                            <ChevronDownIcon
-                                aria-hidden="true"
-                                className="h-5 w-5 flex-none text-gray-400"
-                            />
-                        </PopoverButton>
-                        <PopoverPanel className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition">
-                            <div className="p-4">
-                                {communityItems.map((item) => (
-                                    <div
-                                        key={item.name}
-                                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:bg-gray-50"
-                                    >
-                                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                            <item.icon
-                                                className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
-                                                aria-hidden="true"
-                                            />
-                                        </div>
-                                        <div className="flex-auto">
-                                            <a
-                                                href={item.href}
-                                                className="block font-semibold text-gray-900"
+                    {/* Recorremos mainMenuItems. Si el item tiene isDropdown, renderizamos el Popover (menú desplegable), si no, un enlace normal */}
+                    {mainMenuItems.map((item) =>
+                        item.isDropdown ? (
+                            // Renderiza el menú desplegable para "Comunidad"
+                            <Popover key={item.name} className="relative">
+                                <PopoverButton className="flex items-center gap-x-1 text-base font-semibold text-gray-900">
+                                    {item.name}
+                                    <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="h-5 w-5 flex-none text-gray-400"
+                                    />
+                                </PopoverButton>
+                                <PopoverPanel className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition">
+                                    {/* Elementos del submenú de Comunidad */}
+                                    <div className="p-4">
+                                        {communityItems.map((item) => (
+                                            <div
+                                                key={item.name}
+                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:bg-gray-50"
                                             >
-                                                {item.name}
-                                                <span className="absolute inset-0" />
-                                            </a>
-                                            <p className="mt-1 text-gray-600">
-                                                {item.description}
-                                            </p>
-                                        </div>
+                                                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                                    <item.icon
+                                                        className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
+                                                        aria-hidden="true"
+                                                    />
+                                                </div>
+                                                <div className="flex-auto">
+                                                    <a
+                                                        href={item.href}
+                                                        className="block font-semibold text-gray-900"
+                                                    >
+                                                        {item.name}
+                                                        <span className="absolute inset-0" />
+                                                    </a>
+                                                    <p className="mt-1 text-gray-600">
+                                                        {item.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                    {/* Enlaces rápidos a redes sociales */}
+                                    <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+                                        {callsToAction.map((item) => (
+                                            <a
+                                                key={item.name}
+                                                href={item.href}
+                                                className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold text-gray-900 hover:bg-gray-100"
+                                            >
+                                                <item.icon
+                                                    className="h-5 w-5 flex-none text-gray-400"
+                                                    aria-hidden="true"
+                                                />
+                                                {item.name}
+                                            </a>
+                                        ))}
+                                    </div>
+                                </PopoverPanel>
+                            </Popover>
+                        ) : (
+                            // Renderiza un enlace normal para los demás items
+                            <div>
+                                <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="text-base font-semibold text-gray-900"
+                                >
+                                    {item.name}
+                                </a>
+                                <div
+                                    className={`
+                                        border-b-2 border-gray-900
+                                        transition-all duration-300
+                                        ${currentUrl === item.href ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}
+                                        origin-left
+                                    `}
+                                    style={{ height: '2px' }}
+                                ></div>
                             </div>
-                            {/* Enlaces rápidos a redes sociales */}
-                            <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                                {callsToAction.map((item) => (
-                                    <a
-                                        key={item.name}
-                                        href={item.href}
-                                        className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold text-gray-900 hover:bg-gray-100"
-                                    >
-                                        <item.icon
-                                            className="h-5 w-5 flex-none text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        {item.name}
-                                    </a>
-                                ))}
-                            </div>
-                        </PopoverPanel>
-                    </Popover>
+                        ),
+                    )}
                 </PopoverGroup>
 
                 {/* Botón "Acceder" para pantallas grandes */}
@@ -259,50 +277,50 @@ export default function Navbar() {
                     <div className="mt-6 flow-root">
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
-                                <a
-                                    href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                                >
-                                    Home
-                                </a>
-                                <a
-                                    href="/cursos"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                                >
-                                    Cursos
-                                </a>
-                                <a
-                                    href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                                >
-                                    Contáctanos
-                                </a>
-
-                                {/* Submenú colapsable para "Comunidad" */}
-                                <Disclosure as="div" className="-mx-3">
-                                    <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base font-semibold text-gray-900 hover:bg-gray-50">
-                                        Comunidad
-                                        <ChevronDownIcon
-                                            aria-hidden="true"
-                                            className="h-5 w-5 flex-none group-data-open:rotate-180"
-                                        />
-                                    </DisclosureButton>
-                                    <DisclosurePanel className="mt-2 space-y-2">
-                                        {[
-                                            ...communityItems,
-                                            ...callsToAction,
-                                        ].map((item) => (
-                                            <DisclosureButton
-                                                key={item.name}
-                                                as="a"
-                                                href={item.href}
-                                                className="block rounded-lg py-2 pr-3 pl-6 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                                            >
+                                {/* Recorremos mainMenuItems. Si el item tiene isDropdown, renderizamos el Disclosure (menú colapsable), si no, un enlace normal */}
+                                {mainMenuItems.map((item) =>
+                                    item.isDropdown ? (
+                                        // Renderiza el menú colapsable para "Comunidad" en móvil
+                                        <Disclosure
+                                            as="div"
+                                            className="-mx-3"
+                                            key={item.name}
+                                        >
+                                            <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base font-semibold text-gray-900 hover:bg-gray-50">
                                                 {item.name}
+                                                <ChevronDownIcon
+                                                    aria-hidden="true"
+                                                    className="h-5 w-5 flex-none group-data-open:rotate-180"
+                                                />
                                             </DisclosureButton>
-                                        ))}
-                                    </DisclosurePanel>
-                                </Disclosure>
+                                            <DisclosurePanel className="mt-2 space-y-2">
+                                                {/* Elementos del submenú de Comunidad y llamadas a la acción */}
+                                                {[
+                                                    ...communityItems,
+                                                    ...callsToAction,
+                                                ].map((item) => (
+                                                    <DisclosureButton
+                                                        key={item.name}
+                                                        as="a"
+                                                        href={item.href}
+                                                        className="block rounded-lg py-2 pr-3 pl-6 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                                                    >
+                                                        {item.name}
+                                                    </DisclosureButton>
+                                                ))}
+                                            </DisclosurePanel>
+                                        </Disclosure>
+                                    ) : (
+                                        // Renderiza un enlace normal para los demás items
+                                        <a
+                                            key={item.name}
+                                            href={item.href}
+                                            className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                                        >
+                                            {item.name}
+                                        </a>
+                                    ),
+                                )}
                             </div>
                         </div>
                     </div>
