@@ -93,7 +93,7 @@ export default function Navbar({ currentUrl }: NavbarProps) {
             >
                 {/* Logo y nombre de marca */}
                 <div className="flex items-center lg:flex-1">
-                    <a href="#" className="flex items-center space-x-2">
+                    <a href="/" className="flex items-center space-x-2">
                         <img
                             className="h-8 lg:h-10 w-auto"
                             src="/favicon.svg"
@@ -127,89 +127,29 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                 </div>
 
                 {/* Menú de navegación para pantallas grandes */}
-                <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-                    {/* Recorremos mainMenuItems. Si el item tiene isDropdown, renderizamos el Popover (menú desplegable), si no, un enlace normal */}
+                <div className="hidden lg:flex lg:gap-x-12">
                     {mainMenuItems.map((item) =>
                         item.isDropdown ? (
-                            // Renderiza el menú desplegable para "Comunidad"
                             <Popover key={item.name} className="relative">
-                                <PopoverButton className="flex items-center gap-x-1 text-base font-semibold text-gray-900">
-                                    {item.name}
-                                    <ChevronDownIcon
-                                        aria-hidden="true"
-                                        className="h-5 w-5 flex-none text-gray-400"
-                                    />
-                                </PopoverButton>
-                                <PopoverPanel className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition">
-                                    {/* Elementos del submenú de Comunidad */}
-                                    <div className="p-4">
-                                        {communityItems.map((item) => (
-                                            <div
-                                                key={item.name}
-                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:bg-gray-50"
-                                            >
-                                                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                                    <item.icon
-                                                        className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
-                                                        aria-hidden="true"
-                                                    />
-                                                </div>
-                                                <div className="flex-auto">
-                                                    <a
-                                                        href={item.href}
-                                                        className="block font-semibold text-gray-900"
-                                                    >
-                                                        {item.name}
-                                                        <span className="absolute inset-0" />
-                                                    </a>
-                                                    <p className="mt-1 text-gray-600">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {/* Enlaces rápidos a redes sociales */}
-                                    <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                                        {callsToAction.map((item) => (
-                                            <a
-                                                key={item.name}
-                                                href={item.href}
-                                                className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold text-gray-900 hover:bg-gray-100"
-                                            >
-                                                <item.icon
-                                                    className="h-5 w-5 flex-none text-gray-400"
-                                                    aria-hidden="true"
-                                                />
-                                                {item.name}
-                                            </a>
-                                        ))}
-                                    </div>
-                                </PopoverPanel>
+                                {/* ... */}
                             </Popover>
                         ) : (
-                            // Renderiza un enlace normal para los demás items
-                            <div>
+                            <div key={item.href}>
                                 <a
-                                    key={item.name}
                                     href={item.href}
                                     className="text-base font-semibold text-gray-900"
                                 >
                                     {item.name}
                                 </a>
-                                <div
-                                    className={`
-                                        border-b-2 border-gray-900
-                                        transition-all duration-300
-                                        ${currentUrl === item.href ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}
-                                        origin-left
-                                    `}
-                                    style={{ height: '2px' }}
-                                ></div>
+                                {currentUrl === item.href ? (
+                                    <div className="border-b-2 border-gray-900 transition-all duration-300" />
+                                ) : (
+                                    <div />
+                                )}
                             </div>
                         ),
                     )}
-                </PopoverGroup>
+                </div>
 
                 {/* Botón "Acceder" para pantallas grandes */}
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
@@ -236,7 +176,7 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                         {/*logo y Nombre*/}
 
                         <a
-                            href="#"
+                            href="/"
                             className="-m-2.5 inline-flex items-center justify-center rounded-md space-x-2"
                         >
                             <span className="sr-only">Your Contáctanos</span>

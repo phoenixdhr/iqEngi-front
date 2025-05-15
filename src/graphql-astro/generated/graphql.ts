@@ -5365,6 +5365,7 @@ export const CursosDocument = gql`
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
+    slug
     instructor {
       firstName
     }

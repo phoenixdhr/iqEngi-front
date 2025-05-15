@@ -7,6 +7,8 @@ import { loadEnv } from 'vite';
 
 import react from '@astrojs/react';
 
+import icon from 'astro-icon';
+
 const env = loadEnv(import.meta.env.MODE, process.cwd(), '');
 
 const rawSiteUrl = env.PUBLIC_DOMAIN?.trim(); // Asegura que no haya espacios adicionales
@@ -32,20 +34,20 @@ export default defineConfig({
         optimizeDeps: {
             include: ['@apollo/client'],
         },
-        // Eliminar el server cuando se este en produccion
-        server: {
-            // Permitir todos los hosts, incluido el dominio de Cloudflare Tunnel
-            hmr: {
-                clientPort: 443,
-                host: 'ringtones-pete-empire-marijuana.trycloudflare.com',
-            },
-            // Permitir todos los hosts o especificar el de cloudflare
-            allowedHosts: [
-                'ringtones-pete-empire-marijuana.trycloudflare.com',
-                'all',
-            ],
-        },
+        // // Eliminar el server cuando se este en produccion
+        // server: {
+        //     // Permitir todos los hosts, incluido el dominio de Cloudflare Tunnel
+        //     hmr: {
+        //         clientPort: 443,
+        //         host: 'ringtones-pete-empire-marijuana.trycloudflare.com',
+        //     },
+        //     // Permitir todos los hosts o especificar el de cloudflare
+        //     allowedHosts: [
+        //         'ringtones-pete-empire-marijuana.trycloudflare.com',
+        //         'all',
+        //     ],
+        // },
     },
 
-    integrations: [react()],
+    integrations: [react(), icon()],
 });

@@ -19,7 +19,7 @@ const {
     slug,
 } = Astro.props;
 
-const slugCurso = slug;
+const slugCurso = slug || 'curso-no-encontrado';
 ---
 
 <!-- Enlace a la página del curso correspondiente -->
