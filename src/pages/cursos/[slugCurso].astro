@@ -64,14 +64,20 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
         <Titulo>{courseTitle}</Titulo>
         <button
             id="btn-favorito"
-            class="ml-4 animate-pulse"
+            class="ml-4 animate-pulse cursor-pointer"
             data-id={_id}
             data-coursetitle={courseTitle}
         >
-            <Icon name="heart-line" size={50} />
-            <Icon class="hidden" name="heart-full" size={50} />
+            <Icon name="heart-line" id={`heart-line-${_id}`} size={50} />
+            <Icon
+                name="heart-full"
+                id={`heart-full-${_id}`}
+                class="hidden"
+                size={50}
+            />
         </button>
-        <button onclick="history.back()" class="text-blue-500">
+
+        <button onclick="history.back()" class="text-blue-500 cursor-pointer">
             Regresar
         </button>
     </div>
@@ -86,21 +92,70 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
     </div>
 </LayoutSeo>
 
-<!-- <style>
-    #btn-favorito {
-        @apply hover:animate-pulse;
-    }
-</style> -->
-
 <script>
-    document.addEventListener('astro:page-load', () => {
-        const btnFavorito = document.getElementById('btn-favorito');
+    interface FavoritosCursos {
+        courseTitle: string;
+        id: string;
+    }
 
-        if (btnFavorito) {
-            const courseTitle = btnFavorito.dataset.coursetitle;
-            const id = btnFavorito.dataset.id;
+    function handleFavoritos() {
+        const btnFavorito = document.getElementById(
+            'btn-favorito',
+        ) as HTMLButtonElement;
+        const id = btnFavorito?.dataset.id ?? '';
+        const courseTitle = btnFavorito?.dataset.coursetitle ?? '';
 
-            console.log('holi : ', courseTitle, id);
+        const iconHeartFull = btnFavorito?.querySelector(
+            `#heart-full-${id}`,
+        ) as HTMLImageElement;
+        const iconHeartLine = btnFavorito?.querySelector(
+            `#heart-line-${id}`,
+        ) as HTMLImageElement;
+
+        let favoritosCursos: FavoritosCursos[] = JSON.parse(
+            localStorage.getItem('favoritosCursos') || '[]',
+        );
+
+        function toggleFavorito() {
+            const isFavorito = favoritosCursos.some(
+                (favorito) => favorito.id == id,
+            );
+            if (isFavorito) {
+                //'curso ya favorito'
+                favoritosCursos = favoritosCursos.filter(
+                    (favorito) => favorito.id !== id,
+                );
+            } else {
+                //'curso no favorito'
+
+                favoritosCursos.push({ id, courseTitle });
+            }
+
+            localStorage.setItem(
+                'favoritosCursos',
+                JSON.stringify(favoritosCursos),
+            );
         }
-    });
+
+        function handleheart() {
+            const isFavorito = favoritosCursos.some(
+                (favorito) => favorito.id == id,
+            );
+
+            if (isFavorito) {
+                iconHeartFull?.classList.remove('hidden');
+                iconHeartLine?.classList.add('hidden');
+            }
+        }
+
+        handleheart();
+
+        btnFavorito?.addEventListener('click', () => {
+            iconHeartFull?.classList.toggle('hidden');
+            iconHeartLine?.classList.toggle('hidden');
+            toggleFavorito();
+        });
+    }
+
+    document.addEventListener('astro:page-load', handleFavoritos);
 </script>
