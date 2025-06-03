@@ -1,5 +1,6 @@
 ---
 import Counter from '@components/atoms/Counter';
+import Cards from '@components/molecules/Cards.astro';
 import CursosFavoritosLista from '@components/sections/CursosFavoritosLista';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
@@ -20,6 +21,7 @@ const counterValue = 100;
 
 <LayoutSeo tituloPagina="contactanos" seoJsonLd={coursesJsonLd}>
     <h1 class="text-2xl font-bold text-center my-6">contactanos</h1>
+    <CursosFavoritosLista client:only="react" />
 
     <Counter
         client:only="react"
@@ -28,6 +30,4 @@ const counterValue = 100;
         transition:persist-props
         transition:name="counter"
     />
-
-    <CursosFavoritosLista client:only="react" />
 </LayoutSeo>

@@ -67,6 +67,9 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
             class="ml-4 animate-pulse cursor-pointer"
             data-id={_id}
             data-coursetitle={courseTitle}
+            data-imagenURL={JSON.stringify(imagenURL)}
+            data-descripcioncorta={descripcionCorta}
+            data-slug={slug}
         >
             <Icon name="heart-line" id={`heart-line-${_id}`} size={50} />
             <Icon
@@ -94,43 +97,48 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
 
 <script>
     import { FAVORITOS_CURSOS } from '@const/const-string';
-
-    interface FavoritosCursos {
-        courseTitle: string;
-        id: string;
-    }
+    import type { CursoFavorito } from 'src/interfaces/cursoFavorito.interface';
 
     function handleFavoritos() {
         const btnFavorito = document.getElementById(
             'btn-favorito',
         ) as HTMLButtonElement;
-        const id = btnFavorito?.dataset.id ?? '';
+        const _id = btnFavorito?.dataset.id ?? '';
         const courseTitle = btnFavorito?.dataset.coursetitle ?? '';
+        const imagenURL = JSON.parse(btnFavorito?.dataset.imagenurl ?? '{}');
+        const descripcionCorta = btnFavorito?.dataset.descripcioncorta ?? '';
+        const slug = btnFavorito?.dataset.slug ?? '';
 
         const iconHeartFull = btnFavorito?.querySelector(
-            `#heart-full-${id}`,
+            `#heart-full-${_id}`,
         ) as HTMLImageElement;
         const iconHeartLine = btnFavorito?.querySelector(
-            `#heart-line-${id}`,
+            `#heart-line-${_id}`,
         ) as HTMLImageElement;
 
-        let favoritosCursos: FavoritosCursos[] = JSON.parse(
+        let favoritosCursos: CursoFavorito[] = JSON.parse(
             localStorage.getItem('favoritosCursos') || '[]',
         );
 
         function toggleFavorito() {
             const isFavorito = favoritosCursos.some(
-                (favorito) => favorito.id == id,
+                (favorito) => favorito._id == _id,
             );
             if (isFavorito) {
                 //'curso ya favorito'
                 favoritosCursos = favoritosCursos.filter(
-                    (favorito) => favorito.id !== id,
+                    (favorito) => favorito._id !== _id,
                 );
             } else {
                 //'curso no favorito'
 
-                favoritosCursos.push({ id, courseTitle });
+                favoritosCursos.push({
+                    _id: _id,
+                    courseTitle,
+                    imagenURL,
+                    descripcionCorta,
+                    slug,
+                });
             }
 
             localStorage.setItem(
@@ -141,7 +149,7 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
 
         function handleheart() {
             const isFavorito = favoritosCursos.some(
-                (favorito) => favorito.id == id,
+                (favorito) => favorito._id == _id,
             );
 
             if (isFavorito) {
