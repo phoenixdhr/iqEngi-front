@@ -93,6 +93,8 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
 </LayoutSeo>
 
 <script>
+    import { FAVORITOS_CURSOS } from '@const/const-string';
+
     interface FavoritosCursos {
         courseTitle: string;
         id: string;
@@ -132,7 +134,7 @@ const courseJsonLd = getCourseJsonLd(Astro.props);
             }
 
             localStorage.setItem(
-                'favoritosCursos',
+                FAVORITOS_CURSOS,
                 JSON.stringify(favoritosCursos),
             );
         }
