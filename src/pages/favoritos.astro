@@ -1,6 +1,5 @@
 ---
 import Counter from '@components/atoms/Counter';
-import Titulo from '@components/atoms/Titulo.astro';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
@@ -15,7 +14,7 @@ const { data } = await clientGql.query({
 const cursos: Curso[] = data?.Cursos;
 const coursesJsonLd = getCoursesJsonLd(cursos);
 
-const counterValue = 10;
+const counterValue = 100;
 ---
 
 <LayoutSeo tituloPagina="contactanos" seoJsonLd={coursesJsonLd}>
@@ -27,7 +26,5 @@ const counterValue = 10;
         transition:persist
         transition:persist-props
         transition:name="counter"
-    >
-        <Titulo>Contactanosffffff!!</Titulo>
-    </Counter>
+    />
 </LayoutSeo>

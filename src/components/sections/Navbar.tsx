@@ -8,9 +8,9 @@ import {
     DisclosureButton,
     DisclosurePanel,
     Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
+    // PopoverButton,
+    // PopoverGroup,
+    // PopoverPanel,
 } from '@headlessui/react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -52,6 +52,7 @@ const mainMenuItems = [
     { name: 'Home', href: '/' },
     { name: 'Cursos', href: '/cursos' },
     { name: 'Contáctanos', href: '/contactanos' },
+    { name: 'favoritos', href: '/favoritos' },
     { name: 'Comunidad', isDropdown: true },
 ];
 
