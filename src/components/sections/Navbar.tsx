@@ -8,9 +8,9 @@ import {
     DisclosureButton,
     DisclosurePanel,
     Popover,
-    // PopoverButton,
-    // PopoverGroup,
-    // PopoverPanel,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
 } from '@headlessui/react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -128,11 +128,63 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                 </div>
 
                 {/* Menú de navegación para pantallas grandes */}
-                <div className="hidden lg:flex lg:gap-x-12">
+                <PopoverGroup className="hidden lg:flex lg:gap-x-12">
                     {mainMenuItems.map((item) =>
                         item.isDropdown ? (
                             <Popover key={item.name} className="relative">
-                                {/* ... */}
+                                <PopoverButton className="flex items-center gap-x-1 text-base font-semibold text-gray-900">
+                                    {item.name}
+                                    <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="h-5 w-5 flex-none text-gray-400"
+                                    />
+                                </PopoverButton>
+                                <PopoverPanel className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition">
+                                    {/* Aquí se renderizan los elementos de communityItems */}
+                                    <div className="p-4">
+                                        {communityItems.map((subitem) => (
+                                            <div
+                                                key={subitem.name}
+                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:bg-gray-50"
+                                            >
+                                                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                                    <subitem.icon
+                                                        className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
+                                                        aria-hidden="true"
+                                                    />
+                                                </div>
+                                                <div className="flex-auto">
+                                                    <a
+                                                        href={subitem.href}
+                                                        className="block font-semibold text-gray-900"
+                                                    >
+                                                        {subitem.name}
+                                                        <span className="absolute inset-0" />
+                                                    </a>
+                                                    <p className="mt-1 text-gray-600">
+                                                        {subitem.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {/* Aquí se renderizan los enlaces rápidos de callsToAction */}
+                                    <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+                                        {callsToAction.map((action) => (
+                                            <a
+                                                key={action.name}
+                                                href={action.href}
+                                                className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold text-gray-900 hover:bg-gray-100"
+                                            >
+                                                <action.icon
+                                                    className="h-5 w-5 flex-none text-gray-400"
+                                                    aria-hidden="true"
+                                                />
+                                                {action.name}
+                                            </a>
+                                        ))}
+                                    </div>
+                                </PopoverPanel>
                             </Popover>
                         ) : (
                             <div key={item.href}>
@@ -150,7 +202,7 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                             </div>
                         ),
                     )}
-                </div>
+                </PopoverGroup>
 
                 {/* Botón "Acceder" para pantallas grandes */}
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
