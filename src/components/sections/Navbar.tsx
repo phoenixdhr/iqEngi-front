@@ -52,7 +52,7 @@ const mainMenuItems = [
     { name: 'Home', href: '/' },
     { name: 'Cursos', href: '/cursos' },
     { name: 'Contáctanos', href: '/contactanos' },
-    { name: 'favoritos', href: '/favoritos' },
+    { name: 'Favoritos', href: '/favoritos' },
     { name: 'Comunidad', isDropdown: true },
 ];
 
