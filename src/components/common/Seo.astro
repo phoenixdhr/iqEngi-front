@@ -7,7 +7,7 @@ interface Props {
     slug?: string;
     imageWeb?: string;
     typeWeb?: string;
-    courseJsonLd: object;
+    jsonLd: object | null;
 }
 
 const {
@@ -16,12 +16,12 @@ const {
     slug = '',
     imageWeb = siteInfo.image,
     typeWeb = siteInfo.type,
-    courseJsonLd,
+    jsonLd: jsonLd,
 } = Astro.props;
 
 const url = `${siteInfo.dominio}/${slug}`;
 
-const json_ld = JSON.stringify(courseJsonLd);
+const json_ld = jsonLd ? JSON.stringify(jsonLd) : null;
 ---
 
 <!-- Metadatos por defecto <head> -->
@@ -57,4 +57,4 @@ const json_ld = JSON.stringify(courseJsonLd);
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- JSON-LD Datos Estructurados: Insertamos el script con datos estructurados -->
-<script type="application/ld+json" set:html={json_ld} />
+{json_ld && <script type="application/ld+json" set:html={json_ld} />}

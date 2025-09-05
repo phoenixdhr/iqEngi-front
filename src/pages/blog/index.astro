@@ -1,14 +1,26 @@
 ---
-import { getHomeJsonLd } from '@utils/jsonld.ts';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
-import CursosBannerIndex from '@components/sections/CursosBanner-index.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getBlogJsonLd } from '@utils/jsonld';
+import BlogPost from '@components/sections/BlogPost.astro';
+// interface Props {
+//     post: CollectionEntry<'posts'>;
+// }
+// const { post } = Astro.props;
+// const frontmatter = posts.data;
 
 const tituloPagina = 'blog';
+const blogPosts = await getCollection('posts');
 
-const homeJsonLd = getHomeJsonLd();
+const blogPostsJsonLd = getBlogJsonLd();
+
+// const homeJsonLd = getHomeJsonLd();
 ---
 
-<LayoutSeo tituloPagina={tituloPagina} seoJsonLd={homeJsonLd}>
+<LayoutSeo tituloPagina={tituloPagina} seoJsonLd={blogPostsJsonLd}>
     <!-- <Welcome /> -->
-    <CursosBannerIndex />
+
+    <div class="grid grid-cols-1 gap-8 md:mt-16 md:grid-cols-2">
+        {blogPosts.map((post) => <BlogPost post={post} />)}
+    </div>
 </LayoutSeo>

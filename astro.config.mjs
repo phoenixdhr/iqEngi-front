@@ -9,6 +9,8 @@ import react from '@astrojs/react';
 
 import icon from 'astro-icon';
 
+import mdx from '@astrojs/mdx';
+
 const env = loadEnv(import.meta.env.MODE, process.cwd(), '');
 
 const rawSiteUrl = env.PUBLIC_DOMAIN?.trim(); // Asegura que no haya espacios adicionales
@@ -49,5 +51,5 @@ export default defineConfig({
         // },
     },
 
-    integrations: [react(), icon()],
+    integrations: [react(), icon(), mdx()],
 });

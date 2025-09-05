@@ -1,5 +1,6 @@
 import type { Comentario, Curso, Instructor } from "@graphql-astro/generated/graphql";
 import { siteSchema } from "../const/site-schema";
+import type { CollectionEntry } from "astro:content";
 
 // 🏠 JSON-LD para la Página Principal (WebSite)
 function getHomeJsonLd() {
@@ -12,6 +13,23 @@ function getHomeJsonLd() {
     "potentialAction": {
       "@type": "SearchAction",
       "target": `${siteSchema.siteUrl}/cursos?q={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+}
+
+
+// 🏠 JSON-LD para la Página de blog (WebSite)
+function getBlogJsonLd() {
+  return {
+    "@context": siteSchema.context,
+    "@type": "WebSite",
+    "name": siteSchema.siteName,
+    "url": siteSchema.siteUrl,
+    "description": "Blog de IQEngi con artículos sobre normativas API, ASME, NFPA y más.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${siteSchema.siteUrl}/blog`,
       "query-input": "required name=search_term_string"
     }
   };
@@ -74,21 +92,25 @@ function getInstructorJsonLd(instructor: Instructor) {
 }
 
 // 📝 JSON-LD para un Blog/Artículo (BlogPosting)
-function getBlogJsonLd(post: Comentario) {
+function getPostJsonLd(post: CollectionEntry<'posts'>) {
+  if (!post || !post.data) {
+    return null;
+  }
+  
   return {
     "@context": siteSchema.context,
     "@type": "BlogPosting",
-    "headline": "titulo del post",//post.title?,
+    "headline": post.data.title,
     "author": {
       "@type": "Person",
-      "name": "autor del post", //post.author
+      "name": post.data.author,
     },
     "publisher": siteSchema.organization,
-    "datePublished": "post.datePublished", //post.datePublished,
-    "image": "post.image", // post.image,
-    "articleBody": "post.content.slice(0, 200)" //post.content.slice(0, 200) // Solo los primeros 200 caracteres
+    "datePublished": post.data.date,
+    "image": post.data.image,
+    "articleBody": post.data.description.slice(0, 200) || ""
   };
 }
 
 
-export { getHomeJsonLd, getCoursesJsonLd, getCourseJsonLd, getInstructorJsonLd, getBlogJsonLd };
+export { getHomeJsonLd, getCoursesJsonLd, getCourseJsonLd, getInstructorJsonLd, getBlogJsonLd, getPostJsonLd };

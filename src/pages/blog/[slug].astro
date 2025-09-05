@@ -1,0 +1,73 @@
+---
+import type { GetStaticPaths } from 'astro';
+import LayoutSeo from '@layouts/LayoutSeo.astro';
+import { getCollection, type CollectionEntry, render } from 'astro:content';
+import { getPostJsonLd } from '@utils/jsonld';
+
+export const prerender = true;
+// Generar rutas estáticas correctamente
+export const getStaticPaths: GetStaticPaths = async () => {
+    const posts = await getCollection('posts');
+    return posts.map((post) => ({
+        params: {
+            // Usar post.id (generado automáticamente) o post.data.slug si existe
+            slug: post.data.slug || post.id,
+        },
+        props: { post },
+    }));
+};
+
+// Tipado correcto - Astro.props ya tiene el tipo correcto
+interface Props {
+    post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+
+// Renderizar el contenido del post
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
+
+// Generar JSON-LD para SEO
+const postJsonLd = getPostJsonLd(post);
+---
+
+<LayoutSeo tituloPagina={post.data.title} seoJsonLd={postJsonLd}>
+    <!-- <Welcome /> -->
+
+    <!-- TABLA DE CONTENIDOS (necesita render para headings) -->
+    {
+        headings.length > 0 && (
+            <nav class="table-of-contents">
+                <h2>En este artículo</h2>
+                <ol>
+                    {headings.map((heading) => (
+                        <li class={`toc-level-${heading.depth}`}>
+                            <a href={`#${heading.slug}`}>{heading.text}</a>
+                        </li>
+                    ))}
+                </ol>
+            </nav>
+        )
+    }
+
+    <!-- CONTENIDO PRINCIPAL (necesita render para Content) -->
+    <main class="post-content">
+        <Content />
+    </main>
+
+    <!-- INFORMACIÓN ADICIONAL -->
+    <footer class="post-footer">
+        <div class="tags">
+            {post.data.tags.map((tag) => <span class="tag">#{tag}</span>)}
+        </div>
+
+        <!-- Ejemplo de uso de remarkPluginFrontmatter -->
+        {
+            remarkPluginFrontmatter.readingTime && (
+                <p class="reading-time">
+                    Tiempo de lectura: {remarkPluginFrontmatter.readingTime}
+                </p>
+            )
+        }
+    </footer>
+</LayoutSeo>

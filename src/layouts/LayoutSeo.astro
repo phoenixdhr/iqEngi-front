@@ -15,7 +15,7 @@ interface Props {
     slug?: string;
     image?: string;
     type?: string;
-    seoJsonLd: object;
+    seoJsonLd: object | null;
 }
 const {
     tituloPagina,
@@ -23,7 +23,7 @@ const {
     slug,
     image,
     type,
-    seoJsonLd: courseJsonLd,
+    seoJsonLd: jsonLd,
 } = Astro.props;
 
 const currentUrl = Astro.url.pathname;
@@ -38,7 +38,7 @@ const currentUrl = Astro.url.pathname;
             slug={slug}
             imageWeb={image}
             typeWeb={type}
-            courseJsonLd={courseJsonLd}
+            jsonLd={jsonLd}
         />
         <meta
             name="google-site-verification"
