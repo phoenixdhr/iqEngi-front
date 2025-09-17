@@ -44,12 +44,49 @@ const currentUrl = Astro.url.pathname;
             name="google-site-verification"
             content="Ev2TdFXtbkht-Jxmbq-7wNtUnlUTWrJgmiPypLEEv1A"
         />
+        <!-- Theme initialization script to prevent flash -->
+        <script is:inline>
+            (function() {
+                function applyTheme(isDark) {
+                    const htmlElement = document.documentElement;
+                    if (isDark) {
+                        htmlElement.classList.add('dark');
+                        htmlElement.setAttribute('data-theme', 'dark');
+                    } else {
+                        htmlElement.classList.remove('dark');
+                        htmlElement.setAttribute('data-theme', 'light');
+                    }
+                }
+
+                function initTheme() {
+                    const savedTheme = localStorage.getItem('theme');
+                    let isDark;
+
+                    if (savedTheme) {
+                        isDark = savedTheme === 'dark';
+                    } else {
+                        isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    }
+
+                    applyTheme(isDark);
+                    return isDark;
+                }
+
+                // Initialize immediately
+                initTheme();
+
+                // Re-initialize on Astro navigation
+                document.addEventListener('astro:page-load', initTheme);
+                document.addEventListener('astro:after-swap', initTheme);
+            })();
+        </script>
     </head>
 
-    <body class="overflow-y-scroll">
+    <body class="overflow-y-scroll" style="background-color: var(--color-bg); color: var(--color-text);">
         <Navbar client:only="true" currentUrl={currentUrl} transition:persist />
         <div
-            class="bg-white mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+            class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+            style="background-color: var(--color-bg);"
         >
             <Modal />
             <!-- Secciones animadas (revisar si `animate-fade-down` pertenece a una librería como Tailwind) -->

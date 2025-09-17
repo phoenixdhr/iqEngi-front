@@ -18,7 +18,7 @@ const mainMenuItems = [
 const currentUrl = Astro.url.pathname;
 ---
 
-<header class="bg-white sticky top-0 z-40">
+<header class="sticky top-0 z-40" style="background-color: var(--color-bg);">
     <nav
         aria-label="Global"
         class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
@@ -32,7 +32,8 @@ const currentUrl = Astro.url.pathname;
                     alt="IqEngi"
                 />
                 <span
-                    class="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                    class="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                    style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
                 >
                     IQ-ENGI
                 </span>
@@ -44,7 +45,8 @@ const currentUrl = Astro.url.pathname;
             <button
                 type="button"
                 id="mobile-menu-button"
-                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:scale-105 transition-transform"
+                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 hover:scale-105 transition-transform"
+                style="color: var(--color-text-muted);"
             >
                 <span class="sr-only">Abrir menú principal</span>
                 <!-- Ícono de menú simple sin usar heroicons -->
@@ -74,12 +76,13 @@ const currentUrl = Astro.url.pathname;
                     <div>
                         <a
                             href={item.href}
-                            class="text-base font-semibold text-gray-900"
+                            class="text-base font-semibold"
+                            style="color: var(--color-text);"
                         >
                             {item.name}
                         </a>
                         {currentUrl === item.href ? (
-                            <div class="border-b-2 border-gray-900 transition-all duration-300" />
+                            <div class="border-b-2 transition-all duration-300" style="border-color: var(--color-text);" />
                         ) : (
                             <div />
                         )}
@@ -93,7 +96,7 @@ const currentUrl = Astro.url.pathname;
             <button
                 type="button"
                 id="logout-button"
-                class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-base px-5 py-2.5 mr-2 transition-transform hover:scale-105"
+                class="btn btn-primary font-medium text-base mr-2 transition-transform hover:scale-105"
             >
                 Cerrar sesión
             </button>
@@ -104,7 +107,8 @@ const currentUrl = Astro.url.pathname;
     <div id="mobile-menu" class="lg:hidden hidden fixed inset-0 z-50">
         <div class="fixed inset-0 bg-black/20"></div>
         <div
-            class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+            class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+            style="background-color: var(--color-bg);"
         >
             <!-- Encabezado del menú móvil -->
             <div class="flex items-center justify-between px-2.5">
@@ -119,7 +123,8 @@ const currentUrl = Astro.url.pathname;
                         alt="IqEngi"
                     />
                     <span
-                        class="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                        class="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                    style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
                     >
                         IQ-ENGI
                     </span>
@@ -129,7 +134,7 @@ const currentUrl = Astro.url.pathname;
                 <button
                     type="button"
                     id="mobile-logout-button"
-                    class="ml-auto h-8 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium rounded-lg text-base px-5 mr-4 hover:scale-105 transition-transform"
+                    class="btn btn-primary btn-sm ml-auto mr-4 hover:scale-105 transition-transform"
                 >
                     Salir
                 </button>
@@ -137,7 +142,8 @@ const currentUrl = Astro.url.pathname;
                 <button
                     type="button"
                     id="close-mobile-menu"
-                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:scale-105 transition-transform"
+                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 hover:scale-105 transition-transform"
+                style="color: var(--color-text-muted);"
                 >
                     <span class="sr-only">Cerrar menú</span>
                     <!-- Ícono X simple sin usar heroicons -->
@@ -167,7 +173,8 @@ const currentUrl = Astro.url.pathname;
                             mainMenuItems.map((item) => (
                                 <a
                                     href={item.href}
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold hover:opacity-80 transition-opacity"
+                                    style="color: var(--color-text);"
                                 >
                                     {item.name}
                                 </a>

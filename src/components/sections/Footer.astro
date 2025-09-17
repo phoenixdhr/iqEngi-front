@@ -56,18 +56,18 @@ const socialLinks = [
 ];
 ---
 
-<footer class="p-4 bg-white sm:p-6 dark:bg-gray-800">
+<footer class="p-4 sm:p-6" style="background-color: var(--color-bg);">
     
     <div class="mx-auto max-w-screen-xl">
         <!-- Línea divisoria -->
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <hr class="my-6 sm:mx-auto lg:my-8" style="border-color: var(--color-border);" />
         
         <div class="md:flex md:justify-between">
             <!-- Logo y nombre del sitio -->
             <div class="mb-6 md:mb-0">
                 <a href="/" class="flex items-center">
                     <img src="/favicon.svg" class="mr-3 h-8" alt={`${siteInfo.titleWeb} Logo`} />
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap" style="color: var(--color-text);">
                         {siteInfo.titleWeb}
                     </span>
                 </a>
@@ -79,10 +79,10 @@ const socialLinks = [
                     Object.entries(footerMenu).map(([key, items]) => (
                         <div>
                             <!-- Título de la sección del menú -->
-                            <h2 class="mb-6 text-base font-semibold text-gray-900 uppercase dark:text-white">
+                            <h2 class="mb-6 text-base font-semibold uppercase" style="color: var(--color-text);">
                                 {key}
                             </h2>
-                            <ul class="text-gray-600 dark:text-gray-400">
+                            <ul style="color: var(--color-text-muted);">
                                 {items.map((item, idx) => (
                                     <li class={idx < items.length - 1 ? 'mb-4' : ''}>
                                         <a href={item.link} class="hover:underline">{item.name}</a>
@@ -96,12 +96,12 @@ const socialLinks = [
         </div>
 
         <!-- Línea divisoria -->
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <hr class="my-6 sm:mx-auto lg:my-8" style="border-color: var(--color-border);" />
 
         <div class="sm:flex sm:items-center sm:justify-between">
             <!-- Derechos de autor -->
-            <span class="text-base text-gray-500 sm:text-center dark:text-gray-400">
-                © {year} Copyright by <a href={footerMenu.legal[1].link} class="hover:underline text-red">
+            <span class="text-base sm:text-center" style="color: var(--color-text-muted);">
+                © {year} Copyright by <a href={footerMenu.legal[1].link} class="hover:underline" style="color: var(--color-danger);">
                     {siteInfo.titleWeb}
                 </a> - Todos los derechos reservados.
             </span>
@@ -110,7 +110,7 @@ const socialLinks = [
             <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
                 {
                     socialLinks.map((link) => (
-                        <a href={link.link} class="text-gray-500 hover:text-gray-900 dark:hover:text-white" aria-label={link.name}>
+                        <a href={link.link} class="hover:opacity-80 transition-opacity" style="color: var(--color-text-muted);" aria-label={link.name}>
                             <span set:html={link.svg} />
                         </a>
                     ))

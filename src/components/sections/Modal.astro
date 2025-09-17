@@ -10,18 +10,21 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
 
 <div
     id="login-modal"
-    class={`hidden fixed inset-0 bg-[rgba(0,0,0,0.85)] bg-opacity-80 items-center justify-center z-50`}
+    class="hidden fixed inset-0 items-center justify-center z-50"
+    style="background-color: var(--color-overlay-bg);"
 >
     <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
     <div
         id="astro-login-box"
-        class="bg-gray-100 text-gray-900 p-8 rounded-3xl w-11/12 max-w-md h-[520px] sm:h-[500px] relative shadow-2xl flex flex-col"
+        class="p-8 rounded-3xl w-11/12 max-w-md h-[520px] sm:h-[500px] relative shadow-2xl flex flex-col"
+        style="background-color: var(--color-bg); color: var(--color-text);"
     >
         <!-- Botón de cierre -->
         <button
             id="btnClose"
             type="button"
-            class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-xl"
+            class="absolute top-4 right-4 hover:opacity-80 text-xl"
+            style="color: var(--color-text-muted);"
         >
             ✖
         </button>
@@ -30,7 +33,8 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
         <button
             id="btnBack"
             type="button"
-            class="hidden absolute top-4 left-4 text-gray-600 hover:text-gray-800 text-2xl mr-4"
+            class="hidden absolute top-4 left-4 hover:opacity-80 text-2xl mr-4"
+            style="color: var(--color-text-muted);"
         >
             ←
         </button>
@@ -46,7 +50,8 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
                     alt="IqEngi"
                 />
                 <span
-                    class="bg-gradient-to-br from-purple-600 to-blue-500 bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                    class="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                    style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
                 >
                     IQ-ENGI
                 </span>

@@ -1,24 +1,250 @@
 @import 'tailwindcss';
 @plugin 'daisyui';
 
+/* =============================================================================
+   SISTEMA DE COLORES (TAILWIND v4 + DAISYUI)
+   -----------------------------------------------------------------------------
+   ▶ Filosofía:
+     - Pocas variables bien pensadas > mil tokens sueltos.
+     - Neutrales para estructura/lectura; Marca solo para acciones clave.
+     - Semánticos para estados (éxito/alerta/error/info) → consistencia.
+
+   ▶ Categorías:
+     - NEUTRALES: escala gris que da jerarquía y respiración. Se usan en fondos,
+       superficies, bordes y texto. Deben dominar el layout.
+     - MARCA: colores de identidad (primary/secondary). Se usan para CTAs,
+       enlaces y elementos de interacción (no fondos grandes).
+     - ACENTO: "detallitos" para micro-llamadas de atención. Úsalo con moderación.
+     - SEMÁNTICOS: estados del sistema (success/warning/danger/info) y su texto.
+
+   ▶ Accesibilidad:
+     - Texto normal: contraste ≥ 4.5:1. Por eso el `secondary` usa texto oscuro.
+     - Evita color sobre color si no garantiza AA.
+   ========================================================================== */
+
+/* ===================== */
+/*  MODO CLARO (default) */
+/* ===================== */
 @theme {
-    --color-iq-white: #ffffff;
+    /* ========================= NEUTRALES (escala gris) =========================
+     Qué son: tonos sin carga emocional que sostienen la UI.
+     Dónde usarlos:
+       - --color-bg: fondo de página / áreas de lectura extensas.
+       - --color-surface / -2: tarjetas, paneles, listas, inputs.
+       - --color-border: divisores/bordes sutiles (evitar "encajonar").
+       - --color-text / -muted: tipografía principal y secundaria.
+     Regla de oro: que los neutros ocupen ~80–90% del lienzo.
+  */
+    --color-bg: #ffffff; /* Fondo principal (máxima legibilidad). */
+    --color-surface: #f8f9fa; /* Tarjetas/secciones elevadas (layer +1). */
+    --color-surface-2: #f3f4f6; /* Inputs, hovers suaves, zebra en tablas. */
+    --color-border: #e5e7eb; /* Divisores/bordes sutiles. */
+    --color-text: #111827; /* Texto principal (alto contraste). */
+    --color-text-muted: #4b5563; /* Labels/ayudas/placeholders (baja saliencia). */
 
-    --color-iq-gray-light-100: #f8f9fa;
-    --color-iq-gray-light-200: #4b5563;
-    --color-iq-gray-dark-300: #343a40;
+    /* ============================ MARCA (identidad) ============================
+     Qué son: colores que comunican identidad y acción.
+     Dónde usarlos:
+       - PRIMARY: CTA principal (Comprar, Guardar, Continuar…), switches clave.
+       - SECONDARY: enlaces, botones secundarios, navegación alternativa.
+     Notas:
+       - Mantener paleta solicitada (no cambiamos estos HEX).
+       - Hovers: ~10–15% más oscuros para feedback claro.
+  */
+    --color-primary: #9810fa; /* ✳ Violeta — CTA principal. */
+    /* Hover: fallback hex + versión dinámica (si el navegador soporta color-mix).
+     Orden importa: si color-mix no existe, se usa el fallback de arriba. */
+    --color-primary-hover: #5b21b6; /* fallback */
+    --color-primary-hover: color-mix(in oklch, var(--color-primary) 85%, black);
 
-    --color-iq-purple-light-100: #6875f5;
-    --color-iq-purple-light-mid-200: #5c47ff; /* usado en el boton de cards - promedio entre 2b7fff y 9810fa */
-    --color-iq-purple-mid-600: #9810fa; /* usado en el boton NavBar - Crear cuenta*/
+    --color-secondary: #2b7fff; /* ✳ Azul — enlaces/acciones secundarias. */
+    /* Renombrado consistente: --color-secondary-hov -> --color-secondary-hover */
+    --color-secondary-hover: #1d4ed8; /* fallback */
+    --color-secondary-hover: color-mix(
+        in oklch,
+        var(--color-secondary) 85%,
+        black
+    );
 
-    --color-iq-purple-dark-300: #5521b5;
-    --color-iq-purple-dark-400: #42389d;
+    /* =============================== ACENTO ====================================
+     Qué es: color "maquillaje" para micro-llamadas de atención (chips, contadores,
+     subrayados, iconitos). Usar <5% del UI para no competir con la marca.
+  */
+    --color-accent: #f041ff; /* Magenta/fucsia. Evitarlo en CTAs principales. */
 
-    --color-iq-blue-light-100: #2b7fff; /* usado en el boton NavBar - Crear cuenta*/
-    --color-iq-blue-dark-200: #003366;
+    /* ============================ SEMÁNTICOS ===================================
+     Qué son: códigos de estado universales.
+     Dónde usarlos: alerts, toasts, badges de estado, banners.
+     Nota en LIGHT: usamos tonos oscuros de fondo con texto blanco para AA.
+  */
+    --color-success: #166534; /* Verde (OK/confirmaciones). */
+    --color-on-success: #ffffff;
+    --color-warning: #c2410c; /* Naranja (avisos no bloqueantes). */
+    --color-on-warning: #ffffff;
+    --color-danger: #b91c1c; /* Rojo (errores/borrado/destrucción). */
+    --color-on-danger: #ffffff;
 
-    --color-iq-red-100: #971650;
-    --color-iq-orange-100: #fd7e14;
-    --color-iq-green-100: #28a745;
+    /* ============================== OVERLAY ====================================
+     Backdrop para modales/drawers. Más opaco en dark (ver abajo).
+  */
+    --color-overlay-bg: rgba(0, 0, 0, 0.6);
+
+    /* ============================= GRADIENTE ===================================
+     Derivado de marca. Úsalo en "hero" o CTA hiper-destacado (no en botones
+     pequeños: roba legibilidad y parece "ruidoso").
+  */
+    --gradient-button-primary: linear-gradient(
+        to bottom right,
+        var(--color-secondary) 0%,
+        var(--color-primary) 100%
+    );
 }
+
+/* ==================== Mapeo a tokens de DaisyUI (LIGHT) =====================
+   DaisyUI espera estos nombres:
+     - --p/--pc  : primary y su texto
+     - --s/--sc  : secondary y su texto
+     - --a/--ac  : accent y su texto
+     - --n/--nc  : neutral (superficies) y su texto
+     - --b1..--b3, --bc : background layers + texto
+     - --su/--suc, --wa/--wac, --er/--erc : success/warning/error
+     - --in/--inc : info (añadido para completar el set)
+   Con esto, componentes como .btn-primary, .alert, .badge, etc. respetan tu tema.
+*/
+:root,
+[data-theme='light'] {
+    --p: var(--color-primary);
+    --pc: #ffffff; /* Texto sobre primary (AA). */
+
+    --s: var(--color-secondary);
+    --sc: #0b0f1a; /* ⚠ Texto oscuro para asegurar AA con #2b7fff. */
+
+    --a: var(--color-accent);
+    --ac: #111827; /* Texto oscuro en acentos claros. */
+
+    --n: var(--color-surface-2);
+    --nc: var(--color-text);
+
+    --b1: var(--color-bg); /* Body base (layer 0). */
+    --b2: var(--color-surface); /* Body elevated 1 (layer 1). */
+    --b3: var(--color-surface-2); /* Body elevated 2 (layer 2). */
+    --bc: var(--color-text); /* Texto "global". */
+
+    /* Info: útil para alertas informativas, banners, tooltips azules. */
+    --in: #1d4ed8;
+    --inc: #ffffff;
+
+    --su: var(--color-success);
+    --suc: var(--color-on-success);
+    --wa: var(--color-warning);
+    --wac: var(--color-on-warning);
+    --er: var(--color-danger);
+    --erc: var(--color-on-danger);
+}
+
+/* ===================== */
+/*        MODO DARK      */
+/* ===================== */
+.dark,
+[data-theme='dark'] {
+    /* ========================= NEUTRALES (dark) =========================
+     Más oscuros para reducir fatiga. Sube espaciado/bordes ligeros para
+     evitar "bloques densos".
+  */
+    --color-bg: #111827; /* Fondo general (gray-900). */
+    --color-surface: #0f172a; /* Secciones elevadas (slate-900). */
+    --color-surface-2: #1f2937; /* Inputs/hover/tablas (gray-800). */
+    --color-border: #374151; /* Divisores (gray-700). */
+    --color-text: #f3f4f6; /* Texto principal (gray-100). */
+    --color-text-muted: #9ca3af; /* Secundario (gray-400). */
+
+    /* ============================ MARCA (dark) ============================
+     Mantenemos tus HEX de marca. Para hover, la misma receta de mezcla
+     asegura feedback coherente en fondos oscuros.
+  */
+    --color-primary: #9810fa;
+    --color-primary-hover: #6d28d9; /* fallback */
+    --color-primary-hover: color-mix(in oklch, var(--color-primary) 85%, black);
+
+    --color-secondary: #2b7fff;
+    --color-secondary-hover: #1d4ed8; /* fallback */
+    --color-secondary-hover: color-mix(
+        in oklch,
+        var(--color-secondary) 85%,
+        black
+    );
+
+    /* =============================== ACENTO =============================== */
+    --color-accent: #f041ff;
+
+    /* ============================ SEMÁNTICOS ==============================
+     En DARK usamos fondos más vivos y texto oscuro para asegurar AA.
+  */
+    --color-success: #16a34a;
+    --color-on-success: #111827;
+    --color-warning: #ea580c;
+    --color-on-warning: #111827;
+    --color-danger: #ef4444;
+    --color-on-danger: #111827;
+
+    --color-overlay-bg: rgba(
+        0,
+        0,
+        0,
+        0.8
+    ); /* Un poco más denso que en light. */
+
+    /* Gradiente consistente con light. */
+    --gradient-button-primary: linear-gradient(
+        to bottom right,
+        var(--color-secondary) 0%,
+        var(--color-primary) 100%
+    );
+
+    /* ================= Mapeo DaisyUI (DARK) ================= */
+    --p: var(--color-primary);
+    --pc: #ffffff;
+
+    --s: var(--color-secondary);
+    --sc: #0b0f1a; /* Mantén texto oscuro para AA también en dark. */
+
+    --a: var(--color-accent);
+    --ac: #0b0f1a; /* Texto oscuro sobre acento en dark. */
+
+    --n: var(--color-surface-2);
+    --nc: var(--color-text);
+
+    --b1: var(--color-bg);
+    --b2: var(--color-surface);
+    --b3: var(--color-surface-2);
+    --bc: var(--color-text);
+
+    /* Info en dark: un cian claro con texto oscuro mejora lectura. */
+    --in: #38bdf8;
+    --inc: #0b0f1a;
+
+    --su: var(--color-success);
+    --suc: var(--color-on-success);
+    --wa: var(--color-warning);
+    --wac: var(--color-on-warning);
+    --er: var(--color-danger);
+    --erc: var(--color-on-danger);
+}
+
+/* ============================================================================
+   GUÍA DE USO RÁPIDO (práctica)
+   ----------------------------------------------------------------------------
+   - Botón principal: .btn.btn-primary  → usa --p / --pc (tu violeta #9810fa).
+   - Enlaces y botón secundario: .link, .btn.btn-secondary → --s / --sc.
+   - Tarjetas/paneles: usa --b2 / --b3 para escalonar profundidad.
+   - Inputs/tablas: fondos con --color-surface-2; bordes con --color-border.
+   - Mensajes del sistema: .alert-success/.alert-warning/.alert-error/.alert-info.
+   - Micro-acento: chips/badges puntuales con --a / --ac (no más del 5% del UI).
+   - Overlay: modales/drawers con --color-overlay-bg.
+
+   Tips de diseño:
+   - No "pintes" grandes superficies con colores de marca; reserva la saturación
+     para acciones. Esto refuerza jerarquía y reduce fatiga visual.
+   - Hovers: los tokens --color-*-hover ya están listos si haces estilos propios.
+   - Soporte: si el navegador no entiende `color-mix`, usará el fallback hex.
+   ========================================================================== */

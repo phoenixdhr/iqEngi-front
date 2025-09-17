@@ -20,10 +20,49 @@ const { title } = Astro.props;
             rel="stylesheet"
         />
 
+        <!-- Theme initialization script to prevent flash -->
+        <script is:inline>
+            (function() {
+                function applyTheme(isDark) {
+                    const htmlElement = document.documentElement;
+                    if (isDark) {
+                        htmlElement.classList.add('dark');
+                        htmlElement.setAttribute('data-theme', 'dark');
+                    } else {
+                        htmlElement.classList.remove('dark');
+                        htmlElement.setAttribute('data-theme', 'light');
+                    }
+                }
+
+                function initTheme() {
+                    const savedTheme = localStorage.getItem('theme');
+                    let isDark;
+
+                    if (savedTheme) {
+                        isDark = savedTheme === 'dark';
+                    } else {
+                        isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    }
+
+                    applyTheme(isDark);
+                    return isDark;
+                }
+
+                // Initialize immediately
+                initTheme();
+
+                // Re-initialize on Astro navigation
+                document.addEventListener('astro:page-load', initTheme);
+                document.addEventListener('astro:after-swap', initTheme);
+            })();
+        </script>
+
         <!-- Aplica la fuente 'Arvo' al cuerpo del documento -->
         <style>
             body {
                 font-family: 'Arvo', serif;
+                background-color: var(--color-bg);
+                color: var(--color-text);
             }
         </style>
 
@@ -31,8 +70,8 @@ const { title } = Astro.props;
         <title>{title}</title>
     </head>
     <body>
-        <!-- Contenedor principal con fondo blanco y espaciado -->
-        <main class="py-10 bg-white">
+        <!-- Contenedor principal con espaciado -->
+        <main class="py-10" style="background-color: var(--color-bg);">
             <!-- Slot: Aquí se insertará el contenido de otras páginas -->
             <slot />
         </main>

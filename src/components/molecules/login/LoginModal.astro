@@ -19,18 +19,20 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
             placeholder="Correo electrónico"
             onblur="this.value = this.value.trim()"
             required
-            class="w-full h-12 px-4 bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-full text-gray-900 text-center placeholder:text-center"
+            class="w-full h-12 px-4 border focus:outline-none focus:ring-2 rounded-full text-center placeholder:text-center"
+            style="background-color: var(--color-bg); border-color: var(--color-border); color: var(--color-text); --tw-ring-color: var(--color-success);"
         />
         <!-- Botón para enviar el formulario y continuar el proceso de inicio de sesión -->
         <button
             type="submit"
-            class="w-full h-12 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 font-medium text-base hover:scale-105 transition-transform rounded-full"
+            class="w-full h-12 text-white font-medium text-base hover:scale-105 transition-transform rounded-full focus:ring-4"
+            style="background: var(--gradient-button-primary);"
         >
             Continuar
         </button>
 
         <!-- Separador visual y textual que sugiere otra forma de iniciar sesión -->
-        <div class="text-center text-gray-500 text-base">
+        <div class="text-center text-base" style="color: var(--color-text-muted);">
             <span class="hidden sm:inline">────</span>────── o inicia sesión con
             ──────<span class="hidden sm:inline">────</span>
         </div>
@@ -39,7 +41,8 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
         <a
             href={googleUrlLogin}
             type="button"
-            class="w-full h-12 bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+            class="w-full h-12 border hover:opacity-80 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+            style="background-color: var(--color-bg); color: var(--color-text); border-color: var(--color-border);"
         >
             <!-- Ícono SVG representativo de Google -->
             <svg
