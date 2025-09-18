@@ -12,24 +12,98 @@ const frontmatter = post.data;
 // console.log(post);
 ---
 
-<div class="lg:flex">
-    <img
-        class="flex flex-col justify-between py-6 lg:mx-6"
-        src={frontmatter.image
-            ? frontmatter.image
-            : '/images/placeholder-image.png'}
-        alt={frontmatter.title}
-    />
+<article
+    class="bg-[--color-surface] border border-[--color-border] rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 group"
+>
+    <!-- Imagen del post -->
+    <div class="aspect-video overflow-hidden">
+        <img
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            src={frontmatter.image
+                ? frontmatter.image
+                : '/images/placeholder-image.png'}
+            alt={frontmatter.title}
+        />
+    </div>
 
-    <div class="flex flex-col justify-between py-6 lg:mx-6">
+    <!-- Contenido del post -->
+    <div class="p-6">
+        <!-- Fecha y autor -->
+        <div
+            class="flex items-center gap-4 mb-3 text-sm text-[--color-text-muted]"
+        >
+            <time datetime={frontmatter.date}>
+                {Formatter.formatDate(frontmatter.date)}
+            </time>
+            {frontmatter.author && <span>Por {frontmatter.author}</span>}
+        </div>
+
+        <!-- Título -->
+        <h2
+            class="text-xl font-bold text-[--color-text] mb-3 line-clamp-2 group-hover:text-[--color-secondary] transition-colors duration-200"
+        >
+            <a href={`/blog/${post.data.slug}`} class="block">
+                {frontmatter.title}
+            </a>
+        </h2>
+
+        <!-- Descripción -->
+        <p class="text-[--color-text-muted] mb-4 line-clamp-3 leading-relaxed">
+            {frontmatter.description}
+        </p>
+
+        <!-- Tags -->
+        {
+            frontmatter.tags && frontmatter.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2 mb-4">
+                    {frontmatter.tags.slice(0, 3).map((tag: string) => (
+                        <span class="bg-[--color-surface-2] text-[--color-text-muted] px-2 py-1 rounded text-xs font-medium">
+                            #{tag}
+                        </span>
+                    ))}
+                    {frontmatter.tags.length > 3 && (
+                        <span class="text-[--color-text-muted] text-xs font-medium">
+                            +{frontmatter.tags.length - 3} más
+                        </span>
+                    )}
+                </div>
+            )
+        }
+
+        <!-- Botón leer más -->
         <a
             href={`/blog/${post.data.slug}`}
-            class="text-xl font-semibold hover:underline text-white"
+            class="inline-flex items-center text-[--color-secondary] font-medium text-sm hover:text-[--color-secondary-hover] transition-colors duration-200"
         >
-            {frontmatter.description}
+            Leer más
+            <svg
+                class="ml-1 w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"></path>
+            </svg>
         </a>
-        <span class="text-sm text-gray-300">
-            {Formatter.formatDate(frontmatter.date)}</span
-        >
     </div>
-</div>
+</article>
+
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>

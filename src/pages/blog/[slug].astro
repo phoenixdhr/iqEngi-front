@@ -32,42 +32,534 @@ const postJsonLd = getPostJsonLd(post);
 ---
 
 <LayoutSeo tituloPagina={post.data.title} seoJsonLd={postJsonLd}>
-    <!-- <Welcome /> -->
+    <div class="max-w-7xl mx-auto">
+        <!-- HEADER DEL POST -->
+        <header class="mb-8 border-b border-[--color-border] pb-8">
+            <div class="mb-4">
+                <span class="text-[--color-text-muted] text-sm font-medium">
+                    {
+                        new Date(post.data.date).toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })
+                    }
+                </span>
+                {
+                    post.data.author && (
+                        <span class="text-[--color-text-muted] text-sm ml-4">
+                            Por {post.data.author}
+                        </span>
+                    )
+                }
+            </div>
 
-    <!-- TABLA DE CONTENIDOS (necesita render para headings) -->
-    {
-        headings.length > 0 && (
-            <nav class="table-of-contents">
-                <h2>En este artículo</h2>
-                <ol>
-                    {headings.map((heading) => (
-                        <li class={`toc-level-${heading.depth}`}>
-                            <a href={`#${heading.slug}`}>{heading.text}</a>
-                        </li>
-                    ))}
-                </ol>
-            </nav>
-        )
-    }
+            <h1
+                class="text-4xl md:text-5xl font-bold text-[--color-text] leading-tight mb-4"
+            >
+                {post.data.title}
+            </h1>
 
-    <!-- CONTENIDO PRINCIPAL (necesita render para Content) -->
-    <main class="post-content">
-        <Content />
-    </main>
+            <p class="text-xl text-[--color-text-muted] leading-relaxed">
+                {post.data.description}
+            </p>
 
-    <!-- INFORMACIÓN ADICIONAL -->
-    <footer class="post-footer">
-        <div class="tags">
-            {post.data.tags.map((tag) => <span class="tag">#{tag}</span>)}
+            {
+                remarkPluginFrontmatter.readingTime && (
+                    <div class="mt-4">
+                        <span class="text-sm text-[--color-text-muted] bg-[--color-surface] px-3 py-1 rounded-full">
+                            Tiempo de lectura:{' '}
+                            {remarkPluginFrontmatter.readingTime}
+                        </span>
+                    </div>
+                )
+            }
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-25 gap-4">
+            <!-- TABLA DE CONTENIDOS -->
+            <aside class="hidden lg:block lg:col-span-7">
+                <!-- La tabla de contenidos se generará dinámicamente con JavaScript -->
+                <nav
+                    id="dynamic-toc"
+                    class="in-this-article-box sticky top-24"
+                    style="display: none;"
+                >
+                    <h4
+                        class="text-lg font-semibold text-[--color-primary] mb-4"
+                    >
+                        En este artículo
+                    </h4>
+                    <ul id="toc-list" class="space-y-2 text-sm">
+                        <!-- Los enlaces se generarán dinámicamente -->
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <main class="lg:col-span-18">
+                <article class="post-content">
+                    <Content />
+                </article>
+            </main>
         </div>
 
-        <!-- Ejemplo de uso de remarkPluginFrontmatter -->
-        {
-            remarkPluginFrontmatter.readingTime && (
-                <p class="reading-time">
-                    Tiempo de lectura: {remarkPluginFrontmatter.readingTime}
-                </p>
-            )
+        <!-- PIE DE PÁGINA DEL POST -->
+        <footer class="mt-12 pt-8 border-t border-[--color-border]">
+            <div class="flex flex-wrap gap-2 mb-6">
+                {
+                    post.data.tags.map((tag) => (
+                        <span class="bg-[--color-surface] text-[--color-text] px-3 py-1 rounded-full text-sm font-medium border border-[--color-border] hover:bg-[--color-surface-2] transition-colors duration-200">
+                            #{tag}
+                        </span>
+                    ))
+                }
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Función para generar ID único basado en texto
+            function generateId(text) {
+                return text
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^\w\s-]/g, '') // Quitar caracteres especiales
+                    .replace(/\s+/g, '-') // Espacios a guiones
+                    .replace(/-+/g, '-') // Múltiples guiones a uno
+                    .replace(/^-|-$/g, ''); // Quitar guiones al inicio/final
+            }
+
+            // Función para generar tabla de contenidos dinámicamente
+            function generateTOC() {
+                const postContent = document.querySelector('.post-content');
+                const tocNav = document.getElementById('dynamic-toc');
+                const tocList = document.getElementById('toc-list');
+
+                if (!postContent || !tocNav || !tocList) return;
+
+                // Limpiar completamente la lista existente primero
+                tocList.innerHTML = '';
+
+                // Forzar ocultar el nav primero
+                tocNav.style.display = 'none';
+
+                // Buscar únicamente los headings h2 en el contenido del post
+                const headings = postContent.querySelectorAll('h2');
+                console.log('H2 encontrados:', headings.length, headings);
+
+                if (headings.length === 0) {
+                    tocNav.style.display = 'none';
+                    return;
+                }
+
+                // Generar IDs automáticamente y crear enlaces
+                headings.forEach((heading, index) => {
+                    if (!heading.id) {
+                        const text =
+                            heading.textContent || heading.innerText || '';
+                        let id = generateId(text);
+
+                        // Asegurar que el ID sea único
+                        if (document.getElementById(id)) {
+                            id = `${id}-${index}`;
+                        }
+
+                        heading.id = id;
+                    }
+
+                    // Solo mostrar H2, sin indentación
+                    const level = 2;
+
+                    // Crear el elemento de lista
+                    const listItem = document.createElement('li');
+                    listItem.className = `toc-level-${level}`;
+
+                    // Crear el enlace
+                    const link = document.createElement('a');
+                    link.href = `#${heading.id}`;
+                    link.className =
+                        'toc-link text-[--color-text-muted] hover:text-[--color-secondary] transition-colors duration-200 block py-1';
+                    link.setAttribute('data-target', heading.id);
+                    link.textContent =
+                        heading.textContent || heading.innerText || '';
+
+                    listItem.appendChild(link);
+                    tocList.appendChild(listItem);
+                });
+
+                // Mostrar la tabla de contenidos solo si hay H2
+                if (headings.length > 0) {
+                    tocNav.style.display = 'block';
+                    console.log('TOC mostrado con', headings.length, 'elementos H2');
+                }
+
+                return headings;
+            }
+
+            // Función para implementar scrollspy universal
+            function initScrollSpy(headings) {
+                if (!headings || headings.length === 0) return;
+
+                const tocLinks = document.querySelectorAll('.toc-link');
+
+                // Crear un mapa de headings con sus posiciones
+                function getHeadingPositions() {
+                    return Array.from(headings).map((heading) => ({
+                        id: heading.id,
+                        offsetTop: heading.offsetTop,
+                        element: heading,
+                        text: heading.textContent || heading.innerText || '',
+                    }));
+                }
+
+                let headingPositions = getHeadingPositions();
+
+                // Actualizar posiciones cuando la ventana cambie de tamaño
+                window.addEventListener('resize', () => {
+                    headingPositions = getHeadingPositions();
+                });
+
+                // Función para hacer scroll del nav hacia el enlace activo (versión inicial)
+                function scrollToActiveLinkInitial(activeLink) {
+                    const tocNav = document.getElementById('dynamic-toc');
+                    if (!tocNav || !activeLink) return;
+
+                    const navRect = tocNav.getBoundingClientRect();
+                    const linkRect = activeLink.getBoundingClientRect();
+
+                    // Calcular si el enlace está fuera del viewport del nav
+                    const isAbove = linkRect.top < navRect.top;
+                    const isBelow = linkRect.bottom > navRect.bottom;
+
+                    if (isAbove || isBelow) {
+                        // Calcular la posición de scroll necesaria
+                        const linkOffsetTop = activeLink.offsetTop;
+                        const navHeight = tocNav.clientHeight;
+                        const linkHeight = activeLink.offsetHeight;
+
+                        // Centrar el enlace en el nav
+                        let targetScrollTop;
+
+                        if (isAbove) {
+                            targetScrollTop = linkOffsetTop - 60;
+                        } else {
+                            targetScrollTop =
+                                linkOffsetTop - navHeight + linkHeight + 60;
+                        }
+
+                        // Hacer scroll suave en el nav
+                        tocNav.scrollTo({
+                            top: Math.max(0, targetScrollTop),
+                            behavior: 'smooth',
+                        });
+                    }
+                }
+
+                function updateActiveLink() {
+                    const scrollPosition = window.scrollY + 150;
+
+                    // Encontrar el heading activo basado en la posición del scroll
+                    let activeHeading = null;
+
+                    for (let i = headingPositions.length - 1; i >= 0; i--) {
+                        if (scrollPosition >= headingPositions[i].offsetTop) {
+                            activeHeading = headingPositions[i];
+                            break;
+                        }
+                    }
+
+                    // Remover clase active de todos los enlaces
+                    tocLinks.forEach((link) => link.classList.remove('active'));
+
+                    // Añadir clase active al enlace correspondiente
+                    if (activeHeading) {
+                        const activeLink = document.querySelector(
+                            `[data-target="${activeHeading.id}"]`,
+                        );
+
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+
+                            // Auto-scroll del nav para mantener la sección activa visible
+                            scrollToActiveLinkInitial(activeLink);
+                        }
+                    }
+                }
+
+                // Smooth scroll para los enlaces del TOC
+                tocLinks.forEach((link) => {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('data-target');
+                        const targetElement = document.getElementById(targetId);
+
+                        if (targetElement) {
+                            const offsetTop = targetElement.offsetTop - 100;
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth',
+                            });
+                        }
+                    });
+                });
+
+                // Throttle function para optimizar el rendimiento
+                function throttle(func, limit) {
+                    let inThrottle = false;
+                    return function (...args) {
+                        if (!inThrottle) {
+                            func.apply(this, args);
+                            inThrottle = true;
+                            setTimeout(() => (inThrottle = false), limit);
+                        }
+                    };
+                }
+
+                // Listener para el scroll con throttle
+                const throttledUpdateActiveLink = throttle(
+                    updateActiveLink,
+                    100,
+                );
+                window.addEventListener('scroll', throttledUpdateActiveLink);
+
+                // Inicializar al cargar la página
+                setTimeout(updateActiveLink, 200);
+            }
+
+            // Inicializar todo
+            function init() {
+                const headings = generateTOC();
+                if (headings) {
+                    initScrollSpy(headings);
+                }
+            }
+
+            // Ejecutar con un pequeño delay para asegurar que el contenido esté completamente cargado
+            setTimeout(init, 100);
+        });
+
+        // Variables globales para el scrollspy
+        let currentScrollListener = null;
+        let currentResizeListener = null;
+
+        // Función para limpiar listeners anteriores
+        function cleanupListeners() {
+            if (currentScrollListener) {
+                window.removeEventListener('scroll', currentScrollListener);
+                currentScrollListener = null;
+            }
+            if (currentResizeListener) {
+                window.removeEventListener('resize', currentResizeListener);
+                currentResizeListener = null;
+            }
         }
-    </footer>
+
+        // Función mejorada para navegación de Astro
+        function initBlogTOCForAstro() {
+            // Limpiar listeners anteriores
+            cleanupListeners();
+
+            const postContent = document.querySelector('.post-content');
+            const tocNav = document.getElementById('dynamic-toc');
+            const tocList = document.getElementById('toc-list');
+
+            if (!postContent || !tocNav || !tocList) return;
+
+            // Buscar todos los headings en el contenido del post
+            const headings = postContent.querySelectorAll('h2');
+
+            if (headings.length === 0) {
+                tocNav.style.display = 'none';
+                return;
+            }
+
+            // Limpiar la lista existente
+            tocList.innerHTML = '';
+
+            // Generar IDs automáticamente y crear enlaces
+            headings.forEach((heading, index) => {
+                if (!heading.id) {
+                    const text = heading.textContent || heading.innerText || '';
+                    let id = generateId(text);
+
+                    // Asegurar que el ID sea único
+                    if (document.getElementById(id)) {
+                        id = `${id}-${index}`;
+                    }
+
+                    heading.id = id;
+                }
+
+                // Determinar el nivel de indentación basado en el tag
+                const level = parseInt(heading.tagName.charAt(1));
+                const indentClass = level > 2 ? 'ml-4' : '';
+
+                // Crear el elemento de lista
+                const listItem = document.createElement('li');
+                listItem.className = `toc-level-${level} ${indentClass}`;
+
+                // Crear el enlace
+                const link = document.createElement('a');
+                link.href = `#${heading.id}`;
+                link.className =
+                    'toc-link text-[--color-text-muted] hover:text-[--color-secondary] transition-colors duration-200 block py-1';
+                link.setAttribute('data-target', heading.id);
+                link.textContent =
+                    heading.textContent || heading.innerText || '';
+
+                listItem.appendChild(link);
+                tocList.appendChild(listItem);
+            });
+
+            // Mostrar la tabla de contenidos
+            tocNav.style.display = 'block';
+
+            // Inicializar scrollspy
+            if (headings.length > 0) {
+                const tocLinks = document.querySelectorAll('.toc-link');
+
+                // Crear un mapa de headings con sus posiciones
+                function getHeadingPositions() {
+                    return Array.from(headings).map((heading) => ({
+                        id: heading.id,
+                        offsetTop: heading.offsetTop,
+                        element: heading,
+                        text: heading.textContent || heading.innerText || '',
+                    }));
+                }
+
+                let headingPositions = getHeadingPositions();
+
+                // Función para actualizar posiciones
+                function updatePositions() {
+                    headingPositions = getHeadingPositions();
+                }
+
+                // Actualizar posiciones cuando la ventana cambie de tamaño
+                currentResizeListener = updatePositions;
+                window.addEventListener('resize', currentResizeListener);
+
+                // Función para hacer scroll del nav hacia el enlace activo
+                function scrollToActiveLink(activeLink) {
+                    const tocNav = document.getElementById('dynamic-toc');
+                    if (!tocNav || !activeLink) return;
+
+                    const navRect = tocNav.getBoundingClientRect();
+                    const linkRect = activeLink.getBoundingClientRect();
+
+                    // Calcular si el enlace está fuera del viewport del nav
+                    const isAbove = linkRect.top < navRect.top;
+                    const isBelow = linkRect.bottom > navRect.bottom;
+
+                    if (isAbove || isBelow) {
+                        // Calcular la posición de scroll necesaria
+                        const navScrollTop = tocNav.scrollTop;
+                        const linkOffsetTop = activeLink.offsetTop;
+                        const navHeight = tocNav.clientHeight;
+                        const linkHeight = activeLink.offsetHeight;
+
+                        // Centrar el enlace en el nav, o posicionarlo cerca del top/bottom
+                        let targetScrollTop;
+
+                        if (isAbove) {
+                            // Si está arriba, scrollear para que aparezca cerca del top
+                            targetScrollTop = linkOffsetTop - 60;
+                        } else {
+                            // Si está abajo, scrollear para que aparezca cerca del bottom
+                            targetScrollTop =
+                                linkOffsetTop - navHeight + linkHeight + 60;
+                        }
+
+                        // Hacer scroll suave en el nav
+                        tocNav.scrollTo({
+                            top: Math.max(0, targetScrollTop),
+                            behavior: 'smooth',
+                        });
+                    }
+                }
+
+                function updateActiveLink() {
+                    const scrollPosition = window.scrollY + 150;
+
+                    // Encontrar el heading activo basado en la posición del scroll
+                    let activeHeading = null;
+
+                    for (let i = headingPositions.length - 1; i >= 0; i--) {
+                        if (scrollPosition >= headingPositions[i].offsetTop) {
+                            activeHeading = headingPositions[i];
+                            break;
+                        }
+                    }
+
+                    // Remover clase active de todos los enlaces
+                    tocLinks.forEach((link) => link.classList.remove('active'));
+
+                    // Añadir clase active al enlace correspondiente
+                    if (activeHeading) {
+                        const activeLink = document.querySelector(
+                            `[data-target="${activeHeading.id}"]`,
+                        );
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+
+                            // Auto-scroll del nav para mantener la sección activa visible
+                            scrollToActiveLink(activeLink);
+                        }
+                    }
+                }
+
+                // Smooth scroll para los enlaces del TOC
+                tocLinks.forEach((link) => {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('data-target');
+                        const targetElement = document.getElementById(targetId);
+
+                        if (targetElement) {
+                            const offsetTop = targetElement.offsetTop - 100;
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth',
+                            });
+                        }
+                    });
+                });
+
+                // Throttle function para optimizar el rendimiento
+                function throttle(func, limit) {
+                    let inThrottle = false;
+                    return function (...args) {
+                        if (!inThrottle) {
+                            func.apply(this, args);
+                            inThrottle = true;
+                            setTimeout(() => (inThrottle = false), limit);
+                        }
+                    };
+                }
+
+                // Listener para el scroll con throttle
+                const throttledUpdateActiveLink = throttle(
+                    updateActiveLink,
+                    100,
+                );
+                currentScrollListener = throttledUpdateActiveLink;
+                window.addEventListener('scroll', currentScrollListener);
+
+                // Inicializar al cargar la página
+                setTimeout(updateActiveLink, 300);
+            }
+        }
+
+        // Escuchar eventos de navegación de Astro
+        document.addEventListener('astro:page-load', function () {
+            setTimeout(initBlogTOCForAstro, 200);
+        });
+
+        // Limpiar al navegar fuera de la página
+        document.addEventListener('astro:before-preparation', function () {
+            cleanupListeners();
+        });
+    </script>
 </LayoutSeo>

@@ -250,114 +250,280 @@
    ========================================================================== */
 
 /* ========================================================================== */
-/*               ESTILOS PARA CONTENIDO DE POSTS (Estilo Coin Bureau)         */
+/*               ESTILOS PARA CONTENIDO DE POSTS (UI Mejorada)              */
 /* ========================================================================== */
 /*
-  Aplica un formato de "prosa" a los elementos generados por MDX dentro
-  de la clase `.post-content`, inspirado en el estilo de Coin Bureau.
+  Estilos de prosa para el contenido generado por MDX.
+  Clase principal: .post-content
 */
 
 .post-content {
-    font-family: 'Roboto', sans-serif;
-    max-width: 720px; /* Ancho óptimo para lectura */
-    margin-left: auto;
-    margin-right: auto;
-    padding: 2rem 1rem; /* Espaciado vertical y horizontal */
+    font-family:
+        system-ui,
+        -apple-system,
+        'Segoe UI',
+        sans-serif;
+    max-width: none; /* Usar todo el espacio disponible en el grid */
+    margin-left: 0;
+    margin-right: 0;
+    padding: 2rem 1.5rem; /* Espaciado optimizado */
     color: var(--color-text);
+    line-height: 1.8; /* Mejor interlineado base */
 }
 
+/* --- JERARQUÍA DE TÍTULOS --- */
 .post-content h1,
 .post-content h2,
 .post-content h3,
-.post-content h4 {
+.post-content h4,
+.post-content h5,
+.post-content h6 {
     font-weight: 700;
-    margin-top: 2.5em;
-    margin-bottom: 1em;
     line-height: 1.3;
+    margin-bottom: 1.2em;
+    letter-spacing: -0.02em; /* Mejor kerning para títulos */
 }
 
-/* El H1 principal del post suele estar en el layout, pero por si acaso */
 .post-content h1 {
-    font-size: 2.5rem; /* 40px */
-    color: var(--color-text);
+    font-size: 2.75rem; /* 44px - Título principal */
+    color: var(--color-primary);
+    margin-top: 0;
+    margin-bottom: 1em;
+    font-weight: 800;
 }
 
 .post-content h2 {
-    font-size: 1.75rem; /* 28px */
-    color: var(--color-secondary); /* Color cobre para H2 */
+    font-size: 2.25rem; /* 36px - Secciones principales */
+    color: var(--color-secondary);
+    margin-top: 1.8em;
+    margin-bottom: 0.7em;
+    border-bottom: 3px solid var(--color-secondary);
+    padding-bottom: 0.5em;
+    font-weight: 700;
 }
 
 .post-content h3 {
-    font-size: 1.375rem; /* 22px */
+    font-size: 1.75rem; /* 28px - Subsecciones */
     color: var(--color-text);
+    margin-top: 1.3em;
+    margin-bottom: 0.6em;
+    font-weight: 600;
 }
 
+.post-content h4 {
+    font-size: 1.375rem; /* 22px - Subsubsecciones */
+    color: var(--color-text);
+    margin-top: 1.1em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+.post-content h5 {
+    font-size: 1.125rem; /* 18px */
+    color: var(--color-text-muted);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.post-content h6 {
+    font-size: 1rem; /* 16px */
+    color: var(--color-text-muted);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+/* --- PÁRRAFOS Y ENLACES --- */
 .post-content p {
-    margin-bottom: 1.25em;
-    line-height: 1.8; /* Un poco más de altura de línea para legibilidad */
-    font-size: 1.125rem; /* 18px, un poco más grande para comodidad */
+    margin-bottom: 0.8em;
+    line-height: 1.8; /* Interlineado óptimo para lectura */
+    font-size: 1.1rem; /* 17.6px - Tamaño óptimo para lectura */
+    max-width: 90ch; /* Ancho más amplio pero aún legible */
 }
 
 .post-content a {
     color: var(--color-secondary);
-    text-decoration: none; /* Sin subrayado por defecto */
-    border-bottom: 2px solid var(--color-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-secondary);
     transition: all 0.2s ease-in-out;
     padding-bottom: 1px;
+    font-weight: 500;
 }
 
 .post-content a:hover {
-    color: var(--color-text);
-    background-color: var(--color-secondary);
-    border-bottom-color: var(--color-secondary);
+    color: var(--color-secondary-hover);
+    border-bottom-color: var(--color-secondary-hover);
+    background-color: color-mix(
+        in oklch,
+        var(--color-secondary) 10%,
+        transparent
+    );
 }
 
+/* --- LISTAS (UL/OL) --- */
 .post-content ul,
 .post-content ol {
-    margin-bottom: 1.25em;
-    padding-left: 1.5em;
-    font-size: 1.125rem; /* 18px */
+    margin-bottom: 2em;
+    padding-left: 2em;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 90ch; /* Consistente con párrafos */
 }
 
 .post-content ul {
-    list-style-type: disc;
+    list-style-type: none;
+    position: relative;
+}
+
+.post-content ul li {
+    position: relative;
+    padding-left: 1.5em;
+}
+
+.post-content ul li::before {
+    content: '▶';
+    color: var(--color-secondary);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .post-content ol {
     list-style-type: decimal;
 }
 
-.post-content li > ul,
-.post-content li > ol {
-    margin-top: 0.5em;
+.post-content ol li::marker {
+    color: var(--color-secondary);
+    font-weight: 600;
 }
 
 .post-content li {
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
+    line-height: 1.7;
 }
 
+/* --- BLOQUES DESTACADOS Y CITAS --- */
 .post-content blockquote {
-    border-left: 4px solid var(--color-secondary);
-    padding-left: 1em;
-    margin-left: 0;
-    margin-right: 0;
+    border-left: 4px solid var(--color-primary);
+    padding: 1em 1.5em;
+    margin: 2em 0;
+    background-color: var(--color-surface);
     font-style: italic;
     color: var(--color-text-muted);
+    border-radius: 0 8px 8px 0;
+    max-width: 90ch; /* Consistente con párrafos */
 }
 
+/*
+  Uso: <div class="in-this-article-box">
+         <h4>En este artículo</h4>
+         <ul>...</ul>
+       </div>
+*/
+.in-this-article-box {
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin: 2.5em 0;
+    max-height: calc(100vh - 120px); /* Altura máxima respecto al viewport */
+    overflow-y: auto; /* Scroll interno cuando sea necesario */
+    overflow-x: hidden; /* Evitar scroll horizontal */
+}
+
+/* Estilos para el scroll interno del TOC */
+.in-this-article-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.in-this-article-box::-webkit-scrollbar-track {
+    background: var(--color-surface);
+    border-radius: 3px;
+}
+
+.in-this-article-box::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.in-this-article-box::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+}
+
+.in-this-article-box h4 {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+.in-this-article-box ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+/*
+  Uso: <li><span class="icon">📌</span> Contenido...</li>
+*/
+.in-this-article-box li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.8em;
+}
+
+/* Estilos simplificados sin iconos */
+
+/* Estilos para scrollspy - sección activa */
+.in-this-article-box .toc-link {
+    position: relative;
+    transition: all 0.2s ease-in-out;
+    border-radius: 4px;
+    padding: 0.4em 0.6em;
+    margin: -0.4em -0.6em;
+}
+
+.in-this-article-box .toc-link.active {
+    background-color: color-mix(
+        in oklch,
+        var(--color-secondary) 15%,
+        transparent
+    );
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+.in-this-article-box .toc-link.active::before {
+    content: '';
+    position: absolute;
+    left: -0.2em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 70%;
+    background-color: var(--color-secondary);
+    border-radius: 2px;
+}
+
+/* --- CÓDIGO Y PREFORMATEADO --- */
 .post-content pre {
     background-color: var(--color-surface-2);
-    border-radius: 0.5rem;
-    padding: 1em;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5em;
     overflow-x: auto;
-    margin-bottom: 1.5em;
+    margin-bottom: 2em;
 }
 
 .post-content code {
     font-family: monospace;
     background-color: var(--color-surface-2);
     padding: 0.2em 0.4em;
-    border-radius: 0.3rem;
+    border-radius: 4px;
     font-size: 0.9em;
 }
 
@@ -365,4 +531,158 @@
     background-color: transparent;
     padding: 0;
     font-size: inherit;
+    border: none;
+}
+
+/* --- TEXTO CON ÉNFASIS --- */
+.post-content strong {
+    font-weight: 600;
+    color: var(--color-secondary);
+    background-color: color-mix(
+        in oklch,
+        var(--color-secondary) 8%,
+        transparent
+    );
+    padding: 0.1em 0.2em;
+    border-radius: 3px;
+}
+
+.post-content em {
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+/* --- TABLAS --- */
+.post-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2.5em 0;
+    background: var(--color-surface);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px
+        color-mix(in oklch, var(--color-border) 50%, transparent);
+}
+
+.post-content th,
+.post-content td {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.95rem;
+}
+
+.post-content th {
+    background: var(--color-surface-2);
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.post-content tbody tr:hover {
+    background-color: color-mix(
+        in oklch,
+        var(--color-surface-2) 30%,
+        transparent
+    );
+}
+
+/* --- ELEMENTOS ESPECIALES PARA CONTENIDO TÉCNICO --- */
+
+/* Resaltado para términos técnicos críticos */
+.post-content .term-highlight {
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        transparent 40%,
+        var(--color-accent) 40%,
+        var(--color-accent) 60%,
+        transparent 60%
+    );
+    padding: 0.1em 0.2em;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Cajas de información especiales */
+.post-content .info-box {
+    background: color-mix(
+        in oklch,
+        var(--color-primary) 10%,
+        var(--color-surface)
+    );
+    border-left: 4px solid var(--color-primary);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+    position: relative;
+}
+
+.post-content .warning-box {
+    background: color-mix(
+        in oklch,
+        var(--color-warning) 10%,
+        var(--color-surface)
+    );
+    border-left: 4px solid var(--color-warning);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.post-content .success-box {
+    background: color-mix(
+        in oklch,
+        var(--color-success) 10%,
+        var(--color-surface)
+    );
+    border-left: 4px solid var(--color-success);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Mejorar el espaciado entre secciones */
+.post-content section {
+    margin-bottom: 3rem;
+}
+
+/* Estilo para citas destacadas */
+.post-content .highlight-quote {
+    font-size: 1.3rem;
+    text-align: center;
+    font-style: italic;
+    color: var(--color-secondary);
+    margin: 3rem 0;
+    padding: 2rem;
+    background: var(--color-surface);
+    border-radius: 12px;
+    border: 2px solid var(--color-border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .post-content {
+        padding: 1.5rem 1rem;
+        font-size: 1rem;
+    }
+
+    .post-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .post-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .post-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .post-content p {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
 }

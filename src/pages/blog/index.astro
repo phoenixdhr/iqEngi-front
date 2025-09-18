@@ -18,9 +18,21 @@ const blogPostsJsonLd = getBlogJsonLd();
 ---
 
 <LayoutSeo tituloPagina={tituloPagina} seoJsonLd={blogPostsJsonLd}>
-    <!-- <Welcome /> -->
+    <div class="max-w-7xl mx-auto">
+        <!-- Header del blog -->
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-[--color-text] mb-4">
+                Blog de IQEngi
+            </h1>
+            <p class="text-xl text-[--color-text-muted] max-w-2xl mx-auto">
+                Artículos técnicos, guías especializadas y análisis profundos
+                sobre ingeniería y tecnología
+            </p>
+        </header>
 
-    <div class="grid grid-cols-1 gap-8 md:mt-16 md:grid-cols-2">
-        {blogPosts.map((post) => <BlogPost post={post} />)}
+        <!-- Grid de posts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post) => <BlogPost post={post} />)}
+        </div>
     </div>
 </LayoutSeo>
