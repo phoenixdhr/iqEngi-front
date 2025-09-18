@@ -6,7 +6,7 @@ import type { APIRoute } from 'astro';
  */
 const siteUrl = import.meta.env.SITE;
 if (!siteUrl) {
-  throw new Error('La variable de entorno SITE no está definida.');
+    throw new Error('La variable de entorno SITE no está definida.');
 }
 
 /**
@@ -14,31 +14,31 @@ if (!siteUrl) {
  * qué rutas pueden o no pueden indexar en el sitio web.
  */
 const robotsTxt = [
-  'User-agent: *', // Aplica a todos los bots de búsqueda
-  'Allow: /', // Permite el acceso a todas las páginas públicas
-  'Disallow: /admin/', // Restringe el acceso a la sección de administración
-  'Disallow: /privado/', // Restringe el acceso a contenido privado
-  'Disallow: /dashboard/',
-  'Disallow: /instructor/',
-  'Disallow: /cuenta/',
-  'Disallow: /perfil/',
-  'Disallow: /login/',
-  'Disallow: /registro/',
-  'Disallow: /logout/',
-  'Disallow: /recuperar/',
-  'Disallow: /carrito/',
-  'Disallow: /checkout/',
-  'Disallow: /orden/',
-  'Disallow: /factura/',
-  'Disallow: /buscar/',
-  'Disallow: /etiquetas/',
-  'Disallow: /filtrar/',
-  'Disallow: /api/',
-  'Disallow: /static/',
-  'Disallow: /uploads/',
-  'Disallow: /temp/',
+    'User-agent: *', // Aplica a todos los bots de búsqueda
+    'Allow: /', // Permite el acceso a todas las páginas públicas
+    'Disallow: /admin/', // Restringe el acceso a la sección de administración
+    'Disallow: /privado/', // Restringe el acceso a contenido privado
+    'Disallow: /dashboard/',
+    'Disallow: /instructor/',
+    'Disallow: /cuenta/',
+    'Disallow: /perfil/',
+    'Disallow: /login/',
+    'Disallow: /registro/',
+    'Disallow: /logout/',
+    'Disallow: /recuperar/',
+    'Disallow: /carrito/',
+    'Disallow: /checkout/',
+    'Disallow: /orden/',
+    'Disallow: /factura/',
+    'Disallow: /buscar/',
+    'Disallow: /etiquetas/',
+    'Disallow: /filtrar/',
+    'Disallow: /api/',
+    'Disallow: /static/',
+    'Disallow: /uploads/',
+    'Disallow: /temp/',
 
-  `Sitemap: ${new URL('sitemap-index.xml', siteUrl).href}`, // URL del sitemap generado dinámicamente
+    `Sitemap: ${new URL('sitemap-index.xml', siteUrl).href}`, // URL del sitemap generado dinámicamente
 ].join('\n');
 
 /**
@@ -46,7 +46,7 @@ const robotsTxt = [
  * Se usa `Object.freeze` para evitar modificaciones accidentales.
  */
 const HEADERS = Object.freeze({
-  'Content-Type': 'text/plain; charset=utf-8',
+    'Content-Type': 'text/plain; charset=utf-8',
 });
 
 /**
@@ -56,6 +56,6 @@ const HEADERS = Object.freeze({
  * @returns {Response} Respuesta HTTP con el contenido de `robots.txt`.
  */
 export const GET: APIRoute = () =>
-  new Response(robotsTxt, {
-    headers: HEADERS,
-  });
+    new Response(robotsTxt, {
+        headers: HEADERS,
+    });

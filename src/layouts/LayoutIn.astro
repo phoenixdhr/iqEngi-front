@@ -20,7 +20,7 @@ const { tituloPagina } = Astro.props;
 
         <!-- Theme initialization script to prevent flash -->
         <script is:inline>
-            (function() {
+            (function () {
                 function applyTheme(isDark) {
                     const htmlElement = document.documentElement;
                     if (isDark) {
@@ -39,7 +39,9 @@ const { tituloPagina } = Astro.props;
                     if (savedTheme) {
                         isDark = savedTheme === 'dark';
                     } else {
-                        isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        isDark = window.matchMedia(
+                            '(prefers-color-scheme: dark)',
+                        ).matches;
                     }
 
                     applyTheme(isDark);
@@ -59,7 +61,10 @@ const { tituloPagina } = Astro.props;
         <title>{tituloPagina} - IQEngi</title>
     </head>
 
-    <body class="overflow-y-scroll" style="background-color: var(--color-bg); color: var(--color-text);">
+    <body
+        class="overflow-y-scroll"
+        style="background-color: var(--color-bg); color: var(--color-text);"
+    >
         <slot />
     </body>
 </html>

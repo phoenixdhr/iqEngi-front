@@ -88,7 +88,10 @@ export default function Navbar({ currentUrl }: NavbarProps) {
     }
 
     return (
-        <header className="sticky top-0 z-40" style={{ backgroundColor: 'var(--color-bg)' }}>
+        <header
+            className="sticky top-0 z-40"
+            style={{ backgroundColor: 'var(--color-bg)' }}
+        >
             <nav
                 aria-label="Global"
                 className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
@@ -101,7 +104,13 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                             src="/favicon.svg"
                             alt="IqEngi"
                         />
-                        <span className="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl" style={{ background: 'var(--gradient-button-primary)', WebkitBackgroundClip: 'text' }}>
+                        <span
+                            className="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                            style={{
+                                background: 'var(--gradient-button-primary)',
+                                WebkitBackgroundClip: 'text',
+                            }}
+                        >
                             IQ-ENGI
                         </span>
                     </a>
@@ -136,15 +145,25 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                     {mainMenuItems.map((item) =>
                         item.isDropdown ? (
                             <Popover key={item.name} className="relative">
-                                <PopoverButton className="flex items-center gap-x-1 text-base font-semibold" style={{ color: 'var(--color-text)' }}>
+                                <PopoverButton
+                                    className="flex items-center gap-x-1 text-base font-semibold"
+                                    style={{ color: 'var(--color-text)' }}
+                                >
                                     {item.name}
                                     <ChevronDownIcon
                                         aria-hidden="true"
                                         className="h-5 w-5 flex-none"
-                                        style={{ color: 'var(--color-text-muted)' }}
+                                        style={{
+                                            color: 'var(--color-text-muted)',
+                                        }}
                                     />
                                 </PopoverButton>
-                                <PopoverPanel className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl ring-1 shadow-lg ring-gray-900/5 transition" style={{ backgroundColor: 'var(--color-bg)' }}>
+                                <PopoverPanel
+                                    className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl ring-1 shadow-lg ring-gray-900/5 transition"
+                                    style={{
+                                        backgroundColor: 'var(--color-bg)',
+                                    }}
+                                >
                                     {/* Aquí se renderizan los elementos de communityItems */}
                                     <div className="p-4">
                                         {communityItems.map((subitem) => (
@@ -152,10 +171,18 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                                 key={subitem.name}
                                                 className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:opacity-80 transition-opacity"
                                             >
-                                                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
+                                                <div
+                                                    className="flex h-11 w-11 flex-none items-center justify-center rounded-lg"
+                                                    style={{
+                                                        backgroundColor:
+                                                            'var(--color-surface)',
+                                                    }}
+                                                >
                                                     <subitem.icon
                                                         className="h-6 w-6"
-                                                        style={{ color: 'var(--color-text-muted)' }}
+                                                        style={{
+                                                            color: 'var(--color-text-muted)',
+                                                        }}
                                                         aria-hidden="true"
                                                     />
                                                 </div>
@@ -163,12 +190,19 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                                     <a
                                                         href={subitem.href}
                                                         className="block font-semibold"
-                                                        style={{ color: 'var(--color-text)' }}
+                                                        style={{
+                                                            color: 'var(--color-text)',
+                                                        }}
                                                     >
                                                         {subitem.name}
                                                         <span className="absolute inset-0" />
                                                     </a>
-                                                    <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>
+                                                    <p
+                                                        className="mt-1"
+                                                        style={{
+                                                            color: 'var(--color-text-muted)',
+                                                        }}
+                                                    >
                                                         {subitem.description}
                                                     </p>
                                                 </div>
@@ -176,17 +210,27 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                         ))}
                                     </div>
                                     {/* Aquí se renderizan los enlaces rápidos de callsToAction */}
-                                    <div className="grid grid-cols-2 divide-x divide-gray-900/5" style={{ backgroundColor: 'var(--color-surface)' }}>
+                                    <div
+                                        className="grid grid-cols-2 divide-x divide-gray-900/5"
+                                        style={{
+                                            backgroundColor:
+                                                'var(--color-surface)',
+                                        }}
+                                    >
                                         {callsToAction.map((action) => (
                                             <a
                                                 key={action.name}
                                                 href={action.href}
                                                 className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold hover:opacity-80 transition-opacity"
-                                                style={{ color: 'var(--color-text)' }}
+                                                style={{
+                                                    color: 'var(--color-text)',
+                                                }}
                                             >
                                                 <action.icon
                                                     className="h-5 w-5 flex-none"
-                                                    style={{ color: 'var(--color-text-muted)' }}
+                                                    style={{
+                                                        color: 'var(--color-text-muted)',
+                                                    }}
                                                     aria-hidden="true"
                                                 />
                                                 {action.name}
@@ -205,7 +249,12 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                     {item.name}
                                 </a>
                                 {currentUrl === item.href ? (
-                                    <div className="border-b-2 transition-all duration-300" style={{ borderColor: 'var(--color-text)' }} />
+                                    <div
+                                        className="border-b-2 transition-all duration-300"
+                                        style={{
+                                            borderColor: 'var(--color-text)',
+                                        }}
+                                    />
                                 ) : (
                                     <div />
                                 )}
@@ -235,7 +284,10 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                 className="lg:hidden"
             >
                 <div className="fixed inset-0 z-10" />
-                <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10" style={{ backgroundColor: 'var(--color-bg)' }}>
+                <DialogPanel
+                    className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+                    style={{ backgroundColor: 'var(--color-bg)' }}
+                >
                     {/* Encabezado del menú móvil con logo y botón cerrar */}
                     <div className="flex items-center justify-between px-2.5">
                         {/*logo y Nombre*/}
@@ -251,7 +303,14 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                 src="/favicon.svg"
                                 alt="IqEngi"
                             />
-                            <span className="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl" style={{ background: 'var(--gradient-button-primary)', WebkitBackgroundClip: 'text' }}>
+                            <span
+                                className="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                                style={{
+                                    background:
+                                        'var(--gradient-button-primary)',
+                                    WebkitBackgroundClip: 'text',
+                                }}
+                            >
                                 IQ-ENGI
                             </span>
                         </a>
@@ -264,7 +323,9 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                 openModalLogin();
                             }}
                             className="ml-auto h-8 text-white font-medium rounded-lg text-base px-5 mr-4 hover:scale-105 transition-transform focus:ring-4"
-                            style={{ background: 'var(--gradient-button-primary)' }}
+                            style={{
+                                background: 'var(--gradient-button-primary)',
+                            }}
                         >
                             Acceder
                         </button>
@@ -282,7 +343,10 @@ export default function Navbar({ currentUrl }: NavbarProps) {
 
                     {/* Secciones de navegación dentro del menú móvil */}
                     <div className="mt-6 flow-root">
-                        <div className="-my-6 divide-y" style={{ borderColor: 'var(--color-border)' }}>
+                        <div
+                            className="-my-6 divide-y"
+                            style={{ borderColor: 'var(--color-border)' }}
+                        >
                             <div className="space-y-2 py-6">
                                 {/* Recorremos mainMenuItems. Si el item tiene isDropdown, renderizamos el Disclosure (menú colapsable), si no, un enlace normal */}
                                 {mainMenuItems.map((item) =>
@@ -293,7 +357,12 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                             className="-mx-3"
                                             key={item.name}
                                         >
-                                            <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base font-semibold hover:opacity-80 transition-opacity" style={{ color: 'var(--color-text)' }}>
+                                            <DisclosureButton
+                                                className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base font-semibold hover:opacity-80 transition-opacity"
+                                                style={{
+                                                    color: 'var(--color-text)',
+                                                }}
+                                            >
                                                 {item.name}
                                                 <ChevronDownIcon
                                                     aria-hidden="true"
@@ -311,7 +380,9 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                                         as="a"
                                                         href={item.href}
                                                         className="block rounded-lg py-2 pr-3 pl-6 text-base font-semibold hover:opacity-80 transition-opacity"
-                                                        style={{ color: 'var(--color-text)' }}
+                                                        style={{
+                                                            color: 'var(--color-text)',
+                                                        }}
                                                     >
                                                         {item.name}
                                                     </DisclosureButton>
@@ -324,7 +395,9 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                             key={item.name}
                                             href={item.href}
                                             className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold hover:opacity-80 transition-opacity"
-                                            style={{ color: 'var(--color-text)' }}
+                                            style={{
+                                                color: 'var(--color-text)',
+                                            }}
                                         >
                                             {item.name}
                                         </a>

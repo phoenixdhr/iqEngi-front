@@ -1,1 +1,1 @@
-export const FAVORITOS_CURSOS  = 'favoritosCursos';
+export const FAVORITOS_CURSOS = 'favoritosCursos';

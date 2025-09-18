@@ -45,7 +45,7 @@ export function initializeTheme(): boolean {
 
     // Aplicamos el tema determinado
     applyTheme(isDark);
-    
+
     // Retornamos el estado del tema aplicado
     return isDark;
 }
@@ -57,12 +57,12 @@ export function initializeTheme(): boolean {
 export function getCurrentTheme(): boolean {
     // Primero verificamos si hay una preferencia guardada en localStorage
     const savedTheme = localStorage.getItem('theme');
-    
+
     if (savedTheme) {
         // Si hay una preferencia guardada, la retornamos
         return savedTheme === 'dark';
     }
-    
+
     // Si no hay preferencia guardada, consultamos la preferencia del sistema
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
@@ -74,7 +74,7 @@ export function getCurrentTheme(): boolean {
 export function setTheme(isDark: boolean): void {
     // Aplicamos el tema al DOM
     applyTheme(isDark);
-    
+
     // Guardamos la preferencia en localStorage para persistir entre sesiones
     // Convertimos el boolean a string para almacenarlo
     localStorage.setItem('theme', isDark ? 'dark' : 'light');

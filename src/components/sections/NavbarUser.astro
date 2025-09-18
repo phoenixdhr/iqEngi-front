@@ -82,7 +82,10 @@ const currentUrl = Astro.url.pathname;
                             {item.name}
                         </a>
                         {currentUrl === item.href ? (
-                            <div class="border-b-2 transition-all duration-300" style="border-color: var(--color-text);" />
+                            <div
+                                class="border-b-2 transition-all duration-300"
+                                style="border-color: var(--color-text);"
+                            />
                         ) : (
                             <div />
                         )}
@@ -124,7 +127,7 @@ const currentUrl = Astro.url.pathname;
                     />
                     <span
                         class="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
-                    style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
+                        style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
                     >
                         IQ-ENGI
                     </span>
@@ -143,7 +146,7 @@ const currentUrl = Astro.url.pathname;
                     type="button"
                     id="close-mobile-menu"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 hover:scale-105 transition-transform"
-                style="color: var(--color-text-muted);"
+                    style="color: var(--color-text-muted);"
                 >
                     <span class="sr-only">Cerrar menú</span>
                     <!-- Ícono X simple sin usar heroicons -->
