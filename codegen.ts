@@ -6,6 +6,7 @@ const config: CodegenConfig = {
 
   schema: "https://iqengi-backend-production.up.railway.app/graphql", // URL del backend GraphQL
 
+
   documents: "src/graphql-astro/**/*.graphql", // Busca todas las queries en la carpeta graphql
 
   generates: {
