@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Development:**
 ```bash
-npm run dev          # Start dev server with --watch flag
+npm run dev          # Start dev server with production backend
+npm run dev:local    # Start dev server with local backend (uses .env.dev)
 npm run build        # Build production site
 npm run preview      # Preview build locally
 npm run start        # Start production server (dist/server/entry.mjs)
@@ -107,3 +108,15 @@ src/
 - **Railway Deployment:** Configured for automatic deployment
 - **Environment Variables:** Used for GraphQL URL and domain configuration
 - **Vite Configuration:** Custom setup with Tailwind plugin and Apollo optimization
+
+**Environment Files:**
+- `.env.dev` - Local development with local backend (http://localhost:3000/graphql)
+- `.env` - Development with production backend
+- `.env.production` - Production deployment
+- `.env.example` - Template with documentation
+
+To switch backends, copy the appropriate env file:
+```bash
+cp .env.dev .env       # Use local backend
+cp .env.production .env # Use production backend
+```

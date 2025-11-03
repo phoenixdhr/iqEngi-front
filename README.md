@@ -1,3 +1,61 @@
+# Guía rápida de despliegue
+
+## Backend
+
+### Iniciar el backend
+
+```bash
+# Levantar MongoDB con Docker
+dco up -d mongo
+
+# Iniciar el backend
+npm run start
+```
+
+### Iniciar el backend Reseteanado la base de datos y clonar desde Railway
+
+```bash
+# Eliminar la base de datos local y clona la de Railway
+./clone-database.sh
+
+# Iniciar el backend
+npm run start
+```
+
+---
+
+## Frontend
+
+### Despliegue en local
+
+```bash
+npm run dev:local
+```
+
+### Despliegue para producción
+
+```bash
+npm run dev
+```
+
+---
+
+## Requisitos previos
+
+- Node.js y npm instalados.
+- Docker y Docker Compose configurados.
+- Acceso a Railway (credenciales/tokens) para el script `clone-database.sh`.
+
+---
+
+## Consejos
+
+- Si `mongo` no levanta, verifica los logs:
+
+    ```bash
+    dco logs -f mongo
+    ```
+
 # Astro Starter Kit: Basics
 
 ```sh

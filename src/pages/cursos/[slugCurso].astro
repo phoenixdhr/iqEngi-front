@@ -1,5 +1,4 @@
 ---
-import type { GetStaticPaths } from 'astro';
 import { clientGql } from '@graphql-astro/apolloClient';
 
 import '@styles/global.css';
@@ -8,26 +7,24 @@ import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
 import Titulo from '@components/atoms/Titulo.astro';
 import { Icon } from 'astro-icon/components';
-export const prerender = true;
 
-interface Props extends Curso {
-    isBig: boolean; // Agregando una nueva propiedad
+// Obtener el slug de los parámetros de la URL
+const { slugCurso } = Astro.params;
+
+// Consultar todos los cursos y filtrar por slug
+const { data } = await clientGql.query({
+    query: CursosDocument,
+    variables: { offset: 0, limit: 1000 }, // Obtener suficientes cursos
+});
+
+// Buscar el curso que coincida con el slug
+const cursos = data?.Cursos || [];
+const curso = cursos.find((c: Curso) => c.slug === slugCurso);
+
+// Si no se encuentra el curso, retornar 404
+if (!curso) {
+    return Astro.redirect('/404');
 }
-
-export const getStaticPaths = (async () => {
-    const { data } = await clientGql.query({
-        query: CursosDocument,
-        variables: { offset: 0, limit: 10 },
-    });
-
-    const cursos: Curso[] = data?.Cursos;
-
-    const prospParams = cursos.map((curso) => ({
-        props: { ...curso },
-        params: { slugCurso: `${curso.slug!}` }, // Aseguramos que slug sea un string
-    }));
-    return prospParams;
-}) satisfies GetStaticPaths;
 
 const {
     courseTitle,
@@ -37,17 +34,15 @@ const {
     // precio,
     _id,
     slug,
-} = Astro.props as Curso;
+} = curso;
 
-const slugCurso = slug;
-
-const courseJsonLd = getCourseJsonLd(Astro.props);
+const courseJsonLd = getCourseJsonLd(curso);
 ---
 
 <LayoutSeo
     tituloPagina={courseTitle}
     description={descripcionCorta}
-    slug={`${slugCurso}`}
+    slug={`cursos/${slug}`}
     image={imagenURL?.url}
     type="article"
     seoJsonLd={courseJsonLd}
