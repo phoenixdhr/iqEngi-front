@@ -8,13 +8,22 @@ import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCoursesJsonLd } from '@utils/jsonld';
 export const prerender = true;
 
-const { data } = await clientGql.query({
-    query: CursosDocument,
-    variables: { offset: 0, limit: 10 },
-});
+let cursos: Curso[] = [];
+let coursesJsonLd;
 
-const cursos: Curso[] = data?.Cursos;
-const coursesJsonLd = getCoursesJsonLd(cursos);
+try {
+    const { data } = await clientGql.query({
+        query: CursosDocument,
+        variables: { offset: 0, limit: 10 },
+    });
+
+    cursos = data?.Cursos || [];
+    coursesJsonLd = getCoursesJsonLd(cursos);
+} catch (error) {
+    console.error('Error fetching courses for favoritos page:', error);
+    cursos = [];
+    coursesJsonLd = null;
+}
 
 const counterValue = 100;
 ---

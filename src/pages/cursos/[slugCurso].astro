@@ -11,15 +11,23 @@ import { Icon } from 'astro-icon/components';
 // Obtener el slug de los parámetros de la URL
 const { slugCurso } = Astro.params;
 
-// Consultar todos los cursos y filtrar por slug
-const { data } = await clientGql.query({
-    query: CursosDocument,
-    variables: { offset: 0, limit: 1000 }, // Obtener suficientes cursos
-});
+let cursos: Curso[] = [];
+let curso: Curso | undefined;
 
-// Buscar el curso que coincida con el slug
-const cursos = data?.Cursos || [];
-const curso = cursos.find((c: Curso) => c.slug === slugCurso);
+try {
+    // Consultar todos los cursos y filtrar por slug
+    const { data } = await clientGql.query({
+        query: CursosDocument,
+        variables: { offset: 0, limit: 1000 }, // Obtener suficientes cursos
+    });
+
+    // Buscar el curso que coincida con el slug
+    cursos = data?.Cursos || [];
+    curso = cursos.find((c: Curso) => c.slug === slugCurso);
+} catch (error) {
+    console.error('Error fetching course details:', error);
+    curso = undefined;
+}
 
 // Si no se encuentra el curso, retornar 404
 if (!curso) {
