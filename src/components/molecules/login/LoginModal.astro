@@ -88,10 +88,17 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 
     import { showElement, hideElement } from '@services/closeOpenLogin';
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function setupLoginFormListener() {
         const form = document.getElementById('login-form') as HTMLFormElement;
 
-        form.addEventListener('submit', async (event: SubmitEvent) => {
+        if (!form) return;
+
+        // Eliminar listeners existentes mediante clonado del formulario
+        // Esto previene duplicación de eventos cuando Astro reconstruye el DOM en view transitions
+        const newForm = form.cloneNode(true) as HTMLFormElement;
+        form.parentNode?.replaceChild(newForm, form);
+
+        newForm.addEventListener('submit', async (event: SubmitEvent) => {
             event.preventDefault();
 
             const emailInput = document.getElementById(
@@ -144,5 +151,11 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
                 event.preventDefault();
             }
         });
-    });
+    }
+
+    // Configurar listeners en la carga inicial de la página
+    setupLoginFormListener();
+
+    // Reconfigurar listeners después de las transiciones de vista de Astro
+    document.addEventListener('astro:page-load', setupLoginFormListener);
 </script>

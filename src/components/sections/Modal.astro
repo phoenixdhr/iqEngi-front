@@ -108,32 +108,50 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
         ]);
     }
 
-    const btnBack = document.getElementById('btnBack');
-    btnBack &&
-        btnBack.addEventListener('click', () => {
-            const btnCheckPassword = document.getElementById(
-                'btnCheckPassword',
-            ) as HTMLButtonElement;
+    function setupModalListeners() {
+        const btnBack = document.getElementById('btnBack');
+        btnBack &&
+            btnBack.addEventListener('click', () => {
+                const btnCheckPassword = document.getElementById(
+                    'btnCheckPassword',
+                ) as HTMLButtonElement;
 
-            const btnCrearCuenta = document.getElementById(
-                'btnCrearCuenta',
-            ) as HTMLButtonElement;
+                const btnCrearCuenta = document.getElementById(
+                    'btnCrearCuenta',
+                ) as HTMLButtonElement;
 
-            btnCheckPassword.classList.add('opacity-50', 'cursor-not-allowed');
-            btnCrearCuenta.classList.add('opacity-50', 'cursor-not-allowed');
+                if (btnCheckPassword) {
+                    btnCheckPassword.classList.add(
+                        'opacity-50',
+                        'cursor-not-allowed',
+                    );
+                }
+                if (btnCrearCuenta) {
+                    btnCrearCuenta.classList.add(
+                        'opacity-50',
+                        'cursor-not-allowed',
+                    );
+                }
 
-            closeModal();
+                closeModal();
+            });
+
+        const btnClose = document.getElementById('btnClose');
+        btnClose &&
+            btnClose.addEventListener('click', () => {
+                closeModal();
+                hideElement('login-modal');
+            });
+
+        window.addEventListener('listener-login-modal', () => {
+            showElement('login-modal');
+            showElement('loginModalDiv');
         });
+    }
 
-    const btnClose = document.getElementById('btnClose');
-    btnClose &&
-        btnClose.addEventListener('click', () => {
-            closeModal();
-            hideElement('login-modal');
-        });
+    // Setup listeners on initial page load
+    setupModalListeners();
 
-    window.addEventListener('listener-login-modal', () => {
-        showElement('login-modal');
-        showElement('loginModalDiv');
-    });
+    // Re-setup listeners after Astro view transitions
+    document.addEventListener('astro:page-load', setupModalListeners);
 </script>

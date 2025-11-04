@@ -61,17 +61,36 @@
         ]);
     }
 
-    const btnComenzarWelcome = document.getElementById(
-        'btnComenzarWelcome',
-    ) as HTMLButtonElement;
+    function setupBienvenidaListeners() {
+        const btnComenzarWelcome = document.getElementById(
+            'btnComenzarWelcome',
+        ) as HTMLButtonElement;
 
-    btnComenzarWelcome &&
-        btnComenzarWelcome.addEventListener('click', () => {
-            // Aquí puedes agregar la lógica para redirigir al usuario a la página principal o a donde desees
+        if (btnComenzarWelcome) {
+            // Eliminar listeners existentes mediante clonado del botón
+            // Esto previene duplicación de eventos cuando Astro reconstruye el DOM en view transitions
+            const newBtn = btnComenzarWelcome.cloneNode(
+                true,
+            ) as HTMLButtonElement;
+            btnComenzarWelcome.parentNode?.replaceChild(
+                newBtn,
+                btnComenzarWelcome,
+            );
 
-            closeModal_bienvenida();
-            hideElement('loginModalDiv');
-            hideElement('bienvenidaDiv');
-            hideElement('login-modal');
-        });
+            newBtn.addEventListener('click', () => {
+                // Aquí puedes agregar la lógica para redirigir al usuario a la página principal o a donde desees
+
+                closeModal_bienvenida();
+                hideElement('loginModalDiv');
+                hideElement('bienvenidaDiv');
+                hideElement('login-modal');
+            });
+        }
+    }
+
+    // Configurar listeners en la carga inicial de la página
+    setupBienvenidaListeners();
+
+    // Reconfigurar listeners después de las transiciones de vista de Astro
+    document.addEventListener('astro:page-load', setupBienvenidaListeners);
 </script>
