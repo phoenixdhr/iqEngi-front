@@ -6,8 +6,9 @@
 
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { siteInfo } from '@const/site-info';
+import FormularioContacto from '@components/molecules/FormularioContacto';
 
-export const prerender = true;
+export const prerender = false;
 
 const tituloPagina = 'Contáctanos | IqEngi';
 
@@ -19,19 +20,6 @@ const contactInfo = {
     email: siteInfo.email,
     horario: 'Lunes a Viernes: 9:00 AM - 6:00 PM',
 };
-
-/**
- * @constant {Array} motivosConsulta
- * @description Motivos principales por los que los profesionales contactan
- */
-const motivosConsulta = [
-    'Información sobre certificaciones',
-    'Consultas sobre cursos específicos',
-    'Cotizaciones para empresas',
-    'Soporte técnico',
-    'Colaboración y alianzas',
-    'Otro',
-];
 
 /**
  * @constant {Array} areasInteres
@@ -186,175 +174,7 @@ const areasInteres = [
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
             <!-- Formulario -->
             <div class="lg:col-span-2">
-                <div class="card bg-base-200 shadow-lg">
-                    <div class="card-body">
-                        <h2 class="card-title text-2xl mb-6">
-                            Envíanos un mensaje
-                        </h2>
-
-                        <form class="space-y-4">
-                            <!-- Nombre y Email -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text"
-                                            >Nombre completo *</span
-                                        >
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Ej: Juan Pérez"
-                                        class="input input-bordered w-full"
-                                        required
-                                    />
-                                </div>
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text">Email *</span>
-                                    </label>
-                                    <input
-                                        type="email"
-                                        placeholder="tu@email.com"
-                                        class="input input-bordered w-full"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <!-- Empresa (Opcional) -->
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text"
-                                        >Empresa u Organización (opcional)</span
-                                    >
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Nombre de tu empresa"
-                                    class="input input-bordered w-full"
-                                />
-                            </div>
-
-                            <!-- Profesión y Nivel de Experiencia
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text"
-                                            >Profesión *</span
-                                        >
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Ej: Ingeniero Mecánico"
-                                        class="input input-bordered w-full"
-                                        required
-                                    />
-                                </div>
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text"
-                                            >Nivel de Experiencia</span
-                                        >
-                                    </label>
-                                    <select
-                                        class="select select-bordered w-full"
-                                    >
-                                        <option disabled selected
-                                            >Selecciona tu nivel</option
-                                        >
-                                        <option>Junior (0-2 años)</option>
-                                        <option>Intermedio (3-5 años)</option>
-                                        <option>Senior (6-10 años)</option>
-                                        <option>Experto (+10 años)</option>
-                                    </select>
-                                </div>
-                            </div> -->
-
-                            <!-- Motivo de Consulta -->
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text"
-                                        >Motivo de consulta *</span
-                                    >
-                                </label>
-                                <select
-                                    class="select select-bordered w-full"
-                                    required
-                                >
-                                    <option disabled selected
-                                        >Selecciona un motivo</option
-                                    >
-                                    {
-                                        motivosConsulta.map((motivo) => (
-                                            <option>{motivo}</option>
-                                        ))
-                                    }
-                                </select>
-                            </div>
-
-                            <!-- Mensaje -->
-                            <div class="form-control flex flex-col w-full">
-                                <label class="label">
-                                    <span class="label-text">Mensaje *</span>
-                                </label>
-                                <textarea
-                                    class="textarea textarea-bordered h-32 w-full"
-                                    placeholder="Cuéntanos más sobre tu consulta, objetivos profesionales o qué área de especialización te interesa..."
-                                    required></textarea>
-                            </div>
-
-                            <!-- Checkbox Newsletter -->
-                            <div class="form-control flex flex-col">
-                                <label
-                                    class="label cursor-pointer justify-start items-start gap-2 flex-wrap"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        class="checkbox checkbox-primary"
-                                    />
-                                    <span
-                                        class="label-text flex-1 min-w-0 whitespace-normal break-words leading-tight"
-                                    >
-                                        Deseo recibir información sobre nuevos
-                                        cursos, certificaciones y contenido de
-                                        valor para mi desarrollo profesional
-                                    </span>
-                                </label>
-                            </div>
-
-                            <!-- Botón de Envío -->
-                            <div class="form-control mt-6">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary btn-lg w-full"
-                                >
-                                    <svg
-                                        class="w-5 h-5 mr-2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                        ></path>
-                                    </svg>
-                                    Enviar Mensaje
-                                </button>
-                            </div>
-
-                            <p
-                                class="text-sm text-center"
-                                style="color: var(--color-text-muted);"
-                            >
-                                * Campos requeridos. Responderemos tu consulta
-                                en un plazo máximo de 24 horas hábiles.
-                            </p>
-                        </form>
-                    </div>
-                </div>
+                <FormularioContacto client:load />
             </div>
 
             <!-- Áreas de Especialización -->
