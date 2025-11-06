@@ -1,42 +1,679 @@
 ---
-import Counter from '@components/atoms/Counter';
-import Titulo from '@components/atoms/Titulo.astro';
-import { clientGql } from '@graphql-astro/apolloClient';
-import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
+/**
+ * @fileoverview Página de contacto para IqEngi - Plataforma de cursos de ingeniería
+ * @description Proporciona múltiples canales de contacto y un formulario para consultas de profesionales
+ */
+
 import LayoutSeo from '@layouts/LayoutSeo.astro';
-import { getCoursesJsonLd } from '@utils/jsonld';
+import { siteInfo } from '@const/site-info';
+
 export const prerender = true;
 
-let cursos: Curso[] = [];
-let coursesJsonLd;
+const tituloPagina = 'Contáctanos | IqEngi';
 
-try {
-    const { data } = await clientGql.query({
-        query: CursosDocument,
-        variables: { offset: 0, limit: 10 },
-    });
+/**
+ * @constant {Object} contactInfo
+ * @description Información de contacto de la empresa online, extraída de siteInfo
+ */
+const contactInfo = {
+    email: siteInfo.email,
+    horario: 'Lunes a Viernes: 9:00 AM - 6:00 PM',
+};
 
-    cursos = data?.Cursos || [];
-    coursesJsonLd = getCoursesJsonLd(cursos);
-} catch (error) {
-    console.error('Error fetching courses for contactanos page:', error);
-    cursos = [];
-    coursesJsonLd = null;
-}
+/**
+ * @constant {Array} motivosConsulta
+ * @description Motivos principales por los que los profesionales contactan
+ */
+const motivosConsulta = [
+    'Información sobre certificaciones',
+    'Consultas sobre cursos específicos',
+    'Cotizaciones para empresas',
+    'Soporte técnico',
+    'Colaboración y alianzas',
+    'Otro',
+];
 
-const counterValue = 10;
+/**
+ * @constant {Array} areasInteres
+ * @description Áreas de especialización disponibles
+ */
+const areasInteres = [
+    {
+        titulo: 'Normativas API',
+        descripcion: 'Estándares del American Petroleum Institute',
+    },
+    {
+        titulo: 'Códigos ASME',
+        descripcion: 'Códigos de la American Society of Mechanical Engineers',
+    },
+    {
+        titulo: 'NFPA',
+        descripcion: 'Normativas de protección contra incendios',
+    },
+    {
+        titulo: 'Inspección de Soldadura',
+        descripcion: 'Técnicas y certificaciones en soldadura',
+    },
+    {
+        titulo: 'Ensayos No Destructivos',
+        descripcion: 'NDT/END para control de calidad',
+    },
+    {
+        titulo: 'Seguridad Industrial',
+        descripcion: 'Gestión de riesgos y respuesta a emergencias',
+    },
+];
 ---
 
-<LayoutSeo tituloPagina="contactanos" seoJsonLd={coursesJsonLd}>
-    <h1 class="text-2xl font-bold text-center my-6">contactanos</h1>
+<LayoutSeo tituloPagina={tituloPagina} seoJsonLd={null}>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1
+                class="text-4xl md:text-5xl font-bold mb-4"
+                style="color: var(--color-text);"
+            >
+                Contáctanos
+            </h1>
+            <p
+                class="text-lg md:text-xl max-w-3xl mx-auto"
+                style="color: var(--color-text-muted);"
+            >
+                Estamos aquí para ayudarte a impulsar tu carrera profesional. Ya
+                sea que necesites información sobre certificaciones, cursos
+                específicos o soporte técnico, nuestro equipo está listo para
+                asistirte.
+            </p>
+        </div>
 
-    <Counter
-        client:only="react"
-        value={counterValue}
-        transition:persist
-        transition:persist-props
-        transition:name="counter"
-    >
-        <Titulo>Contactanosffffff!!</Titulo>
-    </Counter>
+        <!-- Información de Contacto Rápido -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Email -->
+            <div class="card bg-base-200 shadow-lg">
+                <div class="card-body items-center text-center">
+                    <svg
+                        class="w-12 h-12 mb-4"
+                        style="color: var(--color-primary);"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        ></path>
+                    </svg>
+                    <h3 class="card-title text-xl mb-2">Email</h3>
+                    <a
+                        href={`mailto:${contactInfo.email}`}
+                        class="link link-primary text-sm"
+                    >
+                        {contactInfo.email}
+                    </a>
+                    <p
+                        class="text-xs mt-2"
+                        style="color: var(--color-text-muted);"
+                    >
+                        Respuesta en 24 horas hábiles
+                    </p>
+                </div>
+            </div>
+
+            <!-- Soporte Online -->
+            <div class="card bg-base-200 shadow-lg">
+                <div class="card-body items-center text-center">
+                    <svg
+                        class="w-12 h-12 mb-4"
+                        style="color: var(--color-primary);"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        ></path>
+                    </svg>
+                    <h3 class="card-title text-xl mb-2">Soporte Online</h3>
+                    <p class="text-sm" style="color: var(--color-text-muted);">
+                        Disponible 24/7
+                    </p>
+                    <p
+                        class="text-xs mt-2"
+                        style="color: var(--color-text-muted);"
+                    >
+                        Atención personalizada
+                    </p>
+                </div>
+            </div>
+
+            <!-- Horario de Atención -->
+            <div class="card bg-base-200 shadow-lg">
+                <div class="card-body items-center text-center">
+                    <svg
+                        class="w-12 h-12 mb-4"
+                        style="color: var(--color-primary);"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        ></path>
+                    </svg>
+                    <h3 class="card-title text-xl mb-2">Horario</h3>
+                    <p class="text-sm" style="color: var(--color-text-muted);">
+                        {contactInfo.horario}
+                    </p>
+                    <p
+                        class="text-xs mt-2"
+                        style="color: var(--color-text-muted);"
+                    >
+                        Tiempo de zona GMT-5
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Contacto y Áreas de Interés -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Formulario -->
+            <div class="lg:col-span-2">
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl mb-6">
+                            Envíanos un mensaje
+                        </h2>
+
+                        <form class="space-y-4">
+                            <!-- Nombre y Email -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text"
+                                            >Nombre completo *</span
+                                        >
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ej: Juan Pérez"
+                                        class="input input-bordered w-full"
+                                        required
+                                    />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Email *</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        placeholder="tu@email.com"
+                                        class="input input-bordered w-full"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Empresa (Opcional) -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text"
+                                        >Empresa u Organización (opcional)</span
+                                    >
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Nombre de tu empresa"
+                                    class="input input-bordered w-full"
+                                />
+                            </div>
+
+                            <!-- Profesión y Nivel de Experiencia
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text"
+                                            >Profesión *</span
+                                        >
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ej: Ingeniero Mecánico"
+                                        class="input input-bordered w-full"
+                                        required
+                                    />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text"
+                                            >Nivel de Experiencia</span
+                                        >
+                                    </label>
+                                    <select
+                                        class="select select-bordered w-full"
+                                    >
+                                        <option disabled selected
+                                            >Selecciona tu nivel</option
+                                        >
+                                        <option>Junior (0-2 años)</option>
+                                        <option>Intermedio (3-5 años)</option>
+                                        <option>Senior (6-10 años)</option>
+                                        <option>Experto (+10 años)</option>
+                                    </select>
+                                </div>
+                            </div> -->
+
+                            <!-- Motivo de Consulta -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text"
+                                        >Motivo de consulta *</span
+                                    >
+                                </label>
+                                <select
+                                    class="select select-bordered w-full"
+                                    required
+                                >
+                                    <option disabled selected
+                                        >Selecciona un motivo</option
+                                    >
+                                    {
+                                        motivosConsulta.map((motivo) => (
+                                            <option>{motivo}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Mensaje -->
+                            <div class="form-control flex flex-col w-full">
+                                <label class="label">
+                                    <span class="label-text">Mensaje *</span>
+                                </label>
+                                <textarea
+                                    class="textarea textarea-bordered h-32 w-full"
+                                    placeholder="Cuéntanos más sobre tu consulta, objetivos profesionales o qué área de especialización te interesa..."
+                                    required></textarea>
+                            </div>
+
+                            <!-- Checkbox Newsletter -->
+                            <div class="form-control flex flex-col">
+                                <label
+                                    class="label cursor-pointer justify-start items-start gap-2 flex-wrap"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        class="checkbox checkbox-primary"
+                                    />
+                                    <span
+                                        class="label-text flex-1 min-w-0 whitespace-normal break-words leading-tight"
+                                    >
+                                        Deseo recibir información sobre nuevos
+                                        cursos, certificaciones y contenido de
+                                        valor para mi desarrollo profesional
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Botón de Envío -->
+                            <div class="form-control mt-6">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-lg w-full"
+                                >
+                                    <svg
+                                        class="w-5 h-5 mr-2"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                        ></path>
+                                    </svg>
+                                    Enviar Mensaje
+                                </button>
+                            </div>
+
+                            <p
+                                class="text-sm text-center"
+                                style="color: var(--color-text-muted);"
+                            >
+                                * Campos requeridos. Responderemos tu consulta
+                                en un plazo máximo de 24 horas hábiles.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Áreas de Especialización -->
+            <div class="lg:col-span-1">
+                <div class="card bg-base-200 shadow-lg mb-6">
+                    <div class="card-body">
+                        <h3 class="card-title text-xl mb-4">
+                            Nuestras Áreas de Especialización
+                        </h3>
+                        <div class="space-y-4">
+                            {
+                                areasInteres.map((area) => (
+                                    <div class="border-l-4 border-primary pl-4 py-2">
+                                        <h4
+                                            class="font-bold text-base"
+                                            style="color: var(--color-text);"
+                                        >
+                                            {area.titulo}
+                                        </h4>
+                                        <p
+                                            class="text-sm"
+                                            style="color: var(--color-text-muted);"
+                                        >
+                                            {area.descripcion}
+                                        </p>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Redes Sociales -->
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title text-xl mb-4">Síguenos</h3>
+                        <p
+                            class="text-sm mb-4"
+                            style="color: var(--color-text-muted);"
+                        >
+                            Mantente actualizado con las últimas tendencias en
+                            ingeniería, normativas y oportunidades de desarrollo
+                            profesional.
+                        </p>
+                        <div class="flex gap-4 justify-center">
+                            <a
+                                href={siteInfo.social.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-circle btn-outline btn-primary"
+                                aria-label="LinkedIn"
+                            >
+                                <svg
+                                    class="w-6 h-6"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                                    ></path>
+                                </svg>
+                            </a>
+                            <a
+                                href={siteInfo.social.youtube}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-circle btn-outline btn-primary"
+                                aria-label="YouTube"
+                            >
+                                <svg
+                                    class="w-6 h-6"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                                    ></path>
+                                </svg>
+                            </a>
+                            <a
+                                href={siteInfo.social.facebook}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-circle btn-outline btn-primary"
+                                aria-label="Facebook"
+                            >
+                                <svg
+                                    class="w-6 h-6"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                                    ></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Beneficios -->
+        <div class="bg-base-200 rounded-lg p-8 mb-12">
+            <h2
+                class="text-3xl font-bold text-center mb-8"
+                style="color: var(--color-text);"
+            >
+                ¿Por qué elegir IqEngi?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                        style="background-color: var(--color-primary); opacity: 0.1;"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            style="color: var(--color-primary);"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">
+                        Expertos en Ingeniería
+                    </h3>
+                    <p class="text-sm" style="color: var(--color-text-muted);">
+                        Instructores con experiencia comprobada en la industria
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                        style="background-color: var(--color-primary); opacity: 0.1;"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            style="color: var(--color-primary);"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">
+                        Certificaciones Reconocidas
+                    </h3>
+                    <p class="text-sm" style="color: var(--color-text-muted);">
+                        Certificados válidos en la industria global
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                        style="background-color: var(--color-primary); opacity: 0.1;"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            style="color: var(--color-primary);"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Flexibilidad Total</h3>
+                    <p class="text-sm" style="color: var(--color-text-muted);">
+                        Aprende a tu ritmo, cuando y donde quieras
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                        style="background-color: var(--color-primary); opacity: 0.1;"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            style="color: var(--color-primary);"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Comunidad Activa</h3>
+                    <p class="text-sm" style="color: var(--color-text-muted);">
+                        Networking con profesionales de la industria
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Rápido -->
+        <div class="card bg-base-200 shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-6">Preguntas Frecuentes</h2>
+                <div class="space-y-4">
+                    <div class="collapse collapse-arrow bg-base-100">
+                        <input type="radio" name="faq-accordion" checked />
+                        <div class="collapse-title text-lg font-medium">
+                            ¿Qué tipos de certificaciones ofrecen?
+                        </div>
+                        <div class="collapse-content">
+                            <p style="color: var(--color-text-muted);">
+                                Ofrecemos certificaciones en normativas API,
+                                códigos ASME, NFPA, inspección de soldadura,
+                                ensayos no destructivos (NDT), y seguridad
+                                industrial. Todas nuestras certificaciones están
+                                alineadas con estándares internacionales
+                                reconocidos en la industria.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="collapse collapse-arrow bg-base-100">
+                        <input type="radio" name="faq-accordion" />
+                        <div class="collapse-title text-lg font-medium">
+                            ¿Los cursos son 100% en línea?
+                        </div>
+                        <div class="collapse-content">
+                            <p style="color: var(--color-text-muted);">
+                                Sí, todos nuestros cursos son completamente en
+                                línea y están diseñados para profesionales que
+                                buscan flexibilidad. Puedes acceder al contenido
+                                24/7 y avanzar a tu propio ritmo,
+                                compatibilizando tu formación con tus
+                                responsabilidades laborales.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="collapse collapse-arrow bg-base-100">
+                        <input type="radio" name="faq-accordion" />
+                        <div class="collapse-title text-lg font-medium">
+                            ¿Ofrecen planes corporativos para empresas?
+                        </div>
+                        <div class="collapse-content">
+                            <p style="color: var(--color-text-muted);">
+                                Sí, contamos con planes especiales para empresas
+                                que desean capacitar a sus equipos. Estos
+                                incluyen descuentos por volumen, reportes de
+                                progreso personalizados y la posibilidad de
+                                personalizar contenidos. Contáctanos para más
+                                información.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="collapse collapse-arrow bg-base-100">
+                        <input type="radio" name="faq-accordion" />
+                        <div class="collapse-title text-lg font-medium">
+                            ¿Cuánto tiempo tengo para completar un curso?
+                        </div>
+                        <div class="collapse-content">
+                            <p style="color: var(--color-text-muted);">
+                                El tiempo de acceso varía según el curso, pero
+                                generalmente tienes entre 6 meses y 1 año para
+                                completarlo. Entendemos que los profesionales
+                                necesitan flexibilidad, por lo que nuestros
+                                plazos están diseñados para adaptarse a tu ritmo
+                                de trabajo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-6">
+                    <a href="/preguntas-frecuentes" class="link link-primary">
+                        Ver todas las preguntas frecuentes →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </LayoutSeo>
+
+<style>
+    /* Estilos personalizados para el formulario */
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    /* Animación para las tarjetas */
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Mejora visual para los botones de redes sociales */
+    .btn-circle:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
+    }
+</style>

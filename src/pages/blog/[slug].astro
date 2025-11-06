@@ -192,7 +192,11 @@ const postJsonLd = getPostJsonLd(post);
                 // Mostrar la tabla de contenidos solo si hay H2
                 if (headings.length > 0) {
                     tocNav.style.display = 'block';
-                    console.log('TOC mostrado con', headings.length, 'elementos H2');
+                    console.log(
+                        'TOC mostrado con',
+                        headings.length,
+                        'elementos H2',
+                    );
                 }
 
                 return headings;
