@@ -1,6 +1,6 @@
 /**
  * @fileoverview Endpoint API para envío de formulario de contacto
- * @description Procesa mensajes de contacto y envía emails usando Resend
+ * @description Procesa mensajes de contacto, verifica reCAPTCHA y envía emails usando Resend
  */
 
 import type { APIRoute } from 'astro';
@@ -18,6 +18,43 @@ interface ContactFormData {
     motivo: string;
     mensaje: string;
     newsletter: boolean;
+    recaptchaToken: string;
+}
+
+/**
+ * @interface RecaptchaResponse
+ * @description Respuesta de la API de verificación de reCAPTCHA
+ */
+interface RecaptchaResponse {
+    success: boolean;
+    score: number;
+    action: string;
+    challenge_ts: string;
+    hostname: string;
+    'error-codes'?: string[];
+}
+
+/**
+ * @function verifyRecaptcha
+ * @description Verifica el token de reCAPTCHA con la API de Google
+ * @param {string} token - Token de reCAPTCHA a verificar
+ * @returns {Promise<RecaptchaResponse>} Respuesta de verificación
+ */
+async function verifyRecaptcha(token: string): Promise<RecaptchaResponse> {
+    const secretKey = import.meta.env.RECAPTCHA_SECRET_KEY;
+
+    const response = await fetch(
+        'https://www.google.com/recaptcha/api/siteverify',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `secret=${secretKey}&response=${token}`,
+        }
+    );
+
+    return await response.json();
 }
 
 /**
@@ -63,6 +100,57 @@ export const POST: APIRoute = async ({ request }) => {
                 }
             );
         }
+
+        // Verificar token de reCAPTCHA
+        if (!formData.recaptchaToken) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    error: 'Token de verificación requerido',
+                }),
+                {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+        }
+
+        // Validar reCAPTCHA
+        const recaptchaResult = await verifyRecaptcha(formData.recaptchaToken);
+
+        if (!recaptchaResult.success) {
+            console.error('Error de verificación reCAPTCHA:', recaptchaResult['error-codes']);
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    error: 'Verificación de seguridad fallida',
+                }),
+                {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+        }
+
+        // Verificar score de reCAPTCHA (0.0 a 1.0, donde 1.0 es muy probablemente humano)
+        // Score mínimo recomendado: 0.5
+        if (recaptchaResult.score < 0.5) {
+            console.warn(
+                `Score de reCAPTCHA bajo: ${recaptchaResult.score} - Posible bot`
+            );
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    error: 'Verificación de seguridad fallida. Por favor intenta nuevamente.',
+                }),
+                {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+        }
+
+        console.log(`reCAPTCHA verificado exitosamente. Score: ${recaptchaResult.score}`);
 
         // Validar formato de email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

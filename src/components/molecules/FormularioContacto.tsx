@@ -1,9 +1,13 @@
 /**
- * @fileoverview Componente React para formulario de contacto con validación
- * @description Formulario interactivo que envía mensajes a través de API de contacto
+ * @fileoverview Componente React para formulario de contacto con validación y reCAPTCHA
+ * @description Formulario interactivo que envía mensajes a través de API de contacto con protección anti-spam
  */
 
 import { useState, type FormEvent } from 'react';
+import {
+    GoogleReCaptchaProvider,
+    useGoogleReCaptcha,
+} from 'react-google-recaptcha-v3';
 
 /**
  * @constant {Array} motivosConsulta
@@ -42,10 +46,11 @@ interface FormState {
 }
 
 /**
- * @component FormularioContacto
- * @description Formulario de contacto con validación y envío asíncrono
+ * @component FormularioContactoInner
+ * @description Formulario de contacto con validación, envío asíncrono y reCAPTCHA
  */
-export default function FormularioContacto() {
+function FormularioContactoInner() {
+    const { executeRecaptcha } = useGoogleReCaptcha();
     const [formData, setFormData] = useState<FormData>({
         nombre: '',
         email: '',
@@ -82,7 +87,7 @@ export default function FormularioContacto() {
 
     /**
      * @function handleSubmit
-     * @description Maneja el envío del formulario
+     * @description Maneja el envío del formulario con verificación reCAPTCHA
      */
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -105,13 +110,24 @@ export default function FormularioContacto() {
                 throw new Error('Por favor completa todos los campos requeridos');
             }
 
-            // Enviar datos a la API
+            // Verificar que reCAPTCHA esté disponible
+            if (!executeRecaptcha) {
+                throw new Error('reCAPTCHA no está disponible');
+            }
+
+            // Ejecutar reCAPTCHA y obtener token
+            const recaptchaToken = await executeRecaptcha('contacto_submit');
+
+            // Enviar datos a la API con token de reCAPTCHA
             const response = await fetch('/api/contacto', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    recaptchaToken,
+                }),
             });
 
             const result = await response.json();
@@ -353,7 +369,99 @@ export default function FormularioContacto() {
                         máximo de 24 horas hábiles.
                     </p>
                 </form>
+
+                {/* Badge de reCAPTCHA */}
+                <div className="text-xs text-center mt-4" style={{ color: 'var(--color-text-muted)' }}>
+                    Este sitio está protegido por reCAPTCHA y se aplican las{' '}
+                    <a
+                        href="https://policies.google.com/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link link-primary"
+                    >
+                        Políticas de Privacidad
+                    </a>{' '}
+                    y{' '}
+                    <a
+                        href="https://policies.google.com/terms"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link link-primary"
+                    >
+                        Términos de Servicio
+                    </a>{' '}
+                    de Google.
+                </div>
             </div>
         </div>
+    );
+}
+
+/**
+ * @component FormularioContacto
+ * @description Wrapper del formulario con provider de reCAPTCHA
+ */
+export default function FormularioContacto() {
+    // Obtener la site key desde variables de entorno públicas
+    const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY || '';
+
+    // Debug: Mostrar información de configuración en desarrollo
+    if (import.meta.env.DEV) {
+        console.log('🔑 reCAPTCHA Site Key:', recaptchaSiteKey ? `${recaptchaSiteKey.substring(0, 10)}...` : 'NO CONFIGURADA');
+        console.log('🌍 Modo:', import.meta.env.MODE);
+    }
+
+    // Si no hay site key configurada, mostrar mensaje de advertencia
+    if (!recaptchaSiteKey) {
+        console.error(
+            '❌ PUBLIC_RECAPTCHA_SITE_KEY no está configurada. El formulario no funcionará.'
+        );
+
+        // Mostrar alerta visual en desarrollo
+        if (import.meta.env.DEV) {
+            return (
+                <div className="card bg-base-200 shadow-lg">
+                    <div className="card-body">
+                        <div className="alert alert-warning">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="stroke-current shrink-0 h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                />
+                            </svg>
+                            <div>
+                                <h3 className="font-bold">reCAPTCHA no configurado</h3>
+                                <div className="text-xs">
+                                    Configura PUBLIC_RECAPTCHA_SITE_KEY en tu archivo .env
+                                </div>
+                            </div>
+                        </div>
+                        <FormularioContactoInner />
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    return (
+        <GoogleReCaptchaProvider
+            reCaptchaKey={recaptchaSiteKey}
+            language="es"
+            useRecaptchaNet={false}
+            scriptProps={{
+                async: true,
+                defer: true,
+                appendTo: 'body',
+            }}
+        >
+            <FormularioContactoInner />
+        </GoogleReCaptchaProvider>
     );
 }
