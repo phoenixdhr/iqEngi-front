@@ -23,6 +23,7 @@ pnpm-debug.log*
 .env.production.local
 
 eliminame.md
+eliminame*
 
 # macOS-specific files
 .DS_Store

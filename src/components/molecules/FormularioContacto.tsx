@@ -3,8 +3,13 @@
  * @description Formulario interactivo que envía mensajes a través de API de contacto
  */
 
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, useEffect, useRef } from 'react';
 
+declare global {
+    interface Window {
+        turnstile: any;
+    }
+}
 /**
  * @constant {Array} motivosConsulta
  * @description Motivos principales por los que los profesionales contactan
@@ -29,6 +34,7 @@ interface FormData {
     motivo: string;
     mensaje: string;
     newsletter: boolean;
+    'cf-turnstile-response': string;
 }
 
 /**
@@ -46,7 +52,9 @@ interface FormState {
  * @description Formulario de contacto con validación y envío asíncrono
  */
 export default function FormularioContacto() {
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState<
+        Omit<FormData, 'cf-turnstile-response'>
+    >({
         nombre: '',
         email: '',
         empresa: '',
@@ -61,6 +69,19 @@ export default function FormularioContacto() {
         error: '',
     });
 
+    const [turnstileToken, setTurnstileToken] = useState<string>('');
+    const turnstileWidget = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (turnstileWidget.current) {
+            window.turnstile.render(turnstileWidget.current, {
+                sitekey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY, // Clave desde variables de entorno
+                callback: function (token: string) {
+                    setTurnstileToken(token);
+                },
+            });
+        }
+    }, []);
+
     /**
      * @function handleInputChange
      * @description Maneja cambios en los campos del formulario
@@ -68,7 +89,7 @@ export default function FormularioContacto() {
     const handleInputChange = (
         e: React.ChangeEvent<
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >
+        >,
     ) => {
         const { name, value, type } = e.target;
 
@@ -102,16 +123,23 @@ export default function FormularioContacto() {
                 !formData.motivo ||
                 !formData.mensaje
             ) {
-                throw new Error('Por favor completa todos los campos requeridos');
+                throw new Error(
+                    'Por favor completa todos los campos requeridos',
+                );
             }
-
+            if (!turnstileToken) {
+                throw new Error('Por favor, completa el CAPTCHA.');
+            }
             // Enviar datos a la API
             const response = await fetch('/api/contacto', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    'cf-turnstile-response': turnstileToken,
+                }),
             });
 
             const result = await response.json();
@@ -136,6 +164,8 @@ export default function FormularioContacto() {
                 newsletter: false,
             });
 
+            window.turnstile.reset();
+
             // Limpiar mensaje de éxito después de 5 segundos
             setTimeout(() => {
                 setFormState((prev) => ({ ...prev, success: false }));
@@ -155,7 +185,9 @@ export default function FormularioContacto() {
     return (
         <div className="card bg-base-200 shadow-lg">
             <div className="card-body">
-                <h2 className="card-title text-2xl mb-6">Envíanos un mensaje</h2>
+                <h2 className="card-title text-2xl mb-6">
+                    Envíanos un mensaje
+                </h2>
 
                 {/* Mensaje de éxito */}
                 {formState.success && (
@@ -174,8 +206,8 @@ export default function FormularioContacto() {
                             />
                         </svg>
                         <span>
-                            ¡Mensaje enviado correctamente! Te responderemos en un plazo
-                            máximo de 24 horas hábiles.
+                            ¡Mensaje enviado correctamente! Te responderemos en
+                            un plazo máximo de 24 horas hábiles.
                         </span>
                     </div>
                 )}
@@ -205,7 +237,9 @@ export default function FormularioContacto() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text">Nombre completo *</span>
+                                <span className="label-text">
+                                    Nombre completo *
+                                </span>
                             </label>
                             <input
                                 type="text"
@@ -256,7 +290,9 @@ export default function FormularioContacto() {
                     {/* Motivo de Consulta */}
                     <div className="form-control">
                         <label className="label">
-                            <span className="label-text">Motivo de consulta *</span>
+                            <span className="label-text">
+                                Motivo de consulta *
+                            </span>
                         </label>
                         <select
                             name="motivo"
@@ -292,7 +328,10 @@ export default function FormularioContacto() {
                             disabled={formState.isSubmitting}
                         ></textarea>
                     </div>
-
+                    {/* Cloudflare Turnstile */}
+                    <div className="form-control">
+                        <div ref={turnstileWidget}></div>
+                    </div>
                     {/* Checkbox Newsletter */}
                     <div className="form-control flex flex-col">
                         <label className="label cursor-pointer justify-start items-start gap-2 flex-wrap">
@@ -306,8 +345,8 @@ export default function FormularioContacto() {
                             />
                             <span className="label-text flex-1 min-w-0 whitespace-normal break-words leading-tight">
                                 Deseo recibir información sobre nuevos cursos,
-                                certificaciones y contenido de valor para mi desarrollo
-                                profesional
+                                certificaciones y contenido de valor para mi
+                                desarrollo profesional
                             </span>
                         </label>
                     </div>
@@ -317,7 +356,7 @@ export default function FormularioContacto() {
                         <button
                             type="submit"
                             className={`btn btn-primary btn-lg w-full ${formState.isSubmitting ? 'loading' : ''}`}
-                            disabled={formState.isSubmitting}
+                            disabled={formState.isSubmitting || !turnstileToken}
                         >
                             {formState.isSubmitting ? (
                                 <>
@@ -349,8 +388,8 @@ export default function FormularioContacto() {
                         className="text-sm text-center"
                         style={{ color: 'var(--color-text-muted)' }}
                     >
-                        * Campos requeridos. Responderemos tu consulta en un plazo
-                        máximo de 24 horas hábiles.
+                        * Campos requeridos. Responderemos tu consulta en un
+                        plazo máximo de 24 horas hábiles.
                     </p>
                 </form>
             </div>

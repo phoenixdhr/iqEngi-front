@@ -6,6 +6,7 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { siteInfo } from '@const/site-info';
+import { timeStamp } from 'console';
 
 /**
  * @interface ContactFormData
@@ -18,13 +19,32 @@ interface ContactFormData {
     motivo: string;
     mensaje: string;
     newsletter: boolean;
+    'cf-turnstile-response': string;
+}
+
+const TURNSTILE_SECRET_KEY = import.meta.env.TURNSTILE_SECRET_KEY; // Clave secreta desde variables de entorno
+
+async function verifyTurnstile(token: string, ip: string | null) {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            secret: TURNSTILE_SECRET_KEY,
+            response: token,
+            remoteip: ip,
+        }),
+    });
+    const data = await response.json();
+    return data.success;
 }
 
 /**
  * @description Maneja peticiones POST para envío de formulario de contacto
  * @returns {Promise<Response>} Respuesta JSON con resultado del envío
  */
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
         // Validar que la API key de Resend esté configurada
         const resendApiKey = import.meta.env.RESEND_API_KEY;
@@ -44,6 +64,21 @@ export const POST: APIRoute = async ({ request }) => {
 
         // Parsear datos del formulario
         const formData: ContactFormData = await request.json();
+
+        // Verificar el token de Turnstile
+        const turnstileSuccess = await verifyTurnstile(formData['cf-turnstile-response'], clientAddress);
+        if (!turnstileSuccess) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    error: 'Falló la verificación de CAPTCHA.',
+                }),
+                {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+        }
 
         // Validación básica
         if (
@@ -102,7 +137,7 @@ export const POST: APIRoute = async ({ request }) => {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h2 style="margin: 0;">Nuevo mensaje de contacto - IqEngi</h2>
+                        <h2 style="margin: 0;">Nuevo mensaje de usuario - IqEngi</h2>
                     </div>
                     <div class="content">
                         <div class="field">
@@ -145,12 +180,15 @@ export const POST: APIRoute = async ({ request }) => {
             </html>
         `;
 
+        // Generar ID de ticket único
+        const ticketId = Date.now().toString();
+
         // Enviar email usando Resend
         const emailRecipient = import.meta.env.CONTACT_EMAIL || siteInfo.email;
         const data = await resend.emails.send({
             from: 'IqEngi Contacto <onboarding@resend.dev>', // Cambiar por tu dominio verificado
             to: emailRecipient,
-            subject: `Nuevo mensaje de contacto: ${formData.motivo}`,
+            subject: `Consulta de: ${formData.email} - Ticket ${ticketId}`,
             html: emailHtml,
             replyTo: formData.email,
         });
