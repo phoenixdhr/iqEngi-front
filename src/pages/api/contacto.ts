@@ -6,7 +6,6 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { siteInfo } from '@const/site-info';
-import { timeStamp } from 'console';
 
 /**
  * @interface ContactFormData

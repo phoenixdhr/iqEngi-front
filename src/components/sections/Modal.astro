@@ -16,7 +16,7 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
     <!-- Caja interna del modal que contiene el formulario de inicio de sesión -->
     <div
         id="astro-login-box"
-        class="p-8 rounded-3xl w-11/12 max-w-md h-[520px] sm:h-[500px] relative shadow-2xl flex flex-col"
+        class="p-8 rounded-3xl w-11/12 max-w-md h-auto min-h-[500px] relative shadow-2xl flex flex-col"
         style="background-color: var(--color-bg); color: var(--color-text);"
     >
         <!-- Botón de cierre -->
@@ -39,25 +39,20 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
             ←
         </button>
 
-        <!-- Logo de IQ-ENGI (ejemplo) -->
-        <div class="h-12"></div>
-
-        <div class="absolute top-12 left-1/2 transform -translate-x-1/2">
-            <div class="flex items-center space-x-2">
-                <img
-                    class="h-8 lg:h-10 w-auto"
-                    src="/favicon.svg"
-                    alt="IqEngi"
-                />
-                <span
-                    class="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
-                    style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
-                >
-                    IQ-ENGI
-                </span>
-            </div>
+        <!-- Logo de IQ-ENGI -->
+        <div class="flex justify-center items-center space-x-2 mt-4 mb-2">
+            <img
+                class="h-8 lg:h-10 w-auto"
+                src="/favicon.svg"
+                alt="IqEngi"
+            />
+            <span
+                class="bg-clip-text text-transparent font-bold text-2xl lg:text-3xl"
+                style="background: var(--gradient-button-primary); -webkit-background-clip: text;"
+            >
+                IQ-ENGI
+            </span>
         </div>
-        <div class="h-10"></div>
 
         <!-- Contenido específico del modal -->
 

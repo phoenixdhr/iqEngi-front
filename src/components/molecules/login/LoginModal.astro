@@ -1,7 +1,8 @@
 ---
-import { siteInfo } from '@const/site-info'; // Importa la información del sitio (por ejemplo, URLs y configuraciones)
+import { siteInfo } from '@const/site-info';
+import TurnstileWidget from '@components/atoms/TurnstileWidget';
 
-const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio de sesión con Google desde la configuración
+const googleUrlLogin = siteInfo.googleUrlLogin;
 ---
 
 <!-- Título del modal que indica la acción a realizar -->
@@ -10,6 +11,51 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 </h2>
 <!-- Contenedor del formulario de login -->
 <div id="astro-login-form" class="relative flex flex-col justify-center mt-7">
+    <!-- Botón de inicio de sesión alternativo usando la cuenta de Google (Ahora arriba y más visible) -->
+    <a
+        href={googleUrlLogin}
+        type="button"
+        class="w-full h-12 border rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform font-medium"
+        style="background-color: #ffffff; color: #1f2937; border-color: #d1d5db;"
+    >
+        <!-- Ícono SVG representativo de Google -->
+        <svg
+            viewBox="0 0 48 48"
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+        >
+            <g>
+                <path
+                    fill="#FBBC05"
+                    d="M9.827 24c0-1.524.253-2.985.705-4.356L2.623 13.604A23.74 23.74 0 000.214 24c0 3.737.868 7.261 2.407 10.388l7.905-6.051A14.125 14.125 0 009.827 24z"
+                ></path>
+                <path
+                    fill="#EB4335"
+                    d="M23.714 10.133c3.311 0 6.302 1.173 8.652 3.093L39.202 6.4C35.036 2.773 29.695.533 23.714.533c-9.287 0-17.269 5.311-21.09 13.071l7.909 6.04c1.823-5.532 7.017-9.51 13.181-9.51z"
+                ></path>
+                <path
+                    fill="#34A853"
+                    d="M23.714 37.867c-6.164 0-11.359-3.979-13.181-9.51l-7.909 6.038c3.822 7.761 11.804 13.072 21.09 13.072 5.732 0 11.205-2.035 15.312-5.848l-7.507-5.804c-2.118 1.335-4.785 2.053-7.805 2.053z"
+                ></path>
+                <path
+                    fill="#4285F4"
+                    d="M46.145 24c0-1.387-.213-2.88-.534-4.267H23.714v9.067h12.605c-.63 3.091-2.346 5.467-4.8 7.014l7.508 5.804C43.34 37.614 46.145 31.649 46.145 24z"
+                ></path>
+            </g>
+        </svg>
+        <span>Continuar con Google</span>
+    </a>
+
+    <!-- Separador visual -->
+    <div
+        class="text-center text-base my-6"
+        style="color: var(--color-text-muted);"
+    >
+        <span class="hidden sm:inline">────</span>────── o ──────<span class="hidden sm:inline">────</span>
+    </div>
+
     <!-- Formulario de inicio de sesión -->
     <form id="login-form" class="space-y-6">
         <!-- Campo de entrada para el correo electrónico con estilos y validación requerida -->
@@ -20,62 +66,26 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
             onblur="this.value = this.value.trim()"
             required
             class="w-full h-12 px-4 border focus:outline-none focus:ring-2 rounded-full text-center placeholder:text-center"
-            style="background-color: var(--color-bg); border-color: var(--color-border); color: var(--color-text); --tw-ring-color: var(--color-success);"
+            style="background-color: var(--color-bg); border-color: #d1d5db; color: var(--color-text); --tw-ring-color: var(--color-success);"
         />
-        <!-- Botón para enviar el formulario y continuar el proceso de inicio de sesión -->
+
+        <!-- Widget de Cloudflare Turnstile -->
+        <div id="turnstile-container">
+            <TurnstileWidget client:load />
+        </div>
+        <input type="hidden" id="turnstileToken" name="turnstileToken" />
+        <p id="turnstile-error" class="text-red-500 text-sm text-center hidden">Por favor, verifica que no eres un robot.</p>
+
+        <!-- Botón de Continuar -->
         <button
+            id="btnContinuar"
             type="submit"
-            class="w-full h-12 text-white font-medium text-base hover:scale-105 transition-transform rounded-full focus:ring-4"
+            disabled
+            class="w-full h-12 text-white font-medium text-base transition-transform rounded-full focus:ring-4 opacity-50 cursor-not-allowed"
             style="background: var(--gradient-button-primary);"
         >
             Continuar
         </button>
-
-        <!-- Separador visual y textual que sugiere otra forma de iniciar sesión -->
-        <div
-            class="text-center text-base"
-            style="color: var(--color-text-muted);"
-        >
-            <span class="hidden sm:inline">────</span>────── o inicia sesión con
-            ──────<span class="hidden sm:inline">────</span>
-        </div>
-
-        <!-- Botón de inicio de sesión alternativo usando la cuenta de Google -->
-        <a
-            href={googleUrlLogin}
-            type="button"
-            class="w-full h-12 border hover:opacity-80 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-transform"
-            style="background-color: var(--color-bg); color: var(--color-text); border-color: var(--color-border);"
-        >
-            <!-- Ícono SVG representativo de Google -->
-            <svg
-                viewBox="0 0 48 48"
-                width="20"
-                height="20"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-            >
-                <g>
-                    <path
-                        fill="#FBBC05"
-                        d="M9.827 24c0-1.524.253-2.985.705-4.356L2.623 13.604A23.74 23.74 0 000.214 24c0 3.737.868 7.261 2.407 10.388l7.905-6.051A14.125 14.125 0 009.827 24z"
-                    ></path>
-                    <path
-                        fill="#EB4335"
-                        d="M23.714 10.133c3.311 0 6.302 1.173 8.652 3.093L39.202 6.4C35.036 2.773 29.695.533 23.714.533c-9.287 0-17.269 5.311-21.09 13.071l7.909 6.04c1.823-5.532 7.017-9.51 13.181-9.51z"
-                    ></path>
-                    <path
-                        fill="#34A853"
-                        d="M23.714 37.867c-6.164 0-11.359-3.979-13.181-9.51l-7.909 6.038c3.822 7.761 11.804 13.072 21.09 13.072 5.732 0 11.205-2.035 15.312-5.848l-7.507-5.804c-2.118 1.335-4.785 2.053-7.805 2.053z"
-                    ></path>
-                    <path
-                        fill="#4285F4"
-                        d="M46.145 24c0-1.387-.213-2.88-.534-4.267H23.714v9.067h12.605c-.63 3.091-2.346 5.467-4.8 7.014l7.508 5.804C43.34 37.614 46.145 31.649 46.145 24z"
-                    ></path>
-                </g>
-            </svg>
-            <span>Cuenta de Google</span>
-        </a>
     </form>
 </div>
 
@@ -93,13 +103,39 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
 
         if (!form) return;
 
+        // Escuchar el evento del token de Turnstile
+        window.addEventListener('turnstile-token', (event: any) => {
+            const tokenInput = document.getElementById('turnstileToken') as HTMLInputElement;
+            const btnContinuar = document.getElementById('btnContinuar') as HTMLButtonElement;
+            
+            if (tokenInput && event.detail.token) {
+                tokenInput.value = event.detail.token;
+                hideElement('turnstile-error');
+
+                // Habilitar botón cuando tenemos token
+                if (btnContinuar) {
+                    btnContinuar.disabled = false;
+                    btnContinuar.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnContinuar.classList.add('hover:scale-105');
+                }
+            }
+        });
+
         // Eliminar listeners existentes mediante clonado del formulario
-        // Esto previene duplicación de eventos cuando Astro reconstruye el DOM en view transitions
         const newForm = form.cloneNode(true) as HTMLFormElement;
         form.parentNode?.replaceChild(newForm, form);
 
         newForm.addEventListener('submit', async (event: SubmitEvent) => {
             event.preventDefault();
+
+            // Validación de Turnstile (redundante si el botón está deshabilitado, pero seguro)
+            const tokenInput = document.getElementById('turnstileToken') as HTMLInputElement;
+            const turnstileToken = tokenInput?.value;
+
+            if (!turnstileToken) {
+                 showElement('turnstile-error');
+                 return;
+            }
 
             const emailInput = document.getElementById(
                 'emailInput',
@@ -139,9 +175,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
                 if (usuario) {
                     showElement('loginPasswordDiv');
                     showElement('btnBack');
-
-                    event.preventDefault(); // Evita el envío del formulario
-                    return; // <-- Detiene aquí la ejecución del resto
+                    return;
                 }
             } catch (error) {
                 hideElement('loginModalDiv');
@@ -153,7 +187,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin; // Extrae la URL para el inicio 
         });
     }
 
-    // Configurar listeners en la carga inicial de la página
+    // Configurar listeners en la carga inicial
     setupLoginFormListener();
 
     // Reconfigurar listeners después de las transiciones de vista de Astro
