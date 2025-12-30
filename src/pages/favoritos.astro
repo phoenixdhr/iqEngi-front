@@ -1,11 +1,12 @@
 ---
-import Counter from '@components/atoms/Counter';
 import Cards from '@components/molecules/Cards.astro';
 import CursosFavoritosLista from '@components/sections/CursosFavoritosLista';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCoursesJsonLd } from '@utils/jsonld';
+import { fade } from 'astro:transitions';
+
 export const prerender = true;
 
 let cursos: Curso[] = [];
@@ -14,7 +15,7 @@ let coursesJsonLd;
 try {
     const { data } = await clientGql.query({
         query: CursosDocument,
-        variables: { offset: 0, limit: 10 },
+        variables: { offset: 0, limit: 4 }, // Limit to 4 for recommendations
     });
 
     cursos = data?.Cursos || [];
@@ -24,19 +25,31 @@ try {
     cursos = [];
     coursesJsonLd = null;
 }
-
-const counterValue = 100;
 ---
 
-<LayoutSeo tituloPagina="contactanos" seoJsonLd={coursesJsonLd}>
-    <h1 class="text-2xl font-bold text-center my-6">Cursos Favoritos</h1>
-    <CursosFavoritosLista client:only="react" />
+<LayoutSeo tituloPagina="Cursos Favoritos" description="Tus cursos guardados para ver más tarde en IQ ENGI" seoJsonLd={coursesJsonLd}>
+    
+    <div slot="Hero" class="text-center py-10" transition:animate={fade({ duration: '0.5s' })}>
+        <h1 class="text-4xl lg:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Mis Cursos Favoritos
+        </h1>
+        <p class="text-lg text-base-content/80 max-w-2xl mx-auto">
+            Accede rápidamente a los contenidos que más te interesan y continúa tu aprendizaje.
+        </p>
+    </div>
 
-    <Counter
-        client:only="react"
-        value={counterValue}
-        transition:persist
-        transition:persist-props
-        transition:name="counter"
-    />
+    <section class="min-h-[300px]" transition:animate="slide">
+        <CursosFavoritosLista client:only="react" />
+    </section>
+
+    {cursos.length > 0 && (
+        <section class="mt-20 pt-10 border-t border-base-200">
+            <h2 class="text-3xl font-bold text-center mb-8">Te podría interesar</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+                {cursos.map((curso) => (
+                    <Cards {...curso} isBig={false} />
+                ))}
+            </div>
+        </section>
+    )}
 </LayoutSeo>
