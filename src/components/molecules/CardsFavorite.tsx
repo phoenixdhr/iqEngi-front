@@ -26,29 +26,27 @@ export default function CardsFavorite(props: CardsFavoriteProps) {
     }
 
     return (
-        <div className="text-current no-underline flex flex-col gap-2">
+        <div className="card bg-base-100 shadow-xl w-full h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:contrast-125 flex flex-col justify-between group">
             <a
                 href={`/cursos/${props.slug}`}
-                className="text-current no-underline"
+                className="text-current no-underline flex flex-col flex-grow"
             >
-                <div className="card bg-base-100 shadow-xl w-full hover:scale-105 transition-transform hover:shadow-2xl hover:contrast-125">
-                    <figure>
-                        <img
-                            src={props.imagenURL.url}
-                            alt={props.imagenURL.alt}
-                        />
-                    </figure>
-                    <div className="card-body"></div>
-                </div>
-                <div className="card-body">
-                    <h2 className="card-title">{props.courseTitle}</h2>
-                    <p className="card-text">{props.descripcionCorta}</p>
+                <figure className="aspect-video relative overflow-hidden">
+                    <img
+                        src={props.imagenURL.url}
+                        alt={props.imagenURL.alt}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                </figure>
+                <div className="card-body flex-grow p-4">
+                    <h2 className="card-title text-lg font-bold min-h-[3.5rem]">{props.courseTitle}</h2>
+                    <p className="card-text text-sm line-clamp-3">{props.descripcionCorta}</p>
                 </div>
             </a>
-            <div className="card-actions justify-end">
+            <div className="card-actions justify-end p-4 pt-0 mt-auto">
                 <button
                     onClick={() => handleEliminarFavorito(props._id)}
-                    className="btn btn-primary bg-iq-purple-light-mid-200 border-iq-purple-light-mid-200"
+                    className="btn btn-primary bg-iq-purple-light-mid-200 border-iq-purple-light-mid-200 btn-sm w-full"
                 >
                     Eliminar de favoritos
                 </button>

@@ -23,34 +23,33 @@ const slugCurso = slug || 'curso-no-encontrado';
 ---
 
 <!-- Enlace a la página del curso correspondiente -->
-<a href={`/cursos/${slugCurso}`} class="text-current no-underline">
+<!-- Enlace a la página del curso correspondiente -->
+<a href={`/cursos/${slugCurso}`} class="text-current no-underline group h-full block"> <!-- Añadido h-full block y group para hover -->
     <div
-        class="card bg-base-100 shadow-xl w-full hover:scale-105 transition-transform hover:shadow-2xl hover:contrast-125"
+        class="card bg-base-100 shadow-xl w-full h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:contrast-125 flex flex-col"
     >
         <!-- Imagen del curso con transición de vista -->
-        <figure transition:name={`card-figure-${_id.toString()}`}>
+        <figure class="aspect-video relative overflow-hidden">
             <img
                 src={imagenURL?.url}
                 alt={imagenURL?.alt}
-                transition:name=`${courseTitle}-image`
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
         </figure>
 
-        <div class="card-body" transition:name={`card-text-${_id.toString()}`}>
+        <div class="card-body flex-1 flex flex-col p-5">
             <!-- Título y descripción del curso -->
             <h2
-                class="card-title"
-                transition:name={`card-title-${_id.toString()}`}
+                class="card-title text-lg font-bold min-h-[3.5rem]" 
             >
                 {courseTitle}
             </h2>
-            <p>{descripcionCorta}</p>
+            <p class="text-sm line-clamp-3 mb-4 flex-grow">{descripcionCorta}</p>
 
             <!-- Botón para añadir el curso al carrito (puede requerir funcionalidad adicional) -->
-            <div class="card-actions justify-end">
+            <div class="card-actions justify-end mt-auto">
                 <button
-                    class="btn btn-primary bg-iq-purple-light-mid-200 border-iq-purple-light-mid-200"
-                    transition:name={`card-button-${_id.toString()}`}
+                    class="btn btn-primary bg-iq-purple-light-mid-200 border-iq-purple-light-mid-200 btn-sm w-full md:w-auto"
                 >
                     Añadir a carrito
                 </button>
