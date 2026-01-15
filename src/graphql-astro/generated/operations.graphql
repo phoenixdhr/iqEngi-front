@@ -913,23 +913,39 @@ query Cursos($offset: Int, $limit: Int) {
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
+    descripcionCorta
+    descripcionLarga
+    nivel
     instructor {
-      firstName
+      _id
     }
+    duracionHoras
     imagenURL {
       url
       alt
     }
     precio
-    duracionHoras
-    descripcionCorta
-    nivel
-    categorias {
-      nombreCategoria
-    }
     currency
     descuento
+    calificacionPromedio
+    numeroCalificaciones
+    aprenderas
+    objetivos
+    dirigidoA
+    modulosIds
+    fechaLanzamiento
+
+    cuestionarioId {
+      _id
+    }
     slug
+    deleted
+    categorias {
+      _id
+      nombreCategoria
+      descripcion
+
+    }
   }
 }
 
@@ -938,6 +954,10 @@ query Curso($cursoId: ID!) {
   Curso(id: $cursoId) {
     _id
     courseTitle
+    categorias {
+      _id
+      nombreCategoria
+    }
     descripcionCorta
     descripcionLarga
     nivel
@@ -945,9 +965,9 @@ query Curso($cursoId: ID!) {
       firstName
     }
     duracionHoras
-     imagenURL {
-      alt
+    imagenURL{
       url
+      alt
     }
     precio
     currency
@@ -1049,6 +1069,30 @@ mutation Curso_hardDelete($cursoHardDeleteId: ID!) {
   Curso_hardDelete(id: $cursoHardDeleteId) {
     courseTitle
     _id
+  }
+}
+
+# Mutation para agregar categorias
+mutation Curso_addCategorias($cursoId: ID!, $categoriaIds: [ID!]!) {
+  Curso_addCategorias(cursoId: $cursoId, categoriaIds: $categoriaIds) {
+    _id
+    courseTitle
+    categorias {
+      _id
+      nombreCategoria
+    }
+  }
+}
+
+# Mutation para remover categorias
+mutation Curso_removeCategorias($cursoId: ID!, $categoriaIds: [ID!]!) {
+  Curso_removeCategorias(cursoId: $cursoId, categoriaIds: $categoriaIds) {
+    _id
+    courseTitle
+    categorias {
+      _id
+      nombreCategoria
+    }
   }
 }
 
