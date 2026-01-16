@@ -1,33 +1,62 @@
 ---
-import Cards from '@components/molecules/Cards.astro';
 import { clientGql } from '@graphql-astro/apolloClient';
-import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
+import { CursosDocument, CategoriasDocument, type Curso, type Categoria } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCoursesJsonLd } from '@utils/jsonld';
+import { CourseCatalog } from '@components/organisms/CourseCatalog';
+
 export const prerender = true;
 
 let cursos: Curso[] = [];
+let categorias: Categoria[] = [];
 let coursesJsonLd;
 
 try {
-    const { data } = await clientGql.query({
-        query: CursosDocument,
-        variables: { offset: 0, limit: 10 },
-    });
+    const [cursosResult, categoriasResult] = await Promise.all([
+        clientGql.query({
+            query: CursosDocument,
+            variables: { offset: 0, limit: 100 }, // Fetch all or increased limit for client-side filtering
+        }),
+        clientGql.query({
+            query: CategoriasDocument,
+        })
+    ]);
 
-    cursos = data?.Cursos || [];
+    cursos = cursosResult.data?.Cursos || [];
+    if (cursos.length > 0) {
+        console.log('DEBUG: First course keys:', Object.keys(cursos[0]));
+        console.log('DEBUG: First course precio:', cursos[0].precio);
+    }
+    categorias = categoriasResult.data?.Categorias || [];
+    
+    // MOCK DATA: Inject categories if none found (for development/testing)
+    if (categorias.length === 0) {
+        console.warn('DEBUG: No categories found in backend, using mock data.');
+        categorias = [
+            { _id: 'cat1', nombreCategoria: 'Mecánica', deleted: false, descripcion: 'Cursos de mecánica' },
+            { _id: 'cat2', nombreCategoria: 'Procesos', deleted: false, descripcion: 'Ingeniería de procesos' },
+            { _id: 'cat3', nombreCategoria: 'Seguridad', deleted: false, descripcion: 'Seguridad industrial' },
+            { _id: 'cat4', nombreCategoria: 'Química', deleted: false, descripcion: 'Ingeniería química' },
+        ];
+    }
+
     coursesJsonLd = getCoursesJsonLd(cursos);
 } catch (error) {
-    console.error('Error fetching courses for cursos index page:', error);
+    console.error('Error fetching data for cursos index page:', error);
     cursos = [];
+    categorias = [];
     coursesJsonLd = null;
 }
 ---
 
 <LayoutSeo tituloPagina="Cursos" seoJsonLd={coursesJsonLd}>
-    <h1 class="text-2xl font-bold text-center my-6">Catálogo de Cursos</h1>
+    <h1 class="text-3xl font-bold text-center my-8 text-iq-purple-dark">Catálogo de Cursos</h1>
 
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
-        {cursos.map((curso) => <Cards {...curso} isBig={false} />)}
-    </section>
+    <div class="min-h-screen bg-base-100">
+        <CourseCatalog 
+            client:load 
+            cursos={cursos} 
+            categorias={categorias} 
+        />
+    </div>
 </LayoutSeo>

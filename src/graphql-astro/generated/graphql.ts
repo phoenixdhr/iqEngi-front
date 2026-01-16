@@ -9110,13 +9110,38 @@ export const CursosDocument = gql`
         Cursos(offset: $offset, limit: $limit) {
             _id
             courseTitle
-            slug
+            descripcionCorta
+            descripcionLarga
+            nivel
             instructor {
+                _id
                 firstName
+                lastName
             }
+            duracionHoras
             imagenURL {
                 url
                 alt
+            }
+            precio
+            currency
+            descuento
+            calificacionPromedio
+            numeroCalificaciones
+            aprenderas
+            objetivos
+            dirigidoA
+            modulosIds
+            fechaLanzamiento
+            cuestionarioId {
+                _id
+            }
+            slug
+            deleted
+            categorias {
+                _id
+                nombreCategoria
+                descripcion
             }
         }
     }
