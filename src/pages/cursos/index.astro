@@ -4,6 +4,10 @@ import { CursosDocument, CategoriasDocument, type Curso, type Categoria } from '
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCoursesJsonLd } from '@utils/jsonld';
 import { CourseCatalog } from '@components/organisms/CourseCatalog';
+import CoursesHero from '@components/sections/CoursesHero.astro';
+import CoursesCategories from '@components/sections/CoursesCategories.astro';
+import CoursesPopular from '@components/sections/CoursesPopular.astro';
+import CoursesTestimonials from '@components/sections/CoursesTestimonials.astro';
 
 export const prerender = true;
 
@@ -49,14 +53,26 @@ try {
 }
 ---
 
-<LayoutSeo tituloPagina="Cursos" seoJsonLd={coursesJsonLd}>
-    <h1 class="text-3xl font-bold text-center my-8 text-iq-purple-dark">Catálogo de Cursos</h1>
+<LayoutSeo tituloPagina="Cursos - IQ ENGI" seoJsonLd={coursesJsonLd} fluid={true}>
+    <div class="antialiased">
+        <CoursesHero />
+        
+        <CoursesCategories categorias={categorias} />
+        
+        <CoursesPopular cursos={cursos} />
 
-    <div class="min-h-screen bg-base-100">
-        <CourseCatalog 
-            client:load 
-            cursos={cursos} 
-            categorias={categorias} 
-        />
+        <div id="catalogo" class="bg-base-100 min-h-screen pt-4 pb-16">
+             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-8 text-center md:text-left">
+                <span class="text-xs font-bold tracking-widest text-primary uppercase">Catálogo Completo</span>
+                <h2 class="text-3xl font-bold mt-2">Explora todos nuestros cursos</h2>
+            </div>
+            <CourseCatalog 
+                client:idle 
+                cursos={cursos} 
+                categorias={categorias} 
+            />
+        </div>
+
+        <CoursesTestimonials />
     </div>
 </LayoutSeo>

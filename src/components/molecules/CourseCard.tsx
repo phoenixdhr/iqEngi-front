@@ -36,6 +36,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             <img
             src={imagenURL?.url || '/placeholder-course.jpg'}
             alt={imagenURL?.alt || courseTitle || 'Course Image'}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
             
@@ -96,12 +98,12 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-base-200">
              <a 
             href={`/cursos/${slug}`} 
-            className="btn btn-outline btn-sm hover:!text-white hover:!bg-primary"
+            className="btn btn-outline h-10 min-h-[40px] hover:!bg-[var(--color-btn-hover)] hover:!border-[var(--color-btn-hover)] hover:!text-white rounded-xl transition-all duration-300"
           >
             Ver Detalles
           </a>
-          <button className="btn btn-primary btn-sm text-white shadow-lg shadow-primary/30 uppercase font-bold tracking-wide">
-            ¡Inscribirme!
+          <button className="btn btn-primary h-10 min-h-[40px] text-white shadow-md shadow-primary/20 hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:shadow-lg hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.03] uppercase font-bold tracking-wide rounded-xl transition-all duration-300">
+            Inscribirme
           </button>
         </div>
       </div>

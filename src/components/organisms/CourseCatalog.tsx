@@ -54,7 +54,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({ cursos, categorias
   }, [cursos, searchTerm, selectedCategory, sortOption]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       {/* Controls Header */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-8 bg-base-100 p-4 rounded-xl shadow-sm border border-base-200">
         
