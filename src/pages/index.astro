@@ -2,13 +2,15 @@
 import { getHomeJsonLd } from '@utils/jsonld.ts';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import CursosBannerIndex from '@components/sections/CursosBanner-index.astro';
+import Hero from '@components/home/Hero';
 
 const tituloPagina = 'IqEngi | Home';
 
 const homeJsonLd = getHomeJsonLd();
 ---
 
-<LayoutSeo tituloPagina={tituloPagina} seoJsonLd={homeJsonLd}>
+<LayoutSeo tituloPagina={tituloPagina} seoJsonLd={homeJsonLd} fluid={true}>
     <!-- <Welcome /> -->
+    <Hero client:idle />
     <CursosBannerIndex />
 </LayoutSeo>
