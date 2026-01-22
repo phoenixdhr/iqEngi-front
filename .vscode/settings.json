@@ -4,7 +4,7 @@
         "activityBar.background": "#fa1b49",
         "activityBar.foreground": "#e7e7e7",
         "activityBar.inactiveForeground": "#e7e7e799",
-        "activityBarBadge.background": "#155e02",
+        "activityBarBadge.background": "#5b21b6",
         "activityBarBadge.foreground": "#e7e7e7",
         "commandCenter.border": "#e7e7e799",
         "sash.hoverBorder": "#fa1b49",
@@ -32,5 +32,7 @@
         "astro",
         "typescript",
         "typescriptreact"
-    ]
+    ],
+    "css.lint.unknownAtRules": "ignore",
+    "scss.lint.unknownAtRules": "ignore"
 }

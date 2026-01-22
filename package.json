@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "astro dev --watch",
         "dev:local": "astro dev --watch --mode dev",
+        "codegen": "graphql-codegen",
         "start": "node ./dist/server/entry.mjs",
         "build": "astro build",
         "preview": "astro preview",
@@ -28,6 +29,7 @@
         "astro": "^5.4.2",
         "astro-icon": "^1.1.5",
         "daisyui": "^5.0.3",
+        "framer-motion": "^12.29.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "resend": "^6.4.1",

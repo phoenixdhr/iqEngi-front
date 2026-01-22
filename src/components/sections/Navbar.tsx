@@ -408,6 +408,7 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                     </div>
                 </DialogPanel>
             </Dialog>
+            <div className="absolute -bottom-6 left-0 w-full h-6 bg-gradient-to-b from-[var(--color-bg)] to-transparent pointer-events-none z-30"></div>
         </header>
     );
 }

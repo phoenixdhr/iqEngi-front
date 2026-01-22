@@ -98,6 +98,11 @@
         var(--color-secondary) 0%,
         var(--color-primary) 100%
     );
+
+    /* ============================== BTN HOVER (cruzado) ======================
+     Efecto visual: en tema claro usamos el azul del tema oscuro para contraste.
+  */
+    --color-btn-hover: #2b7fff; /* Azul (secondary de dark) */
 }
 
 /* ==================== Mapeo a tokens de DaisyUI (LIGHT) =====================
@@ -200,6 +205,11 @@
         var(--color-secondary) 0%,
         var(--color-primary) 100%
     );
+
+    /* ============================== BTN HOVER =================================
+     En tema oscuro usamos el azul (secondary de dark) para mantener coherencia.
+  */
+    --color-btn-hover: #2b7fff; /* Azul (secondary de dark) */
 
     /* ================= Mapeo DaisyUI (DARK) ================= */
     --p: var(--color-primary);
