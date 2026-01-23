@@ -61,13 +61,14 @@ const mainMenuItems = [
 interface NavbarProps {
     currentUrl: string;
     isTransparent?: boolean;
+    hideBottomGradient?: boolean;
 }
 
 /**
  * Componente Navbar principal que maneja navegación en desktop y móvil.
  * Incluye lógica de apertura del menú móvil y efectos visuales.
  */
-export default function Navbar({ currentUrl, isTransparent = false }: NavbarProps) {
+export default function Navbar({ currentUrl, isTransparent = false, hideBottomGradient = false }: NavbarProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     /**
@@ -148,17 +149,23 @@ export default function Navbar({ currentUrl, isTransparent = false }: NavbarProp
                 <PopoverGroup className="hidden lg:flex lg:gap-x-12">
                     {mainMenuItems.map((item) =>
                         item.isDropdown ? (
-                            <Popover key={item.name} className="relative">
-                                {({ close }) => (
+                            <Popover key={item.name} className="relative group">
+                                {({ close, open }) => (
                                     <>
                                         <PopoverButton
                                             className="flex items-center gap-x-1 text-base font-semibold outline-none"
                                             style={{ color: textColor }}
+                                            onMouseEnter={(e) => {
+                                                // Abrir al hover si está cerrado
+                                                if (!open) {
+                                                    (e.target as HTMLElement).click();
+                                                }
+                                            }}
                                         >
                                             {item.name}
                                             <ChevronDownIcon
                                                 aria-hidden="true"
-                                                className="h-5 w-5 flex-none"
+                                                className={`h-5 w-5 flex-none transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                                                 style={{
                                                     color: mutedColor,
                                                 }}
@@ -170,6 +177,7 @@ export default function Navbar({ currentUrl, isTransparent = false }: NavbarProp
                                             style={{
                                                 backgroundColor: 'var(--color-bg)',
                                             }}
+                                            onMouseLeave={() => close()}
                                         >
                                             {/* Aquí se renderizan los elementos de communityItems */}
                                             <div className="p-4">
@@ -419,7 +427,7 @@ export default function Navbar({ currentUrl, isTransparent = false }: NavbarProp
                     </div>
                 </DialogPanel>
             </Dialog>
-            {!isTransparent && (
+            {!isTransparent && !hideBottomGradient && (
                 <div className="absolute -bottom-6 left-0 w-full h-6 bg-gradient-to-b from-[var(--color-bg)] to-transparent pointer-events-none z-30"></div>
             )}
         </header>

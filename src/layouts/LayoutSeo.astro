@@ -18,6 +18,7 @@ interface Props {
     seoJsonLd: object | null;
     fluid?: boolean;
     transparentNavbar?: boolean;
+    hideNavbarGradient?: boolean;
 }
 const {
     tituloPagina,
@@ -28,6 +29,7 @@ const {
     seoJsonLd: jsonLd,
     fluid = false,
     transparentNavbar = false,
+    hideNavbarGradient = false,
 } = Astro.props;
 
 const currentUrl = Astro.url.pathname;
@@ -103,7 +105,7 @@ const currentUrl = Astro.url.pathname;
         class="overflow-y-scroll min-h-screen flex flex-col"
         style="background-color: var(--color-bg); color: var(--color-text);"
     >
-        <Navbar client:only="true" currentUrl={currentUrl} transition:persist isTransparent={transparentNavbar} />
+        <Navbar client:only="true" currentUrl={currentUrl} transition:persist isTransparent={transparentNavbar} hideBottomGradient={hideNavbarGradient} />
         <div
             class:list={[
                 !fluid &&

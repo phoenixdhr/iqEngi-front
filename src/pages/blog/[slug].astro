@@ -58,13 +58,13 @@ const encodedUrl = encodeURIComponent(currentUrl);
 const encodedTitle = encodeURIComponent(post.data.title);
 ---
 
-<LayoutSeo tituloPagina={post.data.title} seoJsonLd={postJsonLd}>
+<LayoutSeo tituloPagina={post.data.title} seoJsonLd={postJsonLd} fluid={true} hideNavbarGradient={true}>
     <!-- Barra de progreso de lectura -->
     <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary to-secondary z-50 transition-all duration-150" style="width: 0%;"></div>
 
-    <!-- Hero Section con imagen -->
+    <!-- Hero Section con imagen (full width en móvil) -->
     <header class="relative w-full overflow-hidden bg-base-200">
-        <!-- Imagen de fondo -->
+        <!-- Imagen de fondo - ocupa todo el ancho -->
         {post.data.image && (
             <div class="absolute inset-0">
                 <img 
