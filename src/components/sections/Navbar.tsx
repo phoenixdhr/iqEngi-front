@@ -60,13 +60,14 @@ const mainMenuItems = [
 // Después:
 interface NavbarProps {
     currentUrl: string;
+    isTransparent?: boolean;
 }
 
 /**
  * Componente Navbar principal que maneja navegación en desktop y móvil.
  * Incluye lógica de apertura del menú móvil y efectos visuales.
  */
-export default function Navbar({ currentUrl }: NavbarProps) {
+export default function Navbar({ currentUrl, isTransparent = false }: NavbarProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     /**
@@ -87,10 +88,13 @@ export default function Navbar({ currentUrl }: NavbarProps) {
         window.dispatchEvent(new Event('listener-login-modal'));
     }
 
+    const textColor = isTransparent ? 'white' : 'var(--color-text)';
+    const mutedColor = isTransparent ? 'rgba(255,255,255,0.7)' : 'var(--color-text-muted)';
+
     return (
         <header
-            className="sticky top-0 z-40"
-            style={{ backgroundColor: 'var(--color-bg)' }}
+            className={`${isTransparent ? 'absolute top-0 left-0 w-full' : 'sticky top-0'} z-40 ${isTransparent ? 'bg-gradient-to-b from-black/80 to-transparent' : ''}`}
+            style={{ backgroundColor: isTransparent ? 'transparent' : 'var(--color-bg)' }}
         >
             <nav
                 aria-label="Global"
@@ -132,7 +136,7 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                             type="button"
                             onClick={() => setMobileMenuOpen(true)}
                             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 hover:scale-105 transition-transform"
-                            style={{ color: 'var(--color-text-muted)' }}
+                            style={{ color: mutedColor }}
                         >
                             <span className="sr-only">Open main menu</span>
                             <Bars3Icon aria-hidden="true" className="h-6 w-6" />
@@ -145,106 +149,113 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                     {mainMenuItems.map((item) =>
                         item.isDropdown ? (
                             <Popover key={item.name} className="relative">
-                                <PopoverButton
-                                    className="flex items-center gap-x-1 text-base font-semibold"
-                                    style={{ color: 'var(--color-text)' }}
-                                >
-                                    {item.name}
-                                    <ChevronDownIcon
-                                        aria-hidden="true"
-                                        className="h-5 w-5 flex-none"
-                                        style={{
-                                            color: 'var(--color-text-muted)',
-                                        }}
-                                    />
-                                </PopoverButton>
-                                <PopoverPanel
-                                    className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl ring-1 shadow-lg ring-gray-900/5 transition"
-                                    style={{
-                                        backgroundColor: 'var(--color-bg)',
-                                    }}
-                                >
-                                    {/* Aquí se renderizan los elementos de communityItems */}
-                                    <div className="p-4">
-                                        {communityItems.map((subitem) => (
+                                {({ close }) => (
+                                    <>
+                                        <PopoverButton
+                                            className="flex items-center gap-x-1 text-base font-semibold outline-none"
+                                            style={{ color: textColor }}
+                                        >
+                                            {item.name}
+                                            <ChevronDownIcon
+                                                aria-hidden="true"
+                                                className="h-5 w-5 flex-none"
+                                                style={{
+                                                    color: mutedColor,
+                                                }}
+                                            />
+                                        </PopoverButton>
+                                        <PopoverPanel
+                                            focus
+                                            className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl ring-1 shadow-lg ring-gray-900/5"
+                                            style={{
+                                                backgroundColor: 'var(--color-bg)',
+                                            }}
+                                        >
+                                            {/* Aquí se renderizan los elementos de communityItems */}
+                                            <div className="p-4">
+                                                {communityItems.map((subitem) => (
+                                                    <div
+                                                        key={subitem.name}
+                                                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:opacity-80 transition-opacity"
+                                                    >
+                                                        <div
+                                                            className="flex h-11 w-11 flex-none items-center justify-center rounded-lg"
+                                                            style={{
+                                                                backgroundColor:
+                                                                    'var(--color-surface)',
+                                                            }}
+                                                        >
+                                                            <subitem.icon
+                                                                className="h-6 w-6"
+                                                                style={{
+                                                                    color: 'var(--color-text-muted)',
+                                                                }}
+                                                                aria-hidden="true"
+                                                            />
+                                                        </div>
+                                                        <div className="flex-auto">
+                                                            <a
+                                                                href={subitem.href}
+                                                                onClick={() => close()}
+                                                                className="block font-semibold"
+                                                                style={{
+                                                                    color: 'var(--color-text)',
+                                                                }}
+                                                            >
+                                                                {subitem.name}
+                                                                <span className="absolute inset-0" />
+                                                            </a>
+                                                            <p
+                                                                className="mt-1"
+                                                                style={{
+                                                                    color: 'var(--color-text-muted)',
+                                                                }}
+                                                            >
+                                                                {subitem.description}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {/* Aquí se renderizan los enlaces rápidos de callsToAction */}
                                             <div
-                                                key={subitem.name}
-                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-base hover:opacity-80 transition-opacity"
+                                                className="grid grid-cols-2 divide-x divide-gray-900/5"
+                                                style={{
+                                                    backgroundColor:
+                                                        'var(--color-surface)',
+                                                }}
                                             >
-                                                <div
-                                                    className="flex h-11 w-11 flex-none items-center justify-center rounded-lg"
-                                                    style={{
-                                                        backgroundColor:
-                                                            'var(--color-surface)',
-                                                    }}
-                                                >
-                                                    <subitem.icon
-                                                        className="h-6 w-6"
-                                                        style={{
-                                                            color: 'var(--color-text-muted)',
-                                                        }}
-                                                        aria-hidden="true"
-                                                    />
-                                                </div>
-                                                <div className="flex-auto">
+                                                {callsToAction.map((action) => (
                                                     <a
-                                                        href={subitem.href}
-                                                        className="block font-semibold"
+                                                        key={action.name}
+                                                        href={action.href}
+                                                        onClick={() => close()}
+                                                        className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold hover:opacity-80 transition-opacity"
                                                         style={{
                                                             color: 'var(--color-text)',
                                                         }}
                                                     >
-                                                        {subitem.name}
-                                                        <span className="absolute inset-0" />
+                                                        <action.icon
+                                                            className="h-5 w-5 flex-none"
+                                                            style={{
+                                                                color: 'var(--color-text-muted)',
+                                                            }}
+                                                            aria-hidden="true"
+                                                        />
+                                                        {action.name}
                                                     </a>
-                                                    <p
-                                                        className="mt-1"
-                                                        style={{
-                                                            color: 'var(--color-text-muted)',
-                                                        }}
-                                                    >
-                                                        {subitem.description}
-                                                    </p>
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                    {/* Aquí se renderizan los enlaces rápidos de callsToAction */}
-                                    <div
-                                        className="grid grid-cols-2 divide-x divide-gray-900/5"
-                                        style={{
-                                            backgroundColor:
-                                                'var(--color-surface)',
-                                        }}
-                                    >
-                                        {callsToAction.map((action) => (
-                                            <a
-                                                key={action.name}
-                                                href={action.href}
-                                                className="flex items-center justify-center gap-x-2.5 p-3 text-base font-semibold hover:opacity-80 transition-opacity"
-                                                style={{
-                                                    color: 'var(--color-text)',
-                                                }}
-                                            >
-                                                <action.icon
-                                                    className="h-5 w-5 flex-none"
-                                                    style={{
-                                                        color: 'var(--color-text-muted)',
-                                                    }}
-                                                    aria-hidden="true"
-                                                />
-                                                {action.name}
-                                            </a>
-                                        ))}
-                                    </div>
-                                </PopoverPanel>
+                                        </PopoverPanel>
+                                    </>
+                                )}
                             </Popover>
                         ) : (
                             <div key={item.href}>
                                 <a
                                     href={item.href}
                                     className="text-base font-semibold"
-                                    style={{ color: 'var(--color-text)' }}
+                                    style={{ color: textColor }}
                                 >
                                     {item.name}
                                 </a>
@@ -252,7 +263,7 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                                     <div
                                         className="border-b-2 transition-all duration-300"
                                         style={{
-                                            borderColor: 'var(--color-text)',
+                                            borderColor: textColor,
                                         }}
                                     />
                                 ) : (
@@ -408,7 +419,9 @@ export default function Navbar({ currentUrl }: NavbarProps) {
                     </div>
                 </DialogPanel>
             </Dialog>
-            <div className="absolute -bottom-6 left-0 w-full h-6 bg-gradient-to-b from-[var(--color-bg)] to-transparent pointer-events-none z-30"></div>
+            {!isTransparent && (
+                <div className="absolute -bottom-6 left-0 w-full h-6 bg-gradient-to-b from-[var(--color-bg)] to-transparent pointer-events-none z-30"></div>
+            )}
         </header>
     );
 }

@@ -36,7 +36,7 @@ export default function CursosFavoritosLista() {
 
     return (
         <section className="w-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 md:px-8 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-8">
                 {cursosFavoritos.length > 0 ? (
                     cursosFavoritos.map((curso, index) => (
                         <div key={curso._id} className="animate-in fade-in zoom-in duration-500" style={{ animationDelay: `${index * 100}ms` }}>

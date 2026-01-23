@@ -34,7 +34,11 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
         optimizeDeps: {
-            include: ['@apollo/client'],
+            include: ['@apollo/client', '@apollo/client/core', '@apollo/client/cache'],
+        },
+        ssr: {
+            // Forzar a Vite a empaquetar Apollo Client en SSR para evitar problemas de ESM/CJS
+            noExternal: ['@apollo/client'],
         },
         // // Eliminar el server cuando se este en produccion
         // server: {
