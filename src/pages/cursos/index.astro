@@ -14,12 +14,16 @@ export const prerender = true;
 let cursos: Curso[] = [];
 let categorias: Categoria[] = [];
 let coursesJsonLd;
+let hasMoreCourses = false;
+
+// Constante para la carga inicial de cursos
+const INITIAL_COURSES_LIMIT = 24;
 
 try {
     const [cursosResult, categoriasResult] = await Promise.all([
         clientGql.query({
             query: CursosDocument,
-            variables: { offset: 0, limit: 100 }, // Fetch all or increased limit for client-side filtering
+            variables: { offset: 0, limit: INITIAL_COURSES_LIMIT },
         }),
         clientGql.query({
             query: CategoriasDocument,
@@ -27,6 +31,9 @@ try {
     ]);
 
     cursos = cursosResult.data?.Cursos || [];
+    // Si se devolvieron exactamente INITIAL_COURSES_LIMIT cursos, probablemente hay más
+    hasMoreCourses = cursos.length === INITIAL_COURSES_LIMIT;
+    
     if (cursos.length > 0) {
         console.log('DEBUG: First course keys:', Object.keys(cursos[0]));
         console.log('DEBUG: First course precio:', cursos[0].precio);
@@ -69,7 +76,9 @@ try {
             <CourseCatalog 
                 client:idle 
                 cursos={cursos} 
-                categorias={categorias} 
+                categorias={categorias}
+                hasMoreInitial={hasMoreCourses}
+                initialLimit={INITIAL_COURSES_LIMIT}
             />
         </div>
 

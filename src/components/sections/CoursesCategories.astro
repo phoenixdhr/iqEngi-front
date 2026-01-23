@@ -17,6 +17,9 @@ const getCategoryColor = (index: number) => {
     const colors = ['bg-primary', 'bg-secondary', 'bg-accent', 'bg-info', 'bg-success', 'bg-warning'];
     return colors[index % colors.length];
 };
+
+// Número de categorías visibles por página
+const ITEMS_PER_PAGE = 4;
 ---
 
 <section class="py-16 md:py-24 bg-base-100">
@@ -31,39 +34,77 @@ const getCategoryColor = (index: number) => {
         </div>
 
         {categorias.length > 0 ? (
-            <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-                {categorias.map((cat, index) => (
-                    <a 
-                        href={`/cursos?categoria=${cat.nombreCategoria}`}
-                        class={`group flex flex-col items-center p-6 bg-base-200/50 hover:bg-base-100 border border-base-200 hover:border-primary/30 rounded-2xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-center h-full ${index >= 3 ? 'hidden md:flex' : 'flex'}`}
-                    >
-                        <div class={`w-14 h-14 rounded-full ${getCategoryColor(index)}/10 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                            {getCategoryIcon(index)}
-                        </div>
-                        <h3 class="font-semibold text-lg group-hover:text-primary transition-colors">
-                            {cat.nombreCategoria}
-                        </h3>
-                        <p class="text-xs text-base-content/50 mt-1 line-clamp-2">
-                            {cat.descripcion || 'Explora cursos en esta área'}
-                        </p>
-                    </a>
-                ))}
-                
-                {/* Botón Ver Más (visible siempre, completa la grilla en móvil) */}
-                <a 
-                    href="#catalogo"
-                    class="group flex flex-col items-center justify-center p-6 bg-base-200/50 hover:bg-base-100 border border-base-200 hover:border-primary/30 rounded-2xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-center h-full cursor-pointer"
+            <div class="relative">
+                {/* Botón Anterior */}
+                <button 
+                    id="prev-btn"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 z-10 w-12 h-12 rounded-full bg-base-100 border-2 border-primary/20 hover:border-primary shadow-lg hover:shadow-xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-base-100 disabled:hover:text-primary"
+                    aria-label="Categorías anteriores"
                 >
-                    <div class="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                        →
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                {/* Contenedor del Slider */}
+                <div class="overflow-hidden mx-6 md:mx-8">
+                    <div 
+                        id="categories-slider"
+                        class="flex transition-transform duration-500 ease-out gap-4 md:gap-6"
+                    >
+                        {categorias.map((cat, index) => (
+                            <a 
+                                href={`/cursos?categoria=${cat.nombreCategoria}`}
+                                class="category-card group flex-shrink-0 w-[calc(50%-8px)] sm:w-[calc(33.333%-12px)] md:w-[calc(25%-18px)] flex flex-col items-center p-5 md:p-6 bg-base-200/50 hover:bg-base-100 border border-base-200 hover:border-primary/30 rounded-2xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-center"
+                                data-index={index}
+                            >
+                                <div class={`w-12 h-12 md:w-14 md:h-14 rounded-full ${getCategoryColor(index)}/10 flex items-center justify-center text-xl md:text-2xl mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                                    {getCategoryIcon(index)}
+                                </div>
+                                <h3 class="font-semibold text-sm md:text-lg group-hover:text-primary transition-colors line-clamp-1">
+                                    {cat.nombreCategoria}
+                                </h3>
+                                <p class="text-xs text-base-content/50 mt-1 line-clamp-2 hidden md:block">
+                                    {cat.descripcion || 'Explora cursos en esta área'}
+                                </p>
+                            </a>
+                        ))}
+                        
+                        {/* Botón Ver Más dentro del slider */}
+                        <a 
+                            href="#catalogo"
+                            class="category-card group flex-shrink-0 w-[calc(50%-8px)] sm:w-[calc(33.333%-12px)] md:w-[calc(25%-18px)] flex flex-col items-center justify-center p-5 md:p-6 bg-gradient-to-br from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/20 border border-primary/20 hover:border-primary/40 rounded-2xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-center cursor-pointer"
+                        >
+                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xl md:text-2xl mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-sm md:text-lg text-primary group-hover:text-primary transition-colors">
+                                Ver más
+                            </h3>
+                            <p class="text-xs text-base-content/50 mt-1 hidden md:block">
+                                Explora todas las áreas
+                            </p>
+                        </a>
                     </div>
-                    <h3 class="font-semibold text-lg text-primary group-hover:text-primary transition-colors">
-                        Ver más
-                    </h3>
-                    <p class="text-xs text-base-content/50 mt-1">
-                        Explora todas las áreas
-                    </p>
-                </a>
+                </div>
+
+                {/* Botón Siguiente */}
+                <button 
+                    id="next-btn"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 z-10 w-12 h-12 rounded-full bg-base-100 border-2 border-primary/20 hover:border-primary shadow-lg hover:shadow-xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-base-100 disabled:hover:text-primary"
+                    aria-label="Categorías siguientes"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                {/* Indicadores de página (dots) */}
+                <div id="page-indicators" class="flex justify-center gap-2 mt-8">
+                    {/* Los dots se generan dinámicamente con JS */}
+                </div>
             </div>
         ) : (
             <div class="text-center py-10 bg-base-200 rounded-xl">
@@ -72,3 +113,110 @@ const getCategoryColor = (index: number) => {
         )}
     </div>
 </section>
+
+<script>
+    // Script para manejar la navegación del slider
+    document.addEventListener('DOMContentLoaded', () => {
+        const slider = document.getElementById('categories-slider');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const indicators = document.getElementById('page-indicators');
+        
+        if (!slider || !prevBtn || !nextBtn || !indicators) return;
+
+        const cards = slider.querySelectorAll('.category-card');
+        const totalCards = cards.length;
+        
+        // Función para calcular items por página según el ancho de pantalla
+        const getItemsPerPage = () => {
+            if (window.innerWidth < 640) return 2; // móvil: 2 items
+            if (window.innerWidth < 768) return 3; // tablet pequeña: 3 items
+            return 4; // desktop: 4 items
+        };
+
+        let itemsPerPage = getItemsPerPage();
+        let currentPage = 0;
+        let totalPages = Math.ceil(totalCards / itemsPerPage);
+
+        // Crear indicadores de página (dots)
+        const createIndicators = () => {
+            indicators.innerHTML = '';
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('button');
+                dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-primary w-8' : 'bg-base-300 hover:bg-primary/50'}`;
+                dot.setAttribute('aria-label', `Ir a página ${i + 1}`);
+                dot.addEventListener('click', () => goToPage(i));
+                indicators.appendChild(dot);
+            }
+        };
+
+        // Actualizar indicadores
+        const updateIndicators = () => {
+            const dots = indicators.querySelectorAll('button');
+            dots.forEach((dot, index) => {
+                if (index === currentPage) {
+                    dot.className = 'w-8 h-2.5 rounded-full bg-primary transition-all duration-300';
+                } else {
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-base-300 hover:bg-primary/50 transition-all duration-300';
+                }
+            });
+        };
+
+        // Actualizar estado de botones
+        const updateButtons = () => {
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage >= totalPages - 1;
+        };
+
+        // Calcular el ancho de desplazamiento
+        const getSlideWidth = () => {
+            const card = cards[0] as HTMLElement;
+            if (!card) return 0;
+            const cardWidth = card.offsetWidth;
+            const gap = window.innerWidth < 768 ? 16 : 24; // gap-4 o gap-6
+            return (cardWidth + gap) * itemsPerPage;
+        };
+
+        // Ir a una página específica
+        const goToPage = (page: number) => {
+            currentPage = Math.max(0, Math.min(page, totalPages - 1));
+            const offset = getSlideWidth() * currentPage;
+            slider.style.transform = `translateX(-${offset}px)`;
+            updateButtons();
+            updateIndicators();
+        };
+
+        // Event listeners para los botones
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                goToPage(currentPage - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages - 1) {
+                goToPage(currentPage + 1);
+            }
+        });
+
+        // Recalcular en resize
+        let resizeTimeout: ReturnType<typeof setTimeout>;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const newItemsPerPage = getItemsPerPage();
+                if (newItemsPerPage !== itemsPerPage) {
+                    itemsPerPage = newItemsPerPage;
+                    totalPages = Math.ceil(totalCards / itemsPerPage);
+                    currentPage = Math.min(currentPage, totalPages - 1);
+                    createIndicators();
+                    goToPage(currentPage);
+                }
+            }, 150);
+        });
+
+        // Inicializar
+        createIndicators();
+        updateButtons();
+    });
+</script>
