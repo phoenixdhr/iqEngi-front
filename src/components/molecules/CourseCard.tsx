@@ -5,6 +5,10 @@ interface CourseCardProps extends Partial<Curso> {
   className?: string;
 }
 
+// Componente: CourseCard
+// Descripción: Tarjeta que muestra el resumen de un curso (imagen, título, precio, etc.)
+// Se utiliza en los listados de cursos y en la página principal.
+
 export const CourseCard: React.FC<CourseCardProps> = ({
   courseTitle,
   imagenURL,
@@ -15,10 +19,11 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   duracionHoras,
   currency = 'USD'
 }) => {
+  // Calcular el precio actual y el precio original (si hay descuento)
   const currentPrice = precio || 0;
   const originalPrice = descuento ? currentPrice / (1 - (descuento / 100)) : null;
   
-  // Formatter for currency
+  // Formateador de moneda (USD por defecto)
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -30,7 +35,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
 
   return (
     <div className="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col group overflow-hidden border border-base-200">
-      {/* Image Section with Overlay Bands for Price/Discount */}
+      {/* Sección principal: Imagen del curso y superposiciones (precios y descuentos) */}
       <a href={`/cursos/${slug}`} className="block relative aspect-video overflow-hidden">
         <figure className="w-full h-full">
             <img
@@ -41,14 +46,14 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
             
-            {/* Discount Badge (Top Right) */}
+            {/* Badge de Descuento (Esquina superior derecha) */}
             {descuento && descuento > 0 && (
             <div className="absolute top-3 right-3 bg-red-500 text-white font-bold px-3 py-1 rounded-full text-sm shadow-md animate-pulse">
                 -{descuento}% OFF
             </div>
             )}
 
-            {/* Price Band (Bottom) */}
+            {/* Banda inferior con el precio (Gradiente oscuro para legibilidad) */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12 flex items-end justify-end text-white">
                 
                 <div className="flex flex-col items-end">
@@ -65,7 +70,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         </figure>
       </a>
 
-      {/* Content Section */}
+      {/* Sección de Contenido: Título, metadatos y botones */}
       <div className="card-body p-5 flex flex-col flex-grow gap-2">
         <div className="flex justify-between items-start gap-2">
              <a href={`/cursos/${slug}`} className="hover:text-primary transition-colors">
@@ -76,7 +81,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         </div>
        
 
-        {/* Duration & Metadata */}
+        {/* Duración y otros metadatos */}
         <div className="flex items-center gap-4 text-xs text-base-content/70 mt-1">
             {duracionHoras && (
                  <div className="flex items-center gap-1">
@@ -87,14 +92,14 @@ export const CourseCard: React.FC<CourseCardProps> = ({
                 </div>
             )}
            
-           {/* Add more metadata icons here if needed (e.g. lessons count) */}
+           {/* Aquí se pueden agregar más metadatos (ej. número de lecciones) */}
         </div>
 
         <p className="text-sm text-base-content/80 line-clamp-2 mt-2 flex-grow">
           {descripcionCorta}
         </p>
         
-        {/* Actions */}
+        {/* Botones de Acción: Ver Detalles y Comprar */}
         <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-base-200">
              <a 
             href={`/cursos/${slug}`} 
@@ -103,7 +108,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             Ver Detalles
           </a>
           <button className="btn btn-primary h-10 min-h-[40px] text-white shadow-md shadow-primary/20 hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:shadow-lg hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.03] uppercase font-bold tracking-wide rounded-xl transition-all duration-300">
-            Inscribirme
+            Comprar
           </button>
         </div>
       </div>
