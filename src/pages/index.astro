@@ -2,15 +2,33 @@
 import { getHomeJsonLd } from '@utils/jsonld.ts';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import CursosBannerIndex from '@components/sections/CursosBanner-index.astro';
+import CoursesTestimonials from '@components/sections/CoursesTestimonials.astro';
 import Hero from '@components/home/Hero';
+import WhyChooseUs from '@components/home/WhyChooseUs';
+
+import HowItWorks from '@components/home/HowItWorks';
+import NewsletterCTA from '@components/home/NewsletterCTA';
 
 const tituloPagina = 'IqEngi | Home';
-
 const homeJsonLd = getHomeJsonLd();
 ---
 
 <LayoutSeo tituloPagina={tituloPagina} seoJsonLd={homeJsonLd} fluid={true}>
-    <!-- <Welcome /> -->
+    <!-- Hero Principal con animaciones de entrada -->
     <Hero client:idle />
+    
+    <!-- Sección: Por qué elegirnos (beneficios) -->
+    <WhyChooseUs client:visible />
+    
+    <!-- Sección: Cómo funciona (timeline) -->
+    <HowItWorks client:visible />
+    
+    <!-- Sección: Cursos Recomendados (existente) -->
     <CursosBannerIndex />
+    
+    <!-- Sección: Testimonios de estudiantes -->
+    <CoursesTestimonials />
+    
+    <!-- Sección: Newsletter CTA -->
+    <NewsletterCTA client:visible />
 </LayoutSeo>
