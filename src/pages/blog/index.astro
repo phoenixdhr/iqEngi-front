@@ -66,13 +66,16 @@ const blogPostsJsonLd = getBlogJsonLd();
         {featuredPost && (
             <div class="mb-16">
                 <article class="card lg:card-side bg-base-100 shadow-xl overflow-hidden border border-base-200 group hover:shadow-2xl transition-all duration-300">
-                    <figure class="lg:w-7/12 relative overflow-hidden aspect-video lg:aspect-auto h-full min-h-[300px] lg:min-h-[450px]">
-                        <img 
-                            src={featuredPost.data.image || '/images/placeholder-image.png'} 
-                            alt={featuredPost.data.title}
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div class="absolute inset-0 bg-gradient-to-t from-base-100/90 via-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-base-100/90"></div>
+                    <figure class="lg:w-7/12 relative overflow-hidden">
+                        <!-- Contenedor con ratio fijo para la imagen -->
+                        <div class="w-full h-full min-h-[350px] lg:min-h-[500px]">
+                            <img 
+                                src={featuredPost.data.image || '/images/placeholder-image.png'} 
+                                alt={featuredPost.data.title}
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-base-100/90 via-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-base-100/95"></div>
                         <div class="absolute top-4 left-4">
                             <span class="badge badge-primary badge-lg shadow-lg font-bold">Destacado</span>
                         </div>
@@ -95,8 +98,14 @@ const blogPostsJsonLd = getBlogJsonLd();
                         </p>
                         
                         <div class="flex items-center gap-4 mt-auto">
-                            <a href={`/blog/${featuredPost.data.slug}`} class="btn btn-primary rounded-xl px-6">
+                            <a 
+                                href={`/blog/${featuredPost.data.slug}`} 
+                                class="btn btn-primary h-10 min-h-[40px] px-6 text-white shadow-md shadow-primary/20 hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:shadow-lg hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.03] rounded-xl transition-all duration-300"
+                            >
                                 Leer artículo completo
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                         </div>
                     </div>

@@ -282,11 +282,11 @@ function PostCard({ post }: { post: PostData }) {
                     {post.description}
                 </p>
 
-                {/* Botón leer más */}
+                {/* Botón leer más - Estilo consistente con branding iqEngi */}
                 <div className="card-actions justify-end mt-auto pt-4 border-t border-base-200">
                     <a
                         href={`/blog/${post.slug}`}
-                        className="btn btn-outline btn-sm w-full hover:!bg-primary hover:!border-primary hover:!text-white transition-all duration-300 group/btn"
+                        className="btn btn-primary h-10 min-h-[40px] w-full text-white shadow-md shadow-primary/20 hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:shadow-lg hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.02] rounded-xl transition-all duration-300 group/btn"
                     >
                         Leer artículo
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
