@@ -1,0 +1,150 @@
+---
+/**
+ * @fileoverview Página de Políticas de Privacidad
+ * @description Documento legal que detalla cómo se manejan los datos de los usuarios en IqEngi.
+ */
+
+import LayoutSeo from '@layouts/LayoutSeo.astro';
+
+// Metadatos de la página
+const title = 'Política de Privacidad | IqEngi';
+const description = 'Conoce nuestra política de privacidad y cómo protegemos tus datos personales en IqEngi.';
+const updatedDate = new Date().toLocaleDateString('es-ES', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+});
+---
+
+<LayoutSeo 
+    tituloPagina={title} 
+    description={description}
+    seoJsonLd={null}
+>
+    <!-- Header de la página legal -->
+    <div class="relative py-12 md:py-16 bg-base-100">
+        <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold tracking-wide border border-primary/20 mb-6">
+                Legal
+            </span>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-base-content tracking-tight mb-4">
+                Política de Privacidad
+            </h1>
+            <p class="text-lg text-base-content/70 max-w-2xl mx-auto">
+                Tu privacidad es importante para nosotros. Aprende cómo recopilamos, usamos y protegemos tu información.
+            </p>
+            <p class="text-sm text-base-content/50 mt-4">
+                Última actualización: {updatedDate}
+            </p>
+        </div>
+    </div>
+
+    <!-- Contenido Legal -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div class="bg-base-100/80 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-base-200 shadow-xl shadow-base-content/5">
+            
+            <div class="space-y-12 text-base-content/80 leading-relaxed text-lg">
+                
+                <!-- Sección 1 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">1</span>
+                        Responsable del Tratamiento
+                    </h2>
+                    <p class="mb-4">
+                        IqEngi ("nosotros", "nuestro" o "la plataforma") es el responsable del tratamiento de los datos personales que se recaban a través de este sitio web. Nos comprometemos a proteger la privacidad de nuestros usuarios y a utilizar sus datos de acuerdo con la normativa vigente de protección de datos.
+                    </p>
+                </section>
+
+                <!-- Sección 2 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">2</span>
+                        Información que Recopilamos
+                    </h2>
+                    <p class="mb-4">
+                        Podemos recopilar la siguiente información personal cuando interactúas con nuestra plataforma:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 marker:text-primary">
+                        <li><strong>Datos de identificación:</strong> Nombre completo, dirección de correo electrónico, número de teléfono.</li>
+                        <li><strong>Datos de perfil:</strong> Información profesional, intereses en cursos, historial de certificaciones.</li>
+                        <li><strong>Datos técnicos:</strong> Dirección IP, tipo de navegador, información del dispositivo y datos de uso del sitio.</li>
+                    </ul>
+                </section>
+
+                <!-- Sección 3 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">3</span>
+                        Finalidad del Tratamiento
+                    </h2>
+                    <p class="mb-4">
+                        Utilizamos tus datos personales para las siguientes finalidades:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 marker:text-primary">
+                        <li>Proporcionar y gestionar el acceso a nuestros cursos y certificaciones.</li>
+                        <li>Responder a tus consultas y solicitudes de soporte.</li>
+                        <li>Enviar información relevante sobre actualizaciones, nuevos cursos y ofertas especiales (si has dado tu consentimiento).</li>
+                        <li>Mejorar la experiencia de usuario y optimizar nuestro sitio web.</li>
+                        <li>Cumplir con nuestras obligaciones legales y fiscales.</li>
+                    </ul>
+                </section>
+
+                <!-- Sección 4 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">4</span>
+                        Protección de Datos
+                    </h2>
+                    <p class="mb-4">
+                        Implementamos medidas de seguridad técnicas y organizativas adecuadas para proteger tus datos personales contra el acceso no autorizado, la pérdida, el uso indebido o la alteración. Utilizamos cifrado SSL/TLS para asegurar la transmisión de información sensible.
+                    </p>
+                </section>
+
+                <!-- Sección 5 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">5</span>
+                        Cookies
+                    </h2>
+                    <p class="mb-4">
+                        Utilizamos cookies y tecnologías similares para mejorar la funcionalidad del sitio y analizar el tráfico. Puedes configurar tu navegador para rechazar o eliminar las cookies, aunque esto podría afectar la disponibilidad de ciertas funciones de la plataforma.
+                    </p>
+                </section>
+
+                <!-- Sección 6 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">6</span>
+                        Derechos del Usuario
+                    </h2>
+                    <p class="mb-4">
+                        Tienes derecho a acceder, rectificar, cancelar y oponerte al tratamiento de tus datos personales. También puedes solicitar la limitación del tratamiento o la portabilidad de tus datos. Para ejercer estos derechos, por favor contáctanos a través de los canales oficiales indicados en este sitio.
+                    </p>
+                </section>
+
+                <!-- Sección 7 -->
+                <section>
+                    <h2 class="text-2xl font-bold text-base-content mb-4 flex items-center gap-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">7</span>
+                        Cambios en la Política
+                    </h2>
+                    <p class="mb-4">
+                        Nos reservamos el derecho de modificar esta Política de Privacidad en cualquier momento. Cualquier cambio será publicado en esta página y la fecha de la última actualización será revisada. Te recomendamos revisar esta política periódicamente.
+                    </p>
+                </section>
+
+                <!-- Contacto -->
+                <div class="mt-16 p-6 bg-base-200/50 rounded-xl border border-base-200 text-center">
+                    <h3 class="text-lg font-bold text-base-content mb-2">¿Tienes dudas sobre tu privacidad?</h3>
+                    <p class="text-base-content/70 mb-4">Nuestro equipo está disponible para responder cualquier pregunta relacionada con el tratamiento de tus datos.</p>
+                    <a href="/contactanos" class="btn btn-primary btn-sm px-6">
+                        Contactar Soporte
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</LayoutSeo>
