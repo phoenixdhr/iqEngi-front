@@ -98,18 +98,32 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
 
     import { showElement, hideElement } from '@services/closeOpenLogin';
 
+    // Flag para evitar múltiples listeners
+    let isSetup = false;
+    let turnstileHandler: ((event: Event) => void) | null = null;
+
     function setupLoginFormListener() {
         const form = document.getElementById('login-form') as HTMLFormElement;
 
         if (!form) return;
 
+        // Evitar configurar múltiples veces
+        if (isSetup) return;
+        isSetup = true;
+
+        // Remover listener anterior si existe
+        if (turnstileHandler) {
+            window.removeEventListener('turnstile-token', turnstileHandler);
+        }
+
         // Escuchar el evento del token de Turnstile
-        window.addEventListener('turnstile-token', (event: any) => {
+        turnstileHandler = (event: Event) => {
+            const customEvent = event as CustomEvent;
             const tokenInput = document.getElementById('turnstileToken') as HTMLInputElement;
             const btnContinuar = document.getElementById('btnContinuar') as HTMLButtonElement;
             
-            if (tokenInput && event.detail.token) {
-                tokenInput.value = event.detail.token;
+            if (tokenInput && customEvent.detail?.token) {
+                tokenInput.value = customEvent.detail.token;
                 hideElement('turnstile-error');
 
                 // Habilitar botón cuando tenemos token
@@ -119,16 +133,14 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
                     btnContinuar.classList.add('hover:scale-105');
                 }
             }
-        });
+        };
+        window.addEventListener('turnstile-token', turnstileHandler);
 
-        // Eliminar listeners existentes mediante clonado del formulario
-        const newForm = form.cloneNode(true) as HTMLFormElement;
-        form.parentNode?.replaceChild(newForm, form);
-
-        newForm.addEventListener('submit', async (event: SubmitEvent) => {
+        // Manejar submit del formulario sin clonar (preserva el widget React de Turnstile)
+        form.addEventListener('submit', async (event: SubmitEvent) => {
             event.preventDefault();
 
-            // Validación de Turnstile (redundante si el botón está deshabilitado, pero seguro)
+            // Validación de Turnstile
             const tokenInput = document.getElementById('turnstileToken') as HTMLInputElement;
             const turnstileToken = tokenInput?.value;
 
@@ -167,9 +179,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
                     ) as HTMLSpanElement;
                     emailGoogleSpan.textContent = usuario.email;
 
-                    event.preventDefault();
-
-                    return; // <-- También podrías detener aquí si lo deseas
+                    return;
                 }
 
                 if (usuario) {
@@ -181,15 +191,25 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
                 hideElement('loginModalDiv');
                 showElement('btnBack');
                 showElement('loginCreatePasswordDiv');
-
-                event.preventDefault();
             }
-        });
+        }, { once: false });
     }
+
+    // Resetear flag cuando la página cambia (para SPA navigation)
+    document.addEventListener('astro:before-swap', () => {
+        isSetup = false;
+        if (turnstileHandler) {
+            window.removeEventListener('turnstile-token', turnstileHandler);
+            turnstileHandler = null;
+        }
+    });
 
     // Configurar listeners en la carga inicial
     setupLoginFormListener();
 
     // Reconfigurar listeners después de las transiciones de vista de Astro
-    document.addEventListener('astro:page-load', setupLoginFormListener);
+    document.addEventListener('astro:page-load', () => {
+        isSetup = false; // Permitir re-setup en nueva página
+        setupLoginFormListener();
+    });
 </script>

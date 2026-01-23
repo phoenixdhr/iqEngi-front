@@ -183,9 +183,14 @@ export default function FormularioContacto() {
     };
 
     return (
-        <div className="card bg-base-200 shadow-lg">
-            <div className="card-body">
-                <h2 className="card-title text-2xl mb-6">
+        <div className="bg-base-100/80 backdrop-blur-sm rounded-2xl border border-base-200 shadow-xl">
+            <div className="p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-base-content mb-6 flex items-center gap-3">
+                    <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </span>
                     Envíanos un mensaje
                 </h2>
 
@@ -355,7 +360,12 @@ export default function FormularioContacto() {
                     <div className="form-control mt-6">
                         <button
                             type="submit"
-                            className={`btn btn-primary btn-lg w-full ${formState.isSubmitting ? 'loading' : ''}`}
+                            className={`btn btn-primary btn-lg w-full rounded-full shadow-lg shadow-primary/30 
+                                hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] 
+                                hover:shadow-xl hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.02] 
+                                transition-all duration-300 gap-2
+                                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                                ${formState.isSubmitting ? 'loading' : ''}`}
                             disabled={formState.isSubmitting || !turnstileToken}
                         >
                             {formState.isSubmitting ? (
@@ -366,7 +376,7 @@ export default function FormularioContacto() {
                             ) : (
                                 <>
                                     <svg
-                                        className="w-5 h-5 mr-2"
+                                        className="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
