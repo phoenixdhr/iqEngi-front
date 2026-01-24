@@ -80,10 +80,10 @@ const Hero = () => {
                         Explorar Cursos
                     </a>
                     <a
-                        href="/comunidad"
+                        href="/blog"
                         className="btn btn-ghost btn-lg min-w-[160px] rounded-full hover:bg-[var(--color-surface-2)]"
                     >
-                        Unirse a la Comunidad
+                        Ir a Artículos
                     </a>
                 </motion.div>
             </motion.div>

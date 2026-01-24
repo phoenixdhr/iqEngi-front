@@ -41,7 +41,7 @@ const NewsletterCTA = () => {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--color-text)]"
             >
-                Mantente al día con las <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)]">últimas novedades</span>
+                Suscríbete a nuestro <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)]"> Newsletter</span>
             </motion.h2>
             <motion.p 
                 initial={{ opacity: 0, y: 10 }}
