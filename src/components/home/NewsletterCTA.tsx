@@ -1,21 +1,51 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNewsletter_SubscribeMutation, NewsletterSource } from '@graphql-astro/generated/graphql';
+import { ApolloProvider } from '@apollo/client';
+import { clientGql } from '@graphql-astro/apolloClient';
 
-const NewsletterCTA = () => {
+// Componente interno que maneja la lógica de suscripción y UI.
+// Separamos este componente para poder envolverlo con el ApolloProvider definido abajo.
+const NewsletterCTAContent = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [subscribe, { loading }] = useNewsletter_SubscribeMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    setMessage('');
     
-    // Simulate API call
-    setTimeout(() => {
-      setStatus('success');
-      setEmail('');
-      setTimeout(() => setStatus('idle'), 3000);
-    }, 1500);
+    try {
+      const { data } = await subscribe({
+        variables: {
+          input: {
+            email: email,
+            source: NewsletterSource.WebFooter
+          }
+        }
+      });
+
+      if (data?.Newsletter_subscribe?.success) {
+        setStatus('success');
+        setMessage(data.Newsletter_subscribe.message || '¡Te has suscrito correctamente!');
+        setEmail('');
+        setTimeout(() => {
+           setStatus('idle');
+           setMessage('');
+        }, 5000);
+      } else {
+        setStatus('error');
+        setMessage(data?.Newsletter_subscribe?.message || 'Ocurrió un error al suscribirse.');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setStatus('error');
+      setMessage(err.message || 'Error de conexión. Inténtalo de nuevo.');
+    }
   };
 
   return (
@@ -69,15 +99,15 @@ const NewsletterCTA = () => {
                         placeholder="tucorreo@ejemplo.com" 
                         className="input input-lg w-full rounded-full bg-[var(--color-surface-2)] border border-[var(--color-border)] text-[var(--color-text)] placeholder-[var(--color-text-muted)]/60 focus:border-[var(--color-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--color-primary)]/10 shadow-lg pl-6 transition-all duration-300" 
                         required 
-                        disabled={status === 'loading' || status === 'success'}
+                        disabled={loading || status === 'success'}
                     />
                 </div>
                 <button 
                     type="submit" 
-                    disabled={status === 'loading' || status === 'success'}
+                    disabled={loading || status === 'success'}
                     className="btn btn-lg rounded-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white border-none hover:shadow-lg hover:shadow-[var(--color-primary)]/20 hover:scale-105 transition-all duration-300 min-w-[160px]"
                 >
-                    {status === 'loading' ? (
+                    {loading ? (
                         <span className="loading loading-spinner loading-sm text-white"></span>
                     ) : status === 'success' ? (
                         '¡Suscrito!'
@@ -87,6 +117,16 @@ const NewsletterCTA = () => {
                 </button>
             </motion.form>
             
+            {message && (
+                <motion.p
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`text-sm mt-4 font-medium ${status === 'success' ? 'text-green-500' : 'text-red-500'}`}
+                >
+                    {message}
+                </motion.p>
+            )}
+
             <motion.p 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -105,5 +145,14 @@ const NewsletterCTA = () => {
     </section>
   );
 };
+
+// Componente principal exportado.
+// Envuelve el contenido en ApolloProvider para proveer el contexto del cliente GraphQL.
+// Esto es necesario en Astro cuando se usan hooks de Apollo en componentes React hidratados (islas).
+const NewsletterCTA = () => (
+    <ApolloProvider client={clientGql}>
+        <NewsletterCTAContent />
+    </ApolloProvider>
+);
 
 export default NewsletterCTA;

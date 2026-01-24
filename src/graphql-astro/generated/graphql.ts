@@ -2913,6 +2913,13 @@ export type Newsletter_CountActiveQueryVariables = Exact<{ [key: string]: never;
 
 export type Newsletter_CountActiveQuery = { __typename?: 'Query', Newsletter_countActive: number };
 
+export type SubscribeToNewsletterMutationVariables = Exact<{
+  input: CreateSubscriberInput;
+}>;
+
+
+export type SubscribeToNewsletterMutation = { __typename?: 'Mutation', Newsletter_subscribe: { __typename?: 'SubscriptionResponseOutput', success: boolean, message: string } };
+
 
 export const ExampleQueryDocument = gql`
     query ExampleQuery($usuarioId: ID!) {
@@ -10249,3 +10256,37 @@ export type Newsletter_CountActiveQueryHookResult = ReturnType<typeof useNewslet
 export type Newsletter_CountActiveLazyQueryHookResult = ReturnType<typeof useNewsletter_CountActiveLazyQuery>;
 export type Newsletter_CountActiveSuspenseQueryHookResult = ReturnType<typeof useNewsletter_CountActiveSuspenseQuery>;
 export type Newsletter_CountActiveQueryResult = Apollo.QueryResult<Newsletter_CountActiveQuery, Newsletter_CountActiveQueryVariables>;
+export const SubscribeToNewsletterDocument = gql`
+    mutation SubscribeToNewsletter($input: CreateSubscriberInput!) {
+  Newsletter_subscribe(input: $input) {
+    success
+    message
+  }
+}
+    `;
+export type SubscribeToNewsletterMutationFn = Apollo.MutationFunction<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>;
+
+/**
+ * __useSubscribeToNewsletterMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToNewsletterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToNewsletterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToNewsletterMutation, { data, loading, error }] = useSubscribeToNewsletterMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSubscribeToNewsletterMutation(baseOptions?: Apollo.MutationHookOptions<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>(SubscribeToNewsletterDocument, options);
+      }
+export type SubscribeToNewsletterMutationHookResult = ReturnType<typeof useSubscribeToNewsletterMutation>;
+export type SubscribeToNewsletterMutationResult = Apollo.MutationResult<SubscribeToNewsletterMutation>;
+export type SubscribeToNewsletterMutationOptions = Apollo.BaseMutationOptions<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>;
