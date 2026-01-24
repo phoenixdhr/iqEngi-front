@@ -11,6 +11,7 @@ Esta regla define el stack tecnológico, gestión de estado y convenciones de c�
 - **UI Library:** React v19.
 - **Styling:** TailwindCSS v4 + DaisyUI v5.
 - **Data:** Apollo Client v3 + GraphQL Codegen.
+- **Component Syntax:** Usar SIEMPRE **Function Declarations** (`function Component() {}`) en lugar de Arrow Functions para componentes React.
 
 ## 2. Gestión de Estado (State Management)
 - **Estado Global:** ⛔ NO USAR librerías externas (Zustand, Redux, Nano Stores).

@@ -26,19 +26,21 @@ import { clientGql } from '@graphql-astro/apolloClient';
 import { useSomeQuery } from '@graphql-astro/generated/graphql';
 
 // 1. Inner component with the logic/hooks
-const MyComponentContent = () => {
+function MyComponentContent() {
     const { data, loading } = useSomeQuery();
     
     if (loading) return <div>Loading...</div>;
     return <div>{data?.someField}</div>;
-};
+}
 
 // 2. Exported component wrapped with provider
-const MyComponent = () => (
-    <ApolloProvider client={clientGql}>
-        <MyComponentContent />
-    </ApolloProvider>
-);
+function MyComponent() {
+    return (
+        <ApolloProvider client={clientGql}>
+            <MyComponentContent />
+        </ApolloProvider>
+    );
+}
 
 export default MyComponent;
 ```

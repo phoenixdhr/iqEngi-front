@@ -7,19 +7,22 @@ import { clientGql } from '@graphql-astro/apolloClient';
 
 // Componente interno que maneja la lógica de suscripción y UI.
 // Separamos este componente para poder envolverlo con el ApolloProvider definido abajo.
-const NewsletterCTAContent = () => {
+function NewsletterCTAContent() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
+  // Hook generado por codegen para ejecutar la mutación de suscripción
   const [subscribe, { loading }] = useNewsletter_SubscribeMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Iniciamos el estado de carga y limpiamos mensajes anteriores
     setStatus('loading');
     setMessage('');
     
     try {
+      // Ejecutamos la mutación enviando el email y la fuente
       const { data } = await subscribe({
         variables: {
           input: {
@@ -29,19 +32,24 @@ const NewsletterCTAContent = () => {
         }
       });
 
+      // Validamos la respuesta exitosa del backend
       if (data?.Newsletter_subscribe?.success) {
         setStatus('success');
         setMessage(data.Newsletter_subscribe.message || '¡Te has suscrito correctamente!');
         setEmail('');
+        
+        // Reseteamos el estado visual después de 5 segundos
         setTimeout(() => {
            setStatus('idle');
            setMessage('');
         }, 5000);
       } else {
+        // Manejo de errores controlados por el backend (ej. email duplicado)
         setStatus('error');
         setMessage(data?.Newsletter_subscribe?.message || 'Ocurrió un error al suscribirse.');
       }
     } catch (err: any) {
+      // Manejo de errores de red o excepciones
       console.error(err);
       setStatus('error');
       setMessage(err.message || 'Error de conexión. Inténtalo de nuevo.');
@@ -149,10 +157,12 @@ const NewsletterCTAContent = () => {
 // Componente principal exportado.
 // Envuelve el contenido en ApolloProvider para proveer el contexto del cliente GraphQL.
 // Esto es necesario en Astro cuando se usan hooks de Apollo en componentes React hidratados (islas).
-const NewsletterCTA = () => (
-    <ApolloProvider client={clientGql}>
-        <NewsletterCTAContent />
-    </ApolloProvider>
-);
+function NewsletterCTA() {
+    return (
+        <ApolloProvider client={clientGql}>
+            <NewsletterCTAContent />
+        </ApolloProvider>
+    );
+}
 
 export default NewsletterCTA;
