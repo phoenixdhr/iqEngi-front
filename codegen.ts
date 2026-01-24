@@ -4,8 +4,8 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true, // Sobrescribe los archivos generados en cada ejecución
 
-  schema: "https://iqengi-backend-production.up.railway.app/graphql", // URL del backend GraphQL
-
+  schema: "http://localhost:3000/graphql", // URL del backend GraphQL
+  // schema: "https://iqengi-backend-production.up.railway.app/graphql", // URL del backend GraphQL
 
   documents: "src/graphql-astro/**/*.graphql", // Busca todas las queries en la carpeta graphql
 

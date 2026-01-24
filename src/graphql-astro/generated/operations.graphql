@@ -256,16 +256,6 @@ query Categorias_findSoftDeleted {
   }
 }
 
-# Operation 32776691-64d0-4671-bef6-b7435f502119
-mutation Categorias_restore($idRestore: ID!) {
-  Categorias_restore(idRestore: $idRestore) {
-    _id
-    nombreCategoria
-    descripcion
-    deleted
-  }
-}
-
 # Operation ddc3c01e-30d9-4934-ba96-80659187d027
 query Categorias_findAllByNombre($search: String) {
   Categorias_findAllByNombre(search: $search) {
@@ -673,36 +663,6 @@ query Cuestionario_findByCursoId($cursoId: ID!) {
   }
 }
 
-# Operation dd4ce030-9f0c-49ee-a10b-f10bac892736
-query Cuestionario_findByCursoId($cursoId: ID!) {
-  Cuestionario_findByCursoId(cursoId: $cursoId) {
-    _id
-    cursoId
-    cuestionarioTitle
-    descripcion
-    preguntas {
-      _id
-      enunciado
-      tipoPregunta
-      opciones {
-        _id
-        textOpcion
-        esCorrecta
-        orden
-        deleted
-      }
-      moduloId
-      unidadId
-      deleted
-    }
-    published
-        notaMaxima
-    notaMinimaAprobar
-    fechaCreacion
-    deleted
-  }
-}
-
 # Operation 0224c569-3430-46e4-9c0c-2106e7d3a041
 mutation CursoComprado_create($createCursoCompradoInput: CreateCursoComprado_userInput!) {
   CursoComprado_create(createCursoCompradoInput: $createCursoCompradoInput) {
@@ -912,39 +872,13 @@ mutation Mutation($createCursoInput: CreateCursoInput!) {
 query Cursos($offset: Int, $limit: Int) {
   Cursos(offset: $offset, limit: $limit) {
     _id
-    courseTitle
-    descripcionCorta
-    descripcionLarga
-    nivel
+    courseTitle,
     instructor {
-      _id
-    }
-    duracionHoras
+      firstName
+    },
     imagenURL {
       url
       alt
-    }
-    precio
-    currency
-    descuento
-    calificacionPromedio
-    numeroCalificaciones
-    aprenderas
-    objetivos
-    dirigidoA
-    modulosIds
-    fechaLanzamiento
-
-    cuestionarioId {
-      _id
-    }
-    slug
-    deleted
-    categorias {
-      _id
-      nombreCategoria
-      descripcion
-
     }
   }
 }
@@ -954,10 +888,6 @@ query Curso($cursoId: ID!) {
   Curso(id: $cursoId) {
     _id
     courseTitle
-    categorias {
-      _id
-      nombreCategoria
-    }
     descripcionCorta
     descripcionLarga
     nivel
@@ -965,9 +895,9 @@ query Curso($cursoId: ID!) {
       firstName
     }
     duracionHoras
-    imagenURL{
-      url
+     imagenURL {
       alt
+      url
     }
     precio
     currency
@@ -1069,30 +999,6 @@ mutation Curso_hardDelete($cursoHardDeleteId: ID!) {
   Curso_hardDelete(id: $cursoHardDeleteId) {
     courseTitle
     _id
-  }
-}
-
-# Mutation para agregar categorias
-mutation Curso_addCategorias($cursoId: ID!, $categoriaIds: [ID!]!) {
-  Curso_addCategorias(cursoId: $cursoId, categoriaIds: $categoriaIds) {
-    _id
-    courseTitle
-    categorias {
-      _id
-      nombreCategoria
-    }
-  }
-}
-
-# Mutation para remover categorias
-mutation Curso_removeCategorias($cursoId: ID!, $categoriaIds: [ID!]!) {
-  Curso_removeCategorias(cursoId: $cursoId, categoriaIds: $categoriaIds) {
-    _id
-    courseTitle
-    categorias {
-      _id
-      nombreCategoria
-    }
   }
 }
 
@@ -2642,5 +2548,41 @@ mutation Jwt_updatePassword($updatePasswordInput: UpdatePasswordInput!) {
     status
     deleted
   }
+}
+
+# Operation a1b2c3d4-newsletter-subscribe-001
+mutation Newsletter_subscribe($input: CreateSubscriberInput!) {
+  Newsletter_subscribe(input: $input) {
+    success
+    message
+    email
+  }
+}
+
+# Operation a1b2c3d4-newsletter-unsubscribe-002
+mutation Newsletter_unsubscribe($email: String!) {
+  Newsletter_unsubscribe(email: $email) {
+    success
+    message
+    email
+  }
+}
+
+# Operation a1b2c3d4-newsletter-allactive-003
+query Newsletter_allActive {
+  Newsletter_allActive {
+    _id
+    email
+    name
+    isActive
+    source
+    createdAt
+    updatedAt
+  }
+}
+
+# Operation a1b2c3d4-newsletter-countactive-004
+query Newsletter_countActive {
+  Newsletter_countActive
 }
 
