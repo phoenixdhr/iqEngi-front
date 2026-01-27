@@ -872,13 +872,25 @@ mutation Mutation($createCursoInput: CreateCursoInput!) {
 query Cursos($offset: Int, $limit: Int) {
   Cursos(offset: $offset, limit: $limit) {
     _id
-    courseTitle,
+    courseTitle
+    slug
+    descripcionCorta
+    precio
+    descuento
+    duracionHoras
+    currency
     instructor {
       firstName
-    },
+      lastName
+      profesion
+    }
     imagenURL {
       url
       alt
+    }
+    categorias {
+      _id
+      nombreCategoria
     }
   }
 }
