@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client/core';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -5442,6 +5442,7 @@ export const CursosDocument = gql`
       url
       alt
     }
+    urlVideo
     precio
     currency
     descuento
