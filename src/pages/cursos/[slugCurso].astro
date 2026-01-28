@@ -66,6 +66,23 @@ const {
     urlVideo,
 } = curso;
 
+// Helper para extraer ID de YouTube
+const getYouTubeId = (url: string | null | undefined) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = (url as string).match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+};
+
+const videoId = getYouTubeId(urlVideo);
+const thumbnailUrl = videoId 
+    ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` 
+    : (imagenURL?.url || '/placeholder-course.jpg');
+
+const embedUrl = videoId 
+    ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` 
+    : null;
+
 // Calcular precios
 const currentPrice = precio || 0;
 const originalPrice = descuento && descuento > 0 ? currentPrice / (1 - (descuento / 100)) : null;
@@ -228,104 +245,34 @@ const courseJsonLd = getCourseJsonLd(curso);
                                 </div>
                             </div>
                         )}
-                    </div>
 
-                    <!-- Tarjeta de Precio (Visible solo en Desktop) -->
-                    <div class="hidden lg:block">
-                        <div class="bg-base-100 rounded-2xl shadow-2xl p-6 border border-base-200 space-y-4">
-                            <!-- Precio y Descuento -->
-                            <div class="text-center">
-                                {originalPrice && (
-                                    <p class="text-base-content/50 line-through text-lg">
-                                        {formatPrice(originalPrice)}
-                                    </p>
-                                )}
-                                <p class="text-4xl font-extrabold text-primary">
-                                    {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
-                                </p>
-                                {descuento && descuento > 0 && (
-                                    <p class="text-sm text-success font-semibold mt-1">
-                                        ¡Ahorras {formatPrice(originalPrice! - currentPrice)}!
-                                    </p>
-                                )}
-                            </div>
-
-                            <!-- Botón de Acción Principal (CTA) -->
-                            <button class="btn btn-primary btn-lg w-full text-white font-bold text-lg shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300 rounded-xl">
-                                🛒 Comprar Ahora
-                            </button>
-                            
-                            <!-- Botón Ver Trailer -->
-                            {urlVideo ? (
-                                <button onclick="document.getElementById('video_modal').showModal()" class="btn btn-outline btn-lg w-full font-bold text-lg border-2 hover:bg-base-content hover:text-base-100 hover:border-base-content transition-all duration-300 rounded-xl group">
-                                    <span class="mr-2 group-hover:scale-110 transition-transform">🎥</span> Ver Trailer
-                                </button>
-                            ) : (
-                                <div class="p-4 rounded-xl bg-base-200/50 border border-base-200 text-center">
-                                    <p class="text-sm text-base-content/60 font-medium">⚠️ Este curso no tiene video promocional asignado.</p>
+                        <!-- Mobile Video Thumbnail (Visible solo en Móvil) -->
+                        <div class="lg:hidden mt-8">
+                             {urlVideo && (
+                                <div 
+                                    class="relative aspect-video w-full cursor-pointer group overflow-hidden bg-black rounded-xl shadow-lg border border-white/10"
+                                    onclick={`openVideoModal('${embedUrl}')`}
+                                >
+                                    <img 
+                                        src={thumbnailUrl} 
+                                        alt={`Trailer de ${courseTitle}`}
+                                        class="w-full h-full object-cover opacity-90 group-hover:opacity-80 transition-opacity duration-300"
+                                    />
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl border border-white/30">
+                                            <div class="w-0 h-0 border-t-[8px] border-t-transparent border-l-[14px] border-l-white border-b-[8px] border-b-transparent ml-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent text-center">
+                                        <span class="text-white font-medium text-xs drop-shadow-md tracking-wide">
+                                            Ver Trailer
+                                        </span>
+                                    </div>
                                 </div>
                             )}
-
-                            <!-- Lista de Características Incluidas -->
-                            <div class="space-y-3 pt-4 border-t border-base-200">
-                                <p class="text-sm font-semibold text-base-content/80">Este curso incluye:</p>
-                                <ul class="space-y-2 text-sm text-base-content/70">
-                                    {duracionHoras && (
-                                        <li class="flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            {duracionHoras} horas de contenido
-                                        </li>
-                                    )}
-                                    {modulosIds && modulosIds.length > 0 && (
-                                        <li class="flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                                            </svg>
-                                            {modulosIds.length} módulos
-                                        </li>
-                                    )}
-                                    {totalUnidades > 0 && (
-                                        <li class="flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            {totalUnidades} lecciones
-                                        </li>
-                                    )}
-                                    <li class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                        Acceso de por vida
-                                    </li>
-                                    <li class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                                        </svg>
-                                        Certificado de finalización
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Botón de Agregar a Favoritos -->
-                            <button
-                                id="btn-favorito"
-                                class="btn btn-outline btn-sm w-full gap-2 rounded-xl"
-                                data-id={_id}
-                                data-coursetitle={courseTitle}
-                                data-imagenURL={JSON.stringify(imagenURL)}
-                                data-descripcioncorta={descripcionCorta}
-                                data-slug={slug}
-                            >
-                                <Icon name="heart-line" id={`heart-line-${_id}`} class="w-5 h-5" />
-                                <Icon name="heart-full" id={`heart-full-${_id}`} class="w-5 h-5 hidden text-red-500" />
-                                Agregar a Favoritos
-                            </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -567,8 +514,117 @@ const courseJsonLd = getCourseJsonLd(curso);
                 </div>
 
                 <!-- Barra Lateral Pegajosa (Sticky Sidebar) - Visible solo en Desktop -->
-                <div class="hidden lg:block">
-                    <div class="sticky top-24 space-y-6">
+                <div class="hidden lg:block relative z-30">
+                    <div class="sticky top-28 space-y-6">
+                        <!-- Tarjeta de Precio MOVED from Hero (Sticky with visual overlap) -->
+                        <div class="bg-base-100 rounded-2xl shadow-2xl border border-base-200 overflow-hidden relative -mt-[32rem]">
+                            <!-- Video Thumbnail Header (Si existe video) -->
+                            {urlVideo && (
+                                <div 
+                                    class="relative aspect-video w-full cursor-pointer group overflow-hidden bg-black"
+                                    onclick={`openVideoModal('${embedUrl}')`}
+                                >
+                                    <img 
+                                        src={thumbnailUrl} 
+                                        alt={`Trailer de ${courseTitle}`}
+                                        class="w-full h-full object-cover opacity-90 group-hover:opacity-60 transition-opacity duration-300"
+                                    />
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-xl border border-white/30">
+                                            <div class="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent text-center">
+                                        <span class="text-white font-medium text-sm drop-shadow-md tracking-wide">
+                                            Ver Trailer del Curso
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div class="p-6 space-y-4">
+                                <!-- Precio y Descuento -->
+                                <div class="text-center">
+                                    {originalPrice && (
+                                        <p class="text-base-content/50 line-through text-lg">
+                                            {formatPrice(originalPrice)}
+                                        </p>
+                                    )}
+                                    <p class="text-4xl font-extrabold text-primary">
+                                        {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
+                                    </p>
+                                    {descuento && descuento > 0 && (
+                                        <p class="text-sm text-success font-semibold mt-1">
+                                            ¡Ahorras {formatPrice(originalPrice! - currentPrice)}!
+                                        </p>
+                                    )}
+                                </div>
+
+                                <!-- Botón de Acción Principal (CTA) -->
+                                <button class="btn btn-primary btn-lg w-full text-white font-bold text-lg shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300 rounded-xl">
+                                    🛒 Comprar Ahora
+                                </button>
+                                
+                                <!-- Lista de Características Incluidas -->
+                            <div class="space-y-3 pt-4 border-t border-base-200">
+                                <p class="text-sm font-semibold text-base-content/80">Este curso incluye:</p>
+                                <ul class="space-y-2 text-sm text-base-content/70">
+                                    {duracionHoras && (
+                                        <li class="flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            {duracionHoras} horas de contenido
+                                        </li>
+                                    )}
+                                    {modulosIds && modulosIds.length > 0 && (
+                                        <li class="flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                            </svg>
+                                            {modulosIds.length} módulos
+                                        </li>
+                                    )}
+                                    {totalUnidades > 0 && (
+                                        <li class="flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            {totalUnidades} lecciones
+                                        </li>
+                                    )}
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                        Acceso de por vida
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                        </svg>
+                                        Certificado de finalización
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Botón de Agregar a Favoritos -->
+                            <button
+                                id="btn-favorito"
+                                class="btn btn-outline btn-sm w-full gap-2 rounded-xl"
+                                data-id={_id}
+                                data-coursetitle={courseTitle}
+                                data-imagenURL={JSON.stringify(imagenURL)}
+                                data-descripcioncorta={descripcionCorta}
+                                data-slug={slug}
+                            >
+                                <Icon name="heart-line" id={`heart-line-${_id}`} class="w-5 h-5" />
+                                <Icon name="heart-full" id={`heart-full-${_id}`} class="w-5 h-5 hidden text-red-500" />
+                                Agregar a Favoritos
+                            </button>
+                        </div>
+                    </div>
                         <!-- Sección de Compartir en Redes Sociales -->
                         <div class="bg-base-100 rounded-2xl shadow-lg p-6 border border-base-200">
                             <h3 class="font-semibold text-base-content mb-4">Compartir este curso</h3>
@@ -647,41 +703,69 @@ const courseJsonLd = getCourseJsonLd(curso);
     </section>
 
     <!-- Video Modal -->
-    {urlVideo && (
-        <dialog id="video_modal" class="modal backdrop-blur-md">
-            <div class="modal-box w-11/12 max-w-5xl bg-black/90 text-white p-0 overflow-hidden relative shadow-2xl shadow-primary/20 border border-white/10 rounded-2xl">
-                <form method="dialog">
-                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-50 text-white/70 hover:text-white hover:bg-white/20">✕</button>
-                </form>
-                <div class="aspect-video w-full">
-                    {urlVideo.includes('youtube.com') || urlVideo.includes('youtu.be') ? (
-                         <iframe 
-                            width="100%" 
-                            height="100%" 
-                            src={`https://www.youtube.com/embed/${urlVideo.includes('v=') ? urlVideo.split('v=')[1].split('&')[0] : urlVideo.split('/').pop()?.split('?')[0]}`} 
-                            title="YouTube video player" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen
-                        ></iframe>
-                    ) : (
-                        <video controls class="w-full h-full">
-                            <source src={urlVideo} type="video/mp4" />
-                            Tu navegador no soporta el elemento de video.
-                        </video>
-                    )}
-                </div>
+    <!-- Video Modal -->
+    <dialog id="video_modal" class="modal modal-middle backdrop-blur-sm">
+        <div class="modal-box w-11/12 max-w-7xl bg-black p-0 overflow-hidden relative shadow-2xl rounded-2xl border border-white/10">
+            <div class="relative pt-[56.25%] bg-black">
+                <iframe 
+                    id="video_iframe"
+                    class="absolute top-0 left-0 w-full h-full"
+                    src="" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen
+                ></iframe>
             </div>
-            <form method="dialog" class="modal-backdrop">
-                <button>close</button>
+             <form method="dialog">
+                <button class="absolute top-4 right-4 text-white/50 hover:text-white bg-black/50 hover:bg-black/80 rounded-full p-2 transition-colors z-50">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </form>
-        </dialog>
-    )}
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button class="cursor-default">close</button>
+        </form>
+    </dialog>
+
+
 </LayoutSeo>
 
 <script>
     import { FAVORITOS_CURSOS } from '@const/const-string';
     import type { CursoFavorito } from 'src/interfaces/cursoFavorito.interface';
+
+    // Video Modal Logic
+    (window as any).openVideoModal = (videoUrl: string) => {
+        if (!videoUrl) return;
+        const modal = document.getElementById('video_modal');
+        const iframe = document.getElementById('video_iframe');
+        if (modal && iframe) {
+            const finalUrl = videoUrl.includes('?') ? `${videoUrl}&autoplay=1` : `${videoUrl}?autoplay=1`;
+            (iframe as any).src = finalUrl;
+            (modal as any).showModal();
+        }
+    };
+
+    function setupVideoModal() {
+        const modal = document.getElementById('video_modal');
+        const iframe = document.getElementById('video_iframe');
+        
+        if (modal && iframe) {
+            (modal as any).onclose = () => {
+                (iframe as any).src = '';
+            };
+            
+            // Explicit backdrop click handler
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    (modal as any).close();
+                }
+            });
+        }
+    }
+    
+    document.addEventListener('astro:page-load', setupVideoModal);
 
     // Maneja la lógica de favoritos: guardar en localStorage y actualizar la UI
     function handleFavoritos() {

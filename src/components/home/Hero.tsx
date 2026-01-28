@@ -81,7 +81,7 @@ const Hero = () => {
                     </a>
                     <a
                         href="/blog"
-                        className="btn btn-ghost btn-lg min-w-[160px] rounded-full hover:bg-[var(--color-surface-2)]"
+                        className="btn btn-outline btn-lg min-w-[160px] rounded-full hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:text-white hover:scale-105 transition-all duration-300"
                     >
                         Ir a Artículos
                     </a>
