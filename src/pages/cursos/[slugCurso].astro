@@ -142,37 +142,17 @@ const courseJsonLd = getCourseJsonLd(curso);
                     <!-- Course Info -->
                     <div class="lg:col-span-2 text-white space-y-4">
                         <!-- Breadcrumb & Back -->
-                        <nav class="flex items-center gap-2 text-sm text-white/70 mb-4">
-                            <a href="/cursos" class="hover:text-white transition-colors">Cursos</a>
-                            <span>/</span>
-                            <span class="text-white/90 truncate max-w-xs">{courseTitle}</span>
-                        </nav>
+
 
                         <!-- Badges -->
-                        <div class="flex flex-wrap gap-2">
-                            {categorias && categorias.length > 0 && (
-                                <span class="px-3 py-1 rounded-full bg-primary/20 text-primary-content text-xs font-semibold border border-primary/30">
-                                    {categorias[0].nombreCategoria}
-                                </span>
-                            )}
-                            {nivel && (
-                                <span class="px-3 py-1 rounded-full bg-secondary/20 text-secondary-content text-xs font-semibold border border-secondary/30">
-                                    📊 {nivelTexto[nivel] || nivel}
-                                </span>
-                            )}
-                            {descuento && descuento > 0 && (
-                                <span class="px-3 py-1 rounded-full bg-red-500/90 text-white text-xs font-bold animate-pulse">
-                                    🔥 -{descuento}% OFF
-                                </span>
-                            )}
-                        </div>
+
 
                         <!-- Título del Curso -->
                         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">
                             {courseTitle}
                         </h1>
 
-                        </h1>
+
 
                         <!-- Descripción Corta -->
                         <p class="text-lg text-white/80 max-w-2xl">
@@ -182,22 +162,7 @@ const courseJsonLd = getCourseJsonLd(curso);
                         <!-- Fila de Estadísticas: Calificación, Duración, Módulos, Lecciones -->
                         <div class="flex flex-wrap items-center gap-6 pt-2">
                             {/* Calificación (Estrellas) */}
-                            {calificacionPromedio && calificacionPromedio > 0 && (
-                                <div class="flex items-center gap-2">
-                                    <div class="flex items-center gap-0.5 text-yellow-400">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <svg
-                                                class={`w-5 h-5 ${star <= Math.round(calificacionPromedio) ? 'fill-current' : 'fill-white/30'}`}
-                                                viewBox="0 0 20 20"
-                                            >
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                        ))}
-                                    </div>
-                                    <span class="font-bold text-yellow-400">{calificacionPromedio.toFixed(1)}</span>
-                                    <span class="text-white/60 text-sm">({numeroCalificaciones} reseñas)</span>
-                                </div>
-                            )}
+
                             
                             {/* Duration */}
                             {duracionHoras && (
