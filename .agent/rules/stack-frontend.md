@@ -21,11 +21,16 @@ Esta regla define el stack tecnológico, gestión de estado y convenciones de c�
 
 ## 3. GraphQL & Data Fetching (STRICT)
 - **Definición:** ⛔ NO usar template literals (`gql` tag) dentro de archivos `.ts/tsx`.
-- **Archivos:** Crear SIEMPRE archivos `.graphql` en `src/graphql-astro/` (ej: `src/graphql-astro/courses.graphql`).
-- **Flujo de Desarrollo:**
-  1. Escribir la Query/Mutation en un archivo `.graphql`.
-  2. Ejecutar script de codegen (ej. `npm run codegen`).
-  3. Importar el **Hook Generado** en React (ej. `useGetCoursesQuery` desde `../generated/graphql`).
+- **Mantenimiento de Queries:**
+  - Las definiciones de queries y mutations residen en `src/graphql-astro/queries-text.json`.
+  - Para agregar o modificar tipos en `generated/graphql.ts`, se debe actualizar PRIMERO `src/graphql-astro/queries-text.json`.
+- **Flujo de Generación:**
+  1. Editar `src/graphql-astro/queries-text.json`.
+  2. Ejecutar `npm run codegen`.
+  3. **Corrección de Importación (CRÍTICO):** Verificar `src/graphql-astro/generated/graphql.ts`.
+     - La importación DEBE ser: `import { gql } from '@apollo/client/core';`.
+     - Si es diferente, modificarla manualmente.
+- **Consumo:** Importar los hooks/types generados en React desde `../generated/graphql`.
 
 ## 4. Estilos (Tailwind v4)
 - **Configuración:** ⛔ NO BUSCAR ni crear `tailwind.config.js`.

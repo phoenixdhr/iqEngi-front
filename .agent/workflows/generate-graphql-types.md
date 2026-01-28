@@ -31,9 +31,13 @@ npm run codegen
 > El script `graphql-generate.js` crea `src/graphql-astro/generated/operations.graphql`.
 > El comando `npm run codegen` crea `src/graphql-astro/generated/graphql.ts`.
 
-## 4. Verificar Importaciones
-
-1.  Revisa el archivo generado: `src/graphql-astro/generated/graphql.ts`.
-2.  Asegúrate de que la importación de Apollo Client sea correcta (si es necesario ajustarla manualmente, aunque `codegen.ts` debería manejarlo):
-    *   Debe ser: `import { gql } from '@apollo/client/core';` (si usas Astro/Node) o `@apollo/client` según tu entorno.
-    *   *Nota: El usuario mencionó cambiarlo a `@apollo/client/core` manualmente en su proceso.*
+## 4. Verificar y Corregir Importaciones (CRÍTICO)
+1.  **Revisión:** Abre `src/graphql-astro/generated/graphql.ts`.
+2.  **Corrección:** Busca la línea de importación de `gql`.
+    - **Incorrecto:** `import { gql } from '@apollo/client';`
+    - **CORRECTO:** `import { gql } from '@apollo/client/core';`
+3.  Si la importación es incorrecta, cámbiala manualmente o ejecuta este comando en PowerShell:
+    ```powershell
+    $file = "src/graphql-astro/generated/graphql.ts"
+    (Get-Content $file).Replace("import { gql } from '@apollo/client';", "import { gql } from '@apollo/client/core';") | Set-Content $file
+    ```
