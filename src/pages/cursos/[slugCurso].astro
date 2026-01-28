@@ -1,7 +1,7 @@
 ---
 import { clientGql } from '@graphql-astro/apolloClient';
 import '@styles/global.css';
-import { CursosDocument, type Curso, type Modulo } from '@graphql-astro/generated/graphql';
+import { CursosDocument, ModulosPorCursoDocument, type Curso, type Modulo } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
 import { Icon } from 'astro-icon/components';
@@ -24,6 +24,19 @@ try {
 } catch (error) {
     console.error('Error fetching course details:', error);
     curso = undefined;
+}
+
+let modulos: Modulo[] = [];
+if (curso && curso._id) {
+    try {
+        const { data: modulosData } = await clientGql.query({
+            query: ModulosPorCursoDocument,
+            variables: { cursoId: curso._id },
+        });
+        modulos = modulosData?.Modulo_findByCursoId || [];
+    } catch (error) {
+        console.error('Error fetching modules:', error);
+    }
 }
 
 if (!curso) {
@@ -67,7 +80,7 @@ const formatPrice = (amount: number) => {
 };
 
 // Calcular total de unidades
-const totalUnidades = modulosIds?.reduce((acc, modulo) => acc + (modulo.unidades?.length || 0), 0) || 0;
+const totalUnidades = modulos?.reduce((acc, modulo) => acc + (modulo.unidades?.length || 0), 0) || 0;
 
 // Nivel en español
 const nivelTexto: Record<string, string> = {
@@ -105,9 +118,9 @@ const courseJsonLd = getCourseJsonLd(curso);
         </div>
 
         <!-- Hero Content -->
-        <div class="relative z-10 w-full pb-12 pt-32">
+        <div class="relative z-10 w-full pb-16 pt-36">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-3 gap-8 items-end">
+                <div class="grid lg:grid-cols-3 gap-12 items-end">
                     <!-- Course Info -->
                     <div class="lg:col-span-2 text-white space-y-4">
                         <!-- Breadcrumb & Back -->
@@ -179,12 +192,12 @@ const courseJsonLd = getCourseJsonLd(curso);
                             )}
 
                             {/* Modules */}
-                            {modulosIds && modulosIds.length > 0 && (
-                                <div class="flex items-center gap-2 text-white/80">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {modulos && modulos.length > 0 && (
+                                <div class="flex items-center gap-2 text-white/90 font-medium">
+                                    <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                     </svg>
-                                    <span>{modulosIds.length} módulos</span>
+                                    <span>{modulos.length} módulos</span>
                                 </div>
                             )}
 
@@ -334,7 +347,7 @@ const courseJsonLd = getCourseJsonLd(curso);
                     
                     <!-- Lo que Aprenderás -->
                     {aprenderas && aprenderas.length > 0 && (
-                        <section class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-8 border border-primary/10">
+                        <section>
                             <h2 class="text-2xl font-bold text-base-content mb-6 flex items-center gap-3">
                                 <span class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -343,16 +356,18 @@ const courseJsonLd = getCourseJsonLd(curso);
                                 </span>
                                 Lo que Aprenderás
                             </h2>
-                            <ul class="grid sm:grid-cols-2 gap-4">
-                                {aprenderas.map((item) => (
-                                    <li class="flex items-start gap-3 text-base-content/80">
-                                        <svg class="w-6 h-6 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-8 border border-primary/10">
+                                <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-4">
+                                    {aprenderas.map((item) => (
+                                        <li class="flex items-start gap-3 text-base-content/80">
+                                            <svg class="w-6 h-6 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </section>
                     )}
 
@@ -382,9 +397,9 @@ const courseJsonLd = getCourseJsonLd(curso);
                                 </span>
                                 ¿Para Quién es Este Curso?
                             </h2>
-                            <ul class="space-y-3">
+                            <ul class="space-y-4">
                                 {dirigidoA.map((item) => (
-                                    <li class="flex items-start gap-3 text-base-content/80 bg-base-200/50 rounded-xl p-4">
+                                    <li class="flex items-start gap-3 text-base-content/80 bg-base-200/50 rounded-xl p-4 transition-all hover:shadow-sm hover:bg-base-200/80">
                                         <svg class="w-6 h-6 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                         </svg>
@@ -406,9 +421,9 @@ const courseJsonLd = getCourseJsonLd(curso);
                                 </span>
                                 Objetivos del Curso
                             </h2>
-                            <ul class="space-y-3">
+                            <ul class="space-y-4">
                                 {objetivos.map((objetivo, index) => (
-                                    <li class="flex items-start gap-4 text-base-content/80">
+                                    <li class="flex items-start gap-4 text-base-content/80 p-4 rounded-xl hover:bg-base-200/30 transition-colors">
                                         <span class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
                                             {index + 1}
                                         </span>
@@ -420,21 +435,21 @@ const courseJsonLd = getCourseJsonLd(curso);
                     )}
 
                     <!-- Contenido del Curso -->
-                    {modulosIds && modulosIds.length > 0 && (
+                    {modulos && modulos.length > 0 && (
                         <section>
-                            <h2 class="text-2xl font-bold text-base-content mb-6 flex items-center gap-3">
-                                <span class="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+                            <h2 class="text-2xl font-bold text-base-content mb-8 flex items-center gap-3">
+                                <span class="w-12 h-12 rounded-xl bg-warning/10 flex items-center justify-center">
                                     <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                     </svg>
                                 </span>
                                 Contenido del Curso
                             </h2>
-                            <p class="text-base-content/60 mb-6">
-                                {modulosIds.length} módulos • {totalUnidades} lecciones • {duracionHoras} horas de contenido
+                            <p class="text-base-content/60 mb-8 pl-1">
+                                {modulos.length} módulos • {totalUnidades} lecciones • {duracionHoras} horas de contenido
                             </p>
-                            <div class="space-y-3">
-                                {modulosIds.map((modulo: Modulo, index: number) => (
+                            <div class="space-y-4">
+                                {modulos.map((modulo: Modulo, index: number) => (
                                     <div class="collapse collapse-arrow bg-base-200/50 rounded-xl border border-base-200">
                                         <input type="checkbox" name="modulo-accordion" checked={index === 0} />
                                         <div class="collapse-title font-semibold text-base-content flex items-center gap-3">
@@ -472,7 +487,7 @@ const courseJsonLd = getCourseJsonLd(curso);
 
                     <!-- Sobre el Instructor -->
                     {instructor && (
-                        <section class="bg-gradient-to-br from-base-200/50 to-base-200/30 rounded-2xl p-8 border border-base-200">
+                        <section>
                             <h2 class="text-2xl font-bold text-base-content mb-6 flex items-center gap-3">
                                 <span class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -483,54 +498,56 @@ const courseJsonLd = getCourseJsonLd(curso);
                                 </span>
                                 Sobre el Instructor
                             </h2>
-                            <div class="flex flex-col sm:flex-row items-start gap-6">
-                                <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-3xl shadow-xl flex-shrink-0">
-                                    {instructor.firstName?.charAt(0)}{instructor.lastName?.charAt(0)}
-                                </div>
-                                <div class="space-y-3">
-                                    <h3 class="text-xl font-bold text-base-content">
-                                        {instructor.firstName} {instructor.lastName}
-                                    </h3>
-                                    {instructor.profesion && (
-                                        <p class="text-base-content/70">{instructor.profesion}</p>
-                                    )}
-                                    {instructor.pais && (
-                                        <p class="text-sm text-base-content/60 flex items-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            </svg>
-                                            {instructor.pais}
-                                        </p>
-                                    )}
-                                    {instructor.especializacion && instructor.especializacion.length > 0 && (
-                                        <div class="flex flex-wrap gap-2 pt-2">
-                                            {instructor.especializacion.map((esp) => (
-                                                <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
-                                                    {esp}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                    {instructor.calificacionPromedio && instructor.calificacionPromedio > 0 && (
-                                        <div class="flex items-center gap-2 pt-2">
-                                            <div class="flex items-center gap-0.5 text-yellow-500">
-                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                    <svg 
-                                                        class={`w-4 h-4 ${star <= Math.round(instructor.calificacionPromedio) ? 'fill-current' : ''}`}
-                                                        fill={star <= Math.round(instructor.calificacionPromedio) ? 'currentColor' : 'none'}
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                                    </svg>
+                            <div class="bg-gradient-to-br from-base-200/50 to-base-200/30 rounded-2xl p-8 border border-base-200">
+                                <div class="flex flex-col sm:flex-row items-start gap-6">
+                                    <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-3xl shadow-xl flex-shrink-0">
+                                        {instructor.firstName?.charAt(0)}{instructor.lastName?.charAt(0)}
+                                    </div>
+                                    <div class="space-y-3">
+                                        <h3 class="text-xl font-bold text-base-content">
+                                            {instructor.firstName} {instructor.lastName}
+                                        </h3>
+                                        {instructor.profesion && (
+                                            <p class="text-base-content/70">{instructor.profesion}</p>
+                                        )}
+                                        {instructor.pais && (
+                                            <p class="text-sm text-base-content/60 flex items-center gap-2">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                {instructor.pais}
+                                            </p>
+                                        )}
+                                        {instructor.especializacion && instructor.especializacion.length > 0 && (
+                                            <div class="flex flex-wrap gap-2 pt-2">
+                                                {instructor.especializacion.map((esp) => (
+                                                    <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                                                        {esp}
+                                                    </span>
                                                 ))}
                                             </div>
-                                            <span class="text-sm text-base-content/70">
-                                                {instructor.calificacionPromedio.toFixed(1)} calificación del instructor
-                                            </span>
-                                        </div>
-                                    )}
+                                        )}
+                                        {instructor.calificacionPromedio && instructor.calificacionPromedio > 0 && (
+                                            <div class="flex items-center gap-2 pt-2">
+                                                <div class="flex items-center gap-0.5 text-yellow-500">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <svg 
+                                                            class={`w-4 h-4 ${star <= Math.round(instructor.calificacionPromedio) ? 'fill-current' : ''}`}
+                                                            fill={star <= Math.round(instructor.calificacionPromedio) ? 'currentColor' : 'none'}
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                                        </svg>
+                                                    ))}
+                                                </div>
+                                                <span class="text-sm text-base-content/70">
+                                                    {instructor.calificacionPromedio.toFixed(1)} calificación del instructor
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -599,18 +616,18 @@ const courseJsonLd = getCourseJsonLd(curso);
             <p class="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
                 Únete a miles de estudiantes que ya están transformando sus carreras con este curso.
             </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <div class="text-center sm:text-right">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
+                <div class="flex items-baseline gap-3">
                     {originalPrice && (
-                        <p class="text-white/60 line-through text-lg">
+                        <span class="text-white/60 line-through text-xl font-medium">
                             {formatPrice(originalPrice)}
-                        </p>
+                        </span>
                     )}
-                    <p class="text-4xl font-extrabold">
+                    <span class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
                         {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
-                    </p>
+                    </span>
                 </div>
-                <button class="btn btn-lg bg-white text-primary hover:bg-white/90 border-0 font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 rounded-xl px-8">
+                <button class="btn btn-lg bg-white text-primary hover:bg-white/90 border-0 font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 rounded-xl px-10">
                     🛒 Comprar Ahora
                 </button>
             </div>

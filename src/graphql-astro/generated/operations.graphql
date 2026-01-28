@@ -865,6 +865,7 @@ mutation Mutation($createCursoInput: CreateCursoInput!) {
       url
       alt
     }
+    urlVideo
   }
 }
 
@@ -873,25 +874,43 @@ query Cursos($offset: Int, $limit: Int) {
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
-    slug
     descripcionCorta
-    precio
-    descuento
-    duracionHoras
-    currency
+    descripcionLarga
+    nivel
     instructor {
+      _id
       firstName
       lastName
       profesion
+      especializacion
+      calificacionPromedio
+      pais
+      deleted
     }
+    duracionHoras
     imagenURL {
       url
       alt
     }
+    urlVideo
+    precio
+    currency
+    descuento
+    calificacionPromedio
+    numeroCalificaciones
+    aprenderas
+    objetivos
+    dirigidoA
+    modulosIds
+    fechaLanzamiento
     categorias {
       _id
       nombreCategoria
+      descripcion
+      deleted
     }
+    slug
+    deleted
   }
 }
 
@@ -911,6 +930,7 @@ query Curso($cursoId: ID!) {
       alt
       url
     }
+    urlVideo
     precio
     currency
     descuento
@@ -919,12 +939,33 @@ query Curso($cursoId: ID!) {
     aprenderas
     objetivos
     dirigidoA
-
+    modulosIds
     fechaLanzamiento
-
     slug
     deleted
-    modulosIds
+  }
+}
+
+# Operation 12345678-modulo-query-uuid
+query ModulosPorCurso($cursoId: ID!) {
+  Modulo_findByCursoId(cursoId: $cursoId) {
+    _id
+    numeroModulo
+    moduloTitle
+    descripcion
+    unidades {
+      _id
+      numeroUnidad
+      unidadTitle
+      descripcion
+      urlVideo
+      materiales {
+        _id
+        materialTitle
+        descripcion
+        url
+      }
+    }
   }
 }
 
@@ -945,6 +986,7 @@ mutation Curso_update($cursoUpdateId: ID!, $updateCursoInput: UpdateCursoInput!)
       alt
       url
     }
+    urlVideo
     precio
     currency
     descuento

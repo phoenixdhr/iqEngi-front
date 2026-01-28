@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client/core';
+import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -2162,7 +2162,7 @@ export type CursosQueryVariables = Exact<{
 }>;
 
 
-export type CursosQuery = { __typename?: 'Query', Cursos: Array<{ __typename?: 'CursoOutput', _id: string, courseTitle: string, slug?: string | null, descripcionCorta: string, precio?: number | null, descuento?: number | null, duracionHoras?: number | null, currency?: string | null, instructor?: { __typename?: 'Instructor', firstName: string, lastName: string, profesion?: string | null } | null, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null, categorias: Array<{ __typename?: 'Categoria', _id: string, nombreCategoria: string }> }> };
+export type CursosQuery = { __typename?: 'Query', Cursos: Array<{ __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, modulosIds?: Array<string> | null, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, instructor?: { __typename?: 'Instructor', _id: string, firstName: string, lastName: string, profesion?: string | null, especializacion: Array<string>, calificacionPromedio: number, pais?: string | null, deleted: boolean } | null, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null, categorias: Array<{ __typename?: 'Categoria', _id: string, nombreCategoria: string, descripcion?: string | null, deleted: boolean }> }> };
 
 export type CursoQueryVariables = Exact<{
   cursoId: Scalars['ID']['input'];
@@ -2912,6 +2912,13 @@ export type Newsletter_CountActiveQueryVariables = Exact<{ [key: string]: never;
 
 
 export type Newsletter_CountActiveQuery = { __typename?: 'Query', Newsletter_countActive: number };
+
+export type ModulosPorCursoQueryVariables = Exact<{
+  cursoId: Scalars['ID']['input'];
+}>;
+
+
+export type ModulosPorCursoQuery = { __typename?: 'Query', Modulo_findByCursoId: Array<{ __typename?: 'Modulo', _id: string, numeroModulo: number, moduloTitle: string, descripcion?: string | null, unidades?: Array<{ __typename?: 'Unidad', _id: string, numeroUnidad: number, unidadTitle: string, descripcion?: string | null, urlVideo?: string | null, materiales?: Array<{ __typename?: 'Material', _id: string, materialTitle: string, descripcion?: string | null, url: string }> | null }> | null }> };
 
 
 export const ExampleQueryDocument = gql`
@@ -5417,25 +5424,42 @@ export const CursosDocument = gql`
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
-    slug
     descripcionCorta
-    precio
-    descuento
-    duracionHoras
-    currency
+    descripcionLarga
+    nivel
     instructor {
+      _id
       firstName
       lastName
       profesion
+      especializacion
+      calificacionPromedio
+      pais
+      deleted
     }
+    duracionHoras
     imagenURL {
       url
       alt
     }
+    precio
+    currency
+    descuento
+    calificacionPromedio
+    numeroCalificaciones
+    aprenderas
+    objetivos
+    dirigidoA
+    modulosIds
+    fechaLanzamiento
     categorias {
       _id
       nombreCategoria
+      descripcion
+      deleted
     }
+    slug
+    deleted
   }
 }
     `;
@@ -10261,3 +10285,59 @@ export type Newsletter_CountActiveQueryHookResult = ReturnType<typeof useNewslet
 export type Newsletter_CountActiveLazyQueryHookResult = ReturnType<typeof useNewsletter_CountActiveLazyQuery>;
 export type Newsletter_CountActiveSuspenseQueryHookResult = ReturnType<typeof useNewsletter_CountActiveSuspenseQuery>;
 export type Newsletter_CountActiveQueryResult = Apollo.QueryResult<Newsletter_CountActiveQuery, Newsletter_CountActiveQueryVariables>;
+export const ModulosPorCursoDocument = gql`
+    query ModulosPorCurso($cursoId: ID!) {
+  Modulo_findByCursoId(cursoId: $cursoId) {
+    _id
+    numeroModulo
+    moduloTitle
+    descripcion
+    unidades {
+      _id
+      numeroUnidad
+      unidadTitle
+      descripcion
+      urlVideo
+      materiales {
+        _id
+        materialTitle
+        descripcion
+        url
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useModulosPorCursoQuery__
+ *
+ * To run a query within a React component, call `useModulosPorCursoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useModulosPorCursoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useModulosPorCursoQuery({
+ *   variables: {
+ *      cursoId: // value for 'cursoId'
+ *   },
+ * });
+ */
+export function useModulosPorCursoQuery(baseOptions: Apollo.QueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables> & ({ variables: ModulosPorCursoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
+      }
+export function useModulosPorCursoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
+        }
+export function useModulosPorCursoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
+        }
+export type ModulosPorCursoQueryHookResult = ReturnType<typeof useModulosPorCursoQuery>;
+export type ModulosPorCursoLazyQueryHookResult = ReturnType<typeof useModulosPorCursoLazyQuery>;
+export type ModulosPorCursoSuspenseQueryHookResult = ReturnType<typeof useModulosPorCursoSuspenseQuery>;
+export type ModulosPorCursoQueryResult = Apollo.QueryResult<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>;
