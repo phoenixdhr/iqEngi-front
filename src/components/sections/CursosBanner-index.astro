@@ -1,6 +1,7 @@
 ---
 import Titulo from '@components/atoms/Titulo.astro';
-import Cards from '@components/molecules/Cards.astro';
+import Titulo from '@components/atoms/Titulo.astro';
+import { FeaturedCourses } from '@components/organisms/FeaturedCourses';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
 export const prerender = true;
@@ -39,31 +40,8 @@ const cursos: Curso[] = data?.Cursos || [];
             </a>
         </div>
 
-        {/* Cuadrícula para mostrar los cursos */}
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {
-                cursos.map((curso, index) => {
-                    return <Cards {...curso} isBig={false} />;
-                })
-            }
-            
-            {/* Card "Ver más cursos" que ocupa el 6to lugar */}
-            <a href="/cursos#catalogo" class="group relative flex flex-col items-center justify-center p-8 h-full min-h-[400px] rounded-2xl border-2 border-dashed border-[var(--color-border)] hover:border-[var(--color-primary)] bg-[var(--color-surface)]/50 hover:bg-[var(--color-surface)] transition-all duration-300 cursor-pointer text-center">
-                <div class="w-20 h-20 rounded-full bg-[var(--color-surface-2)] group-hover:bg-[var(--color-primary)]/10 flex items-center justify-center mb-6 transition-colors duration-300">
-                    <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🚀</span>
-                </div>
-                <h3 class="text-xl font-bold text-[var(--color-text)] mb-3 group-hover:text-[var(--color-primary)] transition-colors">
-                    Explora todo el catálogo
-                </h3>
-                <p class="text-[var(--color-text-muted)] text-sm mb-6 max-w-[200px]">
-                    Tenemos muchos más cursos especializados esperando por ti.
-                </p>
-                <span class="inline-flex items-center gap-2 font-semibold text-[var(--color-primary)] group-hover:gap-3 transition-all duration-300">
-                    Ver todos los cursos
-                    <span>→</span>
-                </span>
-            </a>
-        </div>
+        {/* Cuadrícula para mostrar los cursos - Hydrated for Currency Support */}
+        <FeaturedCourses client:visible initialCourses={cursos} />
 
         {/* Botón móvil para ver todos (visible solo en móvil) */}
         <div class="mt-12 text-center md:hidden">

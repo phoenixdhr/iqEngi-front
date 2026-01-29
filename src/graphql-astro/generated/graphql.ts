@@ -93,6 +93,7 @@ export type CreateCursoInput = {
   objetivos?: InputMaybe<Array<Scalars['String']['input']>>;
   precio?: InputMaybe<Scalars['Float']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  urlVideo?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateInstructorInput = {
@@ -228,6 +229,7 @@ export type Curso = {
   objetivos: Array<Scalars['String']['output']>;
   precio?: Maybe<Scalars['Float']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
+  urlVideo?: Maybe<Scalars['String']['output']>;
 };
 
 export type CursoComprado = {
@@ -269,6 +271,17 @@ export type CursoOutput = {
   objetivos: Array<Scalars['String']['output']>;
   precio?: Maybe<Scalars['Float']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
+  urlVideo?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type CursoOutputCurrencyArgs = {
+  currency?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type CursoOutputPrecioArgs = {
+  currency?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DeletedCountOutput = {
@@ -1643,6 +1656,7 @@ export type UpdateCursoInput = {
   objetivos?: InputMaybe<Array<Scalars['String']['input']>>;
   precio?: InputMaybe<Scalars['Float']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  urlVideo?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateInstructorInput = {
@@ -2154,22 +2168,31 @@ export type MutationMutationVariables = Exact<{
 }>;
 
 
-export type MutationMutation = { __typename?: 'Mutation', Curso_create: { __typename?: 'CursoOutput', _id: string, courseTitle: string, precio?: number | null, objetivos: Array<string>, nivel?: Nivel | null, fechaLanzamiento?: any | null, descripcionCorta: string, categorias: Array<{ __typename?: 'Categoria', nombreCategoria: string, descripcion?: string | null, _id: string }>, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null } };
+export type MutationMutation = { __typename?: 'Mutation', Curso_create: { __typename?: 'CursoOutput', _id: string, courseTitle: string, precio?: number | null, objetivos: Array<string>, nivel?: Nivel | null, fechaLanzamiento?: any | null, descripcionCorta: string, urlVideo?: string | null, categorias: Array<{ __typename?: 'Categoria', nombreCategoria: string, descripcion?: string | null, _id: string }>, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null } };
 
 export type CursosQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type CursosQuery = { __typename?: 'Query', Cursos: Array<{ __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, modulosIds?: Array<string> | null, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, instructor?: { __typename?: 'Instructor', _id: string, firstName: string, lastName: string, profesion?: string | null, especializacion: Array<string>, calificacionPromedio: number, pais?: string | null, deleted: boolean } | null, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null, categorias: Array<{ __typename?: 'Categoria', _id: string, nombreCategoria: string, descripcion?: string | null, deleted: boolean }> }> };
+export type CursosQuery = { __typename?: 'Query', Cursos: Array<{ __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, urlVideo?: string | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, modulosIds?: Array<string> | null, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, instructor?: { __typename?: 'Instructor', _id: string, firstName: string, lastName: string, profesion?: string | null, especializacion: Array<string>, calificacionPromedio: number, pais?: string | null, deleted: boolean } | null, imagenURL?: { __typename?: 'ImageObjectType', url: string, alt: string } | null, categorias: Array<{ __typename?: 'Categoria', _id: string, nombreCategoria: string, descripcion?: string | null, deleted: boolean }> }> };
 
 export type CursoQueryVariables = Exact<{
+  cursoId: Scalars['ID']['input'];
+  currency?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CursoQuery = { __typename?: 'Query', Curso: { __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, urlVideo?: string | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, modulosIds?: Array<string> | null, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, instructor?: { __typename?: 'Instructor', firstName: string } | null, imagenURL?: { __typename?: 'ImageObjectType', alt: string, url: string } | null } };
+
+export type ModulosPorCursoQueryVariables = Exact<{
   cursoId: Scalars['ID']['input'];
 }>;
 
 
-export type CursoQuery = { __typename?: 'Query', Curso: { __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, modulosIds?: Array<string> | null, instructor?: { __typename?: 'Instructor', firstName: string } | null, imagenURL?: { __typename?: 'ImageObjectType', alt: string, url: string } | null } };
+export type ModulosPorCursoQuery = { __typename?: 'Query', Modulo_findByCursoId: Array<{ __typename?: 'Modulo', _id: string, numeroModulo: number, moduloTitle: string, descripcion?: string | null, unidades?: Array<{ __typename?: 'Unidad', _id: string, numeroUnidad: number, unidadTitle: string, descripcion?: string | null, urlVideo?: string | null, materiales?: Array<{ __typename?: 'Material', _id: string, materialTitle: string, descripcion?: string | null, url: string }> | null }> | null }> };
 
 export type Curso_UpdateMutationVariables = Exact<{
   cursoUpdateId: Scalars['ID']['input'];
@@ -2177,7 +2200,7 @@ export type Curso_UpdateMutationVariables = Exact<{
 }>;
 
 
-export type Curso_UpdateMutation = { __typename?: 'Mutation', Curso_update: { __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, instructor?: { __typename?: 'Instructor', _id: string, firstName: string } | null, imagenURL?: { __typename?: 'ImageObjectType', alt: string, url: string } | null, categorias: Array<{ __typename?: 'Categoria', _id: string, nombreCategoria: string, descripcion?: string | null, deleted: boolean }>, cuestionarioId?: { __typename?: 'Cuestionario', _id: string } | null } };
+export type Curso_UpdateMutation = { __typename?: 'Mutation', Curso_update: { __typename?: 'CursoOutput', _id: string, courseTitle: string, descripcionCorta: string, descripcionLarga?: string | null, nivel?: Nivel | null, duracionHoras?: number | null, urlVideo?: string | null, precio?: number | null, currency?: string | null, descuento?: number | null, calificacionPromedio?: number | null, numeroCalificaciones: number, aprenderas: Array<string>, objetivos: Array<string>, dirigidoA: Array<string>, fechaLanzamiento?: any | null, slug?: string | null, deleted: boolean, instructor?: { __typename?: 'Instructor', _id: string, firstName: string } | null, imagenURL?: { __typename?: 'ImageObjectType', alt: string, url: string } | null, categorias: Array<{ __typename?: 'Categoria', _id: string, nombreCategoria: string, descripcion?: string | null, deleted: boolean }>, cuestionarioId?: { __typename?: 'Cuestionario', _id: string } | null } };
 
 export type Curso_SoftDeleteMutationVariables = Exact<{
   idRemove: Scalars['ID']['input'];
@@ -2912,13 +2935,6 @@ export type Newsletter_CountActiveQueryVariables = Exact<{ [key: string]: never;
 
 
 export type Newsletter_CountActiveQuery = { __typename?: 'Query', Newsletter_countActive: number };
-
-export type ModulosPorCursoQueryVariables = Exact<{
-  cursoId: Scalars['ID']['input'];
-}>;
-
-
-export type ModulosPorCursoQuery = { __typename?: 'Query', Modulo_findByCursoId: Array<{ __typename?: 'Modulo', _id: string, numeroModulo: number, moduloTitle: string, descripcion?: string | null, unidades?: Array<{ __typename?: 'Unidad', _id: string, numeroUnidad: number, unidadTitle: string, descripcion?: string | null, urlVideo?: string | null, materiales?: Array<{ __typename?: 'Material', _id: string, materialTitle: string, descripcion?: string | null, url: string }> | null }> | null }> };
 
 
 export const ExampleQueryDocument = gql`
@@ -5390,6 +5406,7 @@ export const MutationDocument = gql`
       url
       alt
     }
+    urlVideo
   }
 }
     `;
@@ -5420,7 +5437,7 @@ export type MutationMutationHookResult = ReturnType<typeof useMutationMutation>;
 export type MutationMutationResult = Apollo.MutationResult<MutationMutation>;
 export type MutationMutationOptions = Apollo.BaseMutationOptions<MutationMutation, MutationMutationVariables>;
 export const CursosDocument = gql`
-    query Cursos($offset: Int, $limit: Int) {
+    query Cursos($offset: Int, $limit: Int, $currency: String) {
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
@@ -5443,8 +5460,8 @@ export const CursosDocument = gql`
       alt
     }
     urlVideo
-    precio
-    currency
+    precio(currency: $currency)
+    currency(currency: $currency)
     descuento
     calificacionPromedio
     numeroCalificaciones
@@ -5479,6 +5496,7 @@ export const CursosDocument = gql`
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      currency: // value for 'currency'
  *   },
  * });
  */
@@ -5499,7 +5517,7 @@ export type CursosLazyQueryHookResult = ReturnType<typeof useCursosLazyQuery>;
 export type CursosSuspenseQueryHookResult = ReturnType<typeof useCursosSuspenseQuery>;
 export type CursosQueryResult = Apollo.QueryResult<CursosQuery, CursosQueryVariables>;
 export const CursoDocument = gql`
-    query Curso($cursoId: ID!) {
+    query Curso($cursoId: ID!, $currency: String) {
   Curso(id: $cursoId) {
     _id
     courseTitle
@@ -5514,18 +5532,19 @@ export const CursoDocument = gql`
       alt
       url
     }
-    precio
-    currency
+    urlVideo
+    precio(currency: $currency)
+    currency(currency: $currency)
     descuento
     calificacionPromedio
     numeroCalificaciones
     aprenderas
     objetivos
     dirigidoA
+    modulosIds
     fechaLanzamiento
     slug
     deleted
-    modulosIds
   }
 }
     `;
@@ -5543,6 +5562,7 @@ export const CursoDocument = gql`
  * const { data, loading, error } = useCursoQuery({
  *   variables: {
  *      cursoId: // value for 'cursoId'
+ *      currency: // value for 'currency'
  *   },
  * });
  */
@@ -5562,6 +5582,62 @@ export type CursoQueryHookResult = ReturnType<typeof useCursoQuery>;
 export type CursoLazyQueryHookResult = ReturnType<typeof useCursoLazyQuery>;
 export type CursoSuspenseQueryHookResult = ReturnType<typeof useCursoSuspenseQuery>;
 export type CursoQueryResult = Apollo.QueryResult<CursoQuery, CursoQueryVariables>;
+export const ModulosPorCursoDocument = gql`
+    query ModulosPorCurso($cursoId: ID!) {
+  Modulo_findByCursoId(cursoId: $cursoId) {
+    _id
+    numeroModulo
+    moduloTitle
+    descripcion
+    unidades {
+      _id
+      numeroUnidad
+      unidadTitle
+      descripcion
+      urlVideo
+      materiales {
+        _id
+        materialTitle
+        descripcion
+        url
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useModulosPorCursoQuery__
+ *
+ * To run a query within a React component, call `useModulosPorCursoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useModulosPorCursoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useModulosPorCursoQuery({
+ *   variables: {
+ *      cursoId: // value for 'cursoId'
+ *   },
+ * });
+ */
+export function useModulosPorCursoQuery(baseOptions: Apollo.QueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables> & ({ variables: ModulosPorCursoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
+      }
+export function useModulosPorCursoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
+        }
+export function useModulosPorCursoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
+        }
+export type ModulosPorCursoQueryHookResult = ReturnType<typeof useModulosPorCursoQuery>;
+export type ModulosPorCursoLazyQueryHookResult = ReturnType<typeof useModulosPorCursoLazyQuery>;
+export type ModulosPorCursoSuspenseQueryHookResult = ReturnType<typeof useModulosPorCursoSuspenseQuery>;
+export type ModulosPorCursoQueryResult = Apollo.QueryResult<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>;
 export const Curso_UpdateDocument = gql`
     mutation Curso_update($cursoUpdateId: ID!, $updateCursoInput: UpdateCursoInput!) {
   Curso_update(id: $cursoUpdateId, updateCursoInput: $updateCursoInput) {
@@ -5579,6 +5655,7 @@ export const Curso_UpdateDocument = gql`
       alt
       url
     }
+    urlVideo
     precio
     currency
     descuento
@@ -10286,59 +10363,3 @@ export type Newsletter_CountActiveQueryHookResult = ReturnType<typeof useNewslet
 export type Newsletter_CountActiveLazyQueryHookResult = ReturnType<typeof useNewsletter_CountActiveLazyQuery>;
 export type Newsletter_CountActiveSuspenseQueryHookResult = ReturnType<typeof useNewsletter_CountActiveSuspenseQuery>;
 export type Newsletter_CountActiveQueryResult = Apollo.QueryResult<Newsletter_CountActiveQuery, Newsletter_CountActiveQueryVariables>;
-export const ModulosPorCursoDocument = gql`
-    query ModulosPorCurso($cursoId: ID!) {
-  Modulo_findByCursoId(cursoId: $cursoId) {
-    _id
-    numeroModulo
-    moduloTitle
-    descripcion
-    unidades {
-      _id
-      numeroUnidad
-      unidadTitle
-      descripcion
-      urlVideo
-      materiales {
-        _id
-        materialTitle
-        descripcion
-        url
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useModulosPorCursoQuery__
- *
- * To run a query within a React component, call `useModulosPorCursoQuery` and pass it any options that fit your needs.
- * When your component renders, `useModulosPorCursoQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useModulosPorCursoQuery({
- *   variables: {
- *      cursoId: // value for 'cursoId'
- *   },
- * });
- */
-export function useModulosPorCursoQuery(baseOptions: Apollo.QueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables> & ({ variables: ModulosPorCursoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
-      }
-export function useModulosPorCursoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
-        }
-export function useModulosPorCursoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>(ModulosPorCursoDocument, options);
-        }
-export type ModulosPorCursoQueryHookResult = ReturnType<typeof useModulosPorCursoQuery>;
-export type ModulosPorCursoLazyQueryHookResult = ReturnType<typeof useModulosPorCursoLazyQuery>;
-export type ModulosPorCursoSuspenseQueryHookResult = ReturnType<typeof useModulosPorCursoSuspenseQuery>;
-export type ModulosPorCursoQueryResult = Apollo.QueryResult<ModulosPorCursoQuery, ModulosPorCursoQueryVariables>;

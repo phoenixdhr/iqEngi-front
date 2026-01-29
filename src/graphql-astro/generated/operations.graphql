@@ -870,7 +870,7 @@ mutation Mutation($createCursoInput: CreateCursoInput!) {
 }
 
 # Operation 4e4cca26-4859-4ae8-b527-c3bda057a41c
-query Cursos($offset: Int, $limit: Int) {
+query Cursos($offset: Int, $limit: Int, $currency: String) {
   Cursos(offset: $offset, limit: $limit) {
     _id
     courseTitle
@@ -893,8 +893,8 @@ query Cursos($offset: Int, $limit: Int) {
       alt
     }
     urlVideo
-    precio
-    currency
+    precio(currency: $currency)
+    currency(currency: $currency)
     descuento
     calificacionPromedio
     numeroCalificaciones
@@ -915,7 +915,7 @@ query Cursos($offset: Int, $limit: Int) {
 }
 
 # Operation 058eac60-139f-4aea-aecf-ede879a893e7
-query Curso($cursoId: ID!) {
+query Curso($cursoId: ID!, $currency: String) {
   Curso(id: $cursoId) {
     _id
     courseTitle
@@ -931,8 +931,8 @@ query Curso($cursoId: ID!) {
       url
     }
     urlVideo
-    precio
-    currency
+    precio(currency: $currency)
+    currency(currency: $currency)
     descuento
     calificacionPromedio
     numeroCalificaciones
@@ -2639,4 +2639,3 @@ query Newsletter_allActive {
 query Newsletter_countActive {
   Newsletter_countActive
 }
-

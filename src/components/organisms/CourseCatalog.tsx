@@ -12,6 +12,7 @@ import type { Curso, Categoria } from '@graphql-astro/generated/graphql';
 import { CursosDocument } from '@graphql-astro/generated/graphql';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CourseCard } from '../molecules/CourseCard';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface CourseCatalogProps {
   cursos: Curso[];
@@ -25,8 +26,8 @@ const ITEMS_PER_PAGE_OPTIONS = [6, 9, 12, 24];
 const DEFAULT_ITEMS_PER_PAGE = 6;
 const LOAD_MORE_BATCH_SIZE = 24;
 
-export const CourseCatalog: React.FC<CourseCatalogProps> = ({ 
-  cursos: initialCursos, 
+export const CourseCatalog: React.FC<CourseCatalogProps> = ({
+  cursos: initialCursos,
   categorias,
   hasMoreInitial = false,
   initialLimit = 24
@@ -35,12 +36,12 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   const [allCourses, setAllCourses] = useState<Curso[]>(initialCursos);
   const [hasMoreFromServer, setHasMoreFromServer] = useState(hasMoreInitial);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  
+
   // Estados de filtros
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortOption, setSortOption] = useState<'recent' | 'price_asc' | 'price_desc'>('recent');
-  
+
   // Estados para paginación client-side
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
@@ -48,22 +49,23 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   // Función para cargar más cursos del servidor usando clientGql directamente
   const handleLoadMore = useCallback(async () => {
     if (isLoadingMore || !hasMoreFromServer) return;
-    
+
     setIsLoadingMore(true);
     try {
       const { data } = await clientGql.query({
         query: CursosDocument,
         variables: {
           offset: allCourses.length,
-          limit: LOAD_MORE_BATCH_SIZE
+          limit: LOAD_MORE_BATCH_SIZE,
+          currency: currency
         },
         fetchPolicy: 'network-only' // Forzar fetch del servidor
       });
-      
+
       if (data?.Cursos) {
         const newCourses = data.Cursos as Curso[];
         setAllCourses(prev => [...prev, ...newCourses]);
-        
+
         // Si devolvió menos de LOAD_MORE_BATCH_SIZE, no hay más cursos
         if (newCourses.length < LOAD_MORE_BATCH_SIZE) {
           setHasMoreFromServer(false);
@@ -78,6 +80,45 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
     }
   }, [allCourses.length, hasMoreFromServer, isLoadingMore]);
 
+  // Filters logic
+  // ... (previous logic)
+
+  const { currency } = useCurrency(); // Get global currency
+
+  // Refetch when currency changes
+  useEffect(() => {
+    const fetchCoursesInCurrency = async () => {
+      if (initialCursos.length > 0 && currency) {
+        try {
+          // We keep the current limit but reset offset to 0 to reload the "first page" of current view
+          // Or better, reload the amount of currently loaded courses?
+          // Let's reload the initial limit to start fresh, or current allCourses.length?
+          // Reloading all might be heavy if user scrolled a lot. Let's restart.
+
+          const limitToFetch = Math.max(allCourses.length, initialLimit);
+
+          const { data } = await clientGql.query({
+            query: CursosDocument,
+            variables: {
+              offset: 0,
+              limit: limitToFetch,
+              currency: currency // Pass the currency
+            },
+            fetchPolicy: 'network-only'
+          });
+
+          if (data?.Cursos) {
+            setAllCourses(data.Cursos as Curso[]);
+          }
+        } catch (error) {
+          console.error("Error updating courses currency:", error);
+        }
+      }
+    };
+
+    fetchCoursesInCurrency();
+  }, [currency]);
+
   // Filter and Sort Logic (sobre todos los cursos cargados)
   const filteredAndSortedCourses = useMemo(() => {
     let result = [...allCourses];
@@ -85,7 +126,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
     // 1. Filter by Search Term
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(curso => 
+      result = result.filter(curso =>
         curso.courseTitle?.toLowerCase().includes(term) ||
         curso.descripcionCorta?.toLowerCase().includes(term)
       );
@@ -93,22 +134,22 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
 
     // 2. Filter by Category
     if (selectedCategory !== 'all') {
-      result = result.filter(curso => 
+      result = result.filter(curso =>
         curso.categorias?.some(cat => cat?._id === selectedCategory)
       );
     }
 
     // 3. Sort
     result.sort((a, b) => {
-        const priceA = a.precio || 0;
-        const priceB = b.precio || 0;
-        
-        if (sortOption === 'price_asc') {
-            return priceA - priceB;
-        } else if (sortOption === 'price_desc') {
-            return priceB - priceA;
-        }
-        return 0; // Default to original order (recent)
+      const priceA = a.precio || 0;
+      const priceB = b.precio || 0;
+
+      if (sortOption === 'price_asc') {
+        return priceA - priceB;
+      } else if (sortOption === 'price_desc') {
+        return priceB - priceA;
+      }
+      return 0; // Default to original order (recent)
     });
 
     return result;
@@ -124,7 +165,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  
+
   // Cursos de la página actual
   const paginatedCourses = useMemo(() => {
     return filteredAndSortedCourses.slice(startIndex, endIndex);
@@ -134,7 +175,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   const getVisiblePageNumbers = () => {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -142,33 +183,33 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
     } else {
       // Siempre mostrar primera página
       pages.push(1);
-      
+
       // Agregar ellipsis si la página actual está lejos del inicio
       if (currentPage > 3) {
         pages.push('...');
       }
-      
+
       // Páginas alrededor de la actual
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      
+
       for (let i = start; i <= end; i++) {
         if (!pages.includes(i)) {
           pages.push(i);
         }
       }
-      
+
       // Agregar ellipsis si la página actual está lejos del final
       if (currentPage < totalPages - 2) {
         pages.push('...');
       }
-      
+
       // Siempre mostrar última página
       if (!pages.includes(totalPages)) {
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -176,9 +217,9 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
     if (page >= 1 && page <= totalPages) {
       const isGoingBack = page < currentPage;
       const isGoingToLastPage = page === totalPages;
-      
+
       setCurrentPage(page);
-      
+
       // Hacer scroll al inicio del catálogo cuando:
       // 1. El usuario va hacia atrás (retrocede páginas)
       // 2. El usuario llega a la última página (para ver los cursos restantes desde arriba)
@@ -202,9 +243,9 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
         <div className="flex-1 w-full md:w-auto">
           <div className="form-control">
             <div className="input-group flex">
-              <input 
-                type="text" 
-                placeholder="Buscar cursos..." 
+              <input
+                type="text"
+                placeholder="Buscar cursos..."
                 className="input input-bordered w-full focus:input-primary"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -215,7 +256,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
 
         {/* Category Filter */}
         <div className="flex-shrink-0 w-full md:w-auto">
-          <select 
+          <select
             className="select select-bordered w-full md:w-auto focus:select-primary"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -229,7 +270,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
 
         {/* Sort Option */}
         <div className="flex-shrink-0 w-full md:w-auto">
-          <select 
+          <select
             className="select select-bordered w-full md:w-auto focus:select-primary"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as 'recent' | 'price_asc' | 'price_desc')}
@@ -269,9 +310,9 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
         <>
           {/* Grid con altura mínima para mantener paginación en posición consistente */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px] content-start">
-              {paginatedCourses.map(curso => (
-                  <CourseCard key={curso._id} {...curso} />
-              ))}
+            {paginatedCourses.map(curso => (
+              <CourseCard key={curso._id} {...curso} currency={currency} />
+            ))}
           </div>
 
           {/* Pagination Controls - Un solo conjunto unificado */}
@@ -281,11 +322,10 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`btn btn-sm gap-1 transition-all duration-200 ${
-                  currentPage === 1
-                    ? 'btn-ghost !bg-base-200 !text-base-content/30 !border-base-300 cursor-not-allowed'
-                    : 'btn-outline border-primary/50 text-primary hover:btn-primary hover:text-white'
-                }`}
+                className={`btn btn-sm gap-1 transition-all duration-200 ${currentPage === 1
+                  ? 'btn-ghost !bg-base-200 !text-base-content/30 !border-base-300 cursor-not-allowed'
+                  : 'btn-outline border-primary/50 text-primary hover:btn-primary hover:text-white'
+                  }`}
                 aria-label="Página anterior"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -308,11 +348,10 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
                     <button
                       key={page}
                       onClick={() => handlePageChange(page as number)}
-                      className={`btn btn-sm min-w-[40px] ${
-                        currentPage === page
-                          ? 'btn-primary'
-                          : 'btn-ghost hover:btn-outline'
-                      }`}
+                      className={`btn btn-sm min-w-[40px] ${currentPage === page
+                        ? 'btn-primary'
+                        : 'btn-ghost hover:btn-outline'
+                        }`}
                       aria-label={`Ir a página ${page}`}
                       aria-current={currentPage === page ? 'page' : undefined}
                     >
@@ -326,11 +365,10 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`btn btn-sm gap-1 transition-all duration-200 ${
-                  currentPage === totalPages
-                    ? 'btn-ghost !bg-base-200 !text-base-content/30 !border-base-300 cursor-not-allowed'
-                    : 'btn-outline border-primary/50 text-primary hover:btn-primary hover:text-white'
-                }`}
+                className={`btn btn-sm gap-1 transition-all duration-200 ${currentPage === totalPages
+                  ? 'btn-ghost !bg-base-200 !text-base-content/30 !border-base-300 cursor-not-allowed'
+                  : 'btn-outline border-primary/50 text-primary hover:btn-primary hover:text-white'
+                  }`}
                 aria-label="Página siguiente"
               >
                 <span className="hidden sm:inline">Siguiente</span>
@@ -373,7 +411,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
           </svg>
           <h3 className="text-xl font-semibold mb-2">No se encontraron cursos</h3>
           <p>Prueba ajustando los filtros de búsqueda</p>
-          
+
           {/* Botón para cargar más si no hay resultados pero hay más en el servidor */}
           {hasMoreFromServer && (
             <button

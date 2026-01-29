@@ -22,6 +22,7 @@ import {
     CalendarIcon,
 } from '@heroicons/react/20/solid';
 import ThemeToggle from '../atoms/ThemeToggle';
+import { CurrencySelector } from '../atoms/CurrencySelector';
 
 /**
  * Lista de elementos del menú "Comunidad"
@@ -123,6 +124,7 @@ export default function Navbar({ currentUrl, isTransparent = false, hideBottomGr
 
                 {/* Botones visibles en pantallas pequeñas (theme, login y menú) */}
                 <div className="flex lg:hidden h-8 items-center space-x-2">
+                    <CurrencySelector />
                     <ThemeToggle />
                     <button
                         type="button"
@@ -284,6 +286,7 @@ export default function Navbar({ currentUrl, isTransparent = false, hideBottomGr
 
                 {/* Botón "Acceder" y toggle de tema para pantallas grandes */}
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-3">
+                    <CurrencySelector />
                     <ThemeToggle />
                     <button
                         type="button"

@@ -5,6 +5,7 @@ import { CursosDocument, ModulosPorCursoDocument, type Curso, type Modulo } from
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
 import { Icon } from 'astro-icon/components';
+import { CoursePriceDisplay } from '@components/atoms/CoursePriceDisplay';
 
 // Obtener el slug de los parámetros de la URL
 const { slugCurso } = Astro.params;
@@ -247,14 +248,16 @@ const courseJsonLd = getCourseJsonLd(curso);
     <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-base-100 border-t border-base-200 p-4 shadow-[0_-4px_30px_rgba(0,0,0,0.15)]">
         <div class="flex items-center justify-between gap-4">
             <div>
-                {originalPrice && (
-                    <p class="text-base-content/50 line-through text-sm">
-                        {formatPrice(originalPrice)}
-                    </p>
-                )}
-                <p class="text-2xl font-extrabold text-primary">
-                    {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
-                </p>
+                <CoursePriceDisplay 
+                    client:visible
+                    courseId={_id!}
+                    initialPrice={currentPrice}
+                    initialCurrency={currency || 'USD'}
+                    descuento={descuento}
+                    layout="column"
+                    className="text-2xl font-extrabold text-primary"
+                    originalPriceClassName="text-base-content/50 line-through text-sm"
+                />
             </div>
             <button class="btn btn-primary flex-1 max-w-xs text-white font-bold shadow-lg shadow-primary/30 rounded-xl">
                 🛒 Comprar Ahora
@@ -509,20 +512,18 @@ const courseJsonLd = getCourseJsonLd(curso);
 
                             <div class="p-6 space-y-4">
                                 <!-- Precio y Descuento -->
-                                <div class="text-center">
-                                    {originalPrice && (
-                                        <p class="text-base-content/50 line-through text-lg">
-                                            {formatPrice(originalPrice)}
-                                        </p>
-                                    )}
-                                    <p class="text-4xl font-extrabold text-primary">
-                                        {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
-                                    </p>
-                                    {descuento && descuento > 0 && (
-                                        <p class="text-sm text-success font-semibold mt-1">
-                                            ¡Ahorras {formatPrice(originalPrice! - currentPrice)}!
-                                        </p>
-                                    )}
+                                <div class="text-center w-full flex flex-col items-center">
+                                    <CoursePriceDisplay 
+                                        client:visible
+                                        courseId={_id!}
+                                        initialPrice={currentPrice}
+                                        initialCurrency={currency || 'USD'}
+                                        descuento={descuento}
+                                        layout="column"
+                                        className="text-4xl font-extrabold text-primary"
+                                        originalPriceClassName="text-base-content/50 line-through text-lg"
+                                        showDiscountLabel={true}
+                                    />
                                 </div>
 
                                 <!-- Botón de Acción Principal (CTA) -->
@@ -651,14 +652,16 @@ const courseJsonLd = getCourseJsonLd(curso);
             </p>
             <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
                 <div class="flex items-baseline gap-3">
-                    {originalPrice && (
-                        <span class="text-white/60 line-through text-xl font-medium">
-                            {formatPrice(originalPrice)}
-                        </span>
-                    )}
-                    <span class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-                        {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
-                    </span>
+                     <CoursePriceDisplay 
+                        client:visible
+                        courseId={_id!}
+                        initialPrice={currentPrice}
+                        initialCurrency={currency || 'USD'}
+                        descuento={descuento}
+                        layout="row"
+                        className="text-4xl md:text-5xl font-extrabold text-white tracking-tight"
+                        originalPriceClassName="text-white/60 line-through text-xl font-medium"
+                    />
                 </div>
                 <button class="btn btn-lg bg-white text-primary hover:bg-white/90 border-0 font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 rounded-xl px-10">
                     🛒 Comprar Ahora

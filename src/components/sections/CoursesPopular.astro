@@ -1,52 +1,12 @@
 ---
 import type { Curso } from '@graphql-astro/generated/graphql';
-import { CourseCard } from '../molecules/CourseCard';
+import { PopularCoursesList } from '@components/organisms/PopularCoursesList';
 
 interface Props {
   cursos: Curso[];
 }
 
 const { cursos } = Astro.props;
-
-// Filter courses that are published (not deleted) and sort by rating/popularity
-// Since we don't have a 'popular' flag, we'll use rating * number of ratings as a proxy score, or just rating.
-const popularCourses = [...cursos]
-    .filter(c => !c.deleted)
-    .sort((a, b) => {
-        const scoreA = (a.calificacionPromedio || 0) + (Math.min(a.numeroCalificaciones, 5) * 0.1); 
-        const scoreB = (b.calificacionPromedio || 0) + (Math.min(b.numeroCalificaciones, 5) * 0.1);
-        return scoreB - scoreA;
-    })
-    .slice(0, 3); // Take top 3
-
-const formatCurrency = (amount?: number | null, currency?: string | null) => {
-    if (amount === undefined || amount === null) return 'Consultar';
-    return new Intl.NumberFormat('es-MX', {
-        style: 'currency',
-        currency: currency || 'MXN', // Default to MXN if not specified, though usually usd
-    }).format(amount);
-};
 ---
 
-{popularCourses.length > 0 && (
-<section class="py-16 bg-base-100">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-            <div class="max-w-xl">
-                <span class="text-primary font-semibold tracking-wider text-sm uppercase">Lo más destacado</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2">Cursos Más Populares</h2>
-                <p class="text-base-content/60 mt-2">
-                    Descubre los cursos que están marcando tendencia en nuestra comunidad de ingenieros.
-                </p>
-            </div>
-            <a href="#catalogo" class="btn btn-outline rounded-full px-6">Ver todos los cursos</a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {popularCourses.map((curso) => (
-                <CourseCard client:visible {...curso} />
-            ))}
-        </div>
-    </div>
-</section>
-)}
+<PopularCoursesList client:visible initialCourses={cursos} />
