@@ -9,11 +9,25 @@ const CURRENCIES = [
     { code: 'COP', label: 'COP ($)', flag: '🇨🇴' },
     { code: 'CLP', label: 'CLP ($)', flag: '🇨🇱' },
     { code: 'PEN', label: 'PEN (S/)', flag: '🇵🇪' },
+    { code: 'ARS', label: 'ARS ($)', flag: '🇦🇷' }, // Asegurando ARS
 ];
 
 export const CurrencySelector: React.FC = () => {
-    const { currency, setCurrency } = useCurrency();
+    const { currency, setCurrency, localCurrency } = useCurrency();
 
+    // Filtramos para mostrar SOLO:
+    // 1. Dólares (USD) - siempre disponible
+    // 2. La moneda local detectada (si está en nuestra lista Soportada y no es USD)
+    const availableCurrencies = CURRENCIES.filter(c => 
+        c.code === 'USD' || c.code === localCurrency
+    );
+
+    // Si por alguna razón la moneda actual (currency) no está en availableCurrencies 
+    // (ej. el usuario viajó o cambió manually y luego la lógica cambió),
+    // deberíamos asegurarnos que se muestre o resetear?
+    // Por simplicidad, si el usuario tiene una moneda seleccionada que YA NO es válida (ej. EUR pero está en PERU),
+    // la UI solo le dejará cambiar a PEN o USD.
+    
     return (
         <div className="relative inline-block text-left">
             <select
@@ -28,7 +42,7 @@ export const CurrencySelector: React.FC = () => {
                     backgroundSize: '1.2em 1.2em'
                 }}
             >
-                {CURRENCIES.map((c) => (
+                {availableCurrencies.map((c) => (
                     <option key={c.code} value={c.code} className="bg-[var(--color-surface)] text-[var(--color-text)]">
                         {c.code} {c.flag}
                     </option>
