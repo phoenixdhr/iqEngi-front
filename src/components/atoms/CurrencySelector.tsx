@@ -1,33 +1,51 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 
-const CURRENCIES = [
-    { code: 'USD', label: 'USD ($)', flag: '🇺🇸' },
-    { code: 'EUR', label: 'EUR (€)', flag: '🇪🇺' },
-    { code: 'MXN', label: 'MXN ($)', flag: '🇲🇽' },
-    { code: 'COP', label: 'COP ($)', flag: '🇨🇴' },
-    { code: 'CLP', label: 'CLP ($)', flag: '🇨🇱' },
-    { code: 'PEN', label: 'PEN (S/)', flag: '🇵🇪' },
-    { code: 'ARS', label: 'ARS ($)', flag: '🇦🇷' }, // Asegurando ARS
-];
+// Mapa completo de monedas soportadas con su información de display
+// Este mapa contiene todas las monedas que la plataforma puede mostrar
+const CURRENCY_MAP: Record<string, { code: string; label: string; flag: string }> = {
+    'USD': { code: 'USD', label: 'USD ($)', flag: '🇺🇸' },
+    'EUR': { code: 'EUR', label: 'EUR (€)', flag: '🇪🇺' },
+    'MXN': { code: 'MXN', label: 'MXN ($)', flag: '🇲🇽' },
+    'COP': { code: 'COP', label: 'COP ($)', flag: '🇨🇴' },
+    'CLP': { code: 'CLP', label: 'CLP ($)', flag: '🇨🇱' },
+    'PEN': { code: 'PEN', label: 'PEN (S/)', flag: '🇵🇪' },
+};
 
-export const CurrencySelector: React.FC = () => {
-    const { currency, setCurrency, localCurrency } = useCurrency();
+export function CurrencySelector() {
+    const { currency, setCurrency, detectedCurrency, isLoading } = useCurrency();
 
-    // Filtramos para mostrar SOLO:
-    // 1. Dólares (USD) - siempre disponible
-    // 2. La moneda local detectada (si está en nuestra lista Soportada y no es USD)
-    const availableCurrencies = CURRENCIES.filter(c => 
-        c.code === 'USD' || c.code === localCurrency
-    );
+    // Calcular opciones disponibles dinámicamente:
+    // - La moneda detectada del país (si está soportada y diferente de USD)
+    // - USD como alternativa (siempre disponible)
+    const availableCurrencies = useMemo(() => {
+        // Si la moneda detectada es USD o no está en el mapa, solo USD
+        if (detectedCurrency === 'USD' || !CURRENCY_MAP[detectedCurrency]) {
+            return [CURRENCY_MAP['USD']];
+        }
+        // Mostrar moneda local primero, luego USD
+        return [CURRENCY_MAP[detectedCurrency], CURRENCY_MAP['USD']];
+    }, [detectedCurrency]);
 
-    // Si por alguna razón la moneda actual (currency) no está en availableCurrencies 
-    // (ej. el usuario viajó o cambió manually y luego la lógica cambió),
-    // deberíamos asegurarnos que se muestre o resetear?
-    // Por simplicidad, si el usuario tiene una moneda seleccionada que YA NO es válida (ej. EUR pero está en PERU),
-    // la UI solo le dejará cambiar a PEN o USD.
-    
+    // Mientras carga, mostrar placeholder
+    if (isLoading) {
+        return (
+            <span className="text-[var(--color-text)] text-sm py-1 px-2 opacity-50">
+                ...
+            </span>
+        );
+    }
+
+    // Si solo hay USD disponible, mostrar un label estático pero visible
+    if (availableCurrencies.length <= 1) {
+        return (
+            <span className="text-[var(--color-text)] text-sm py-1 px-2 border border-transparent">
+                {availableCurrencies[0]?.flag} {availableCurrencies[0]?.code}
+            </span>
+        );
+    }
+
     return (
         <div className="relative inline-block text-left">
             <select
@@ -50,4 +68,4 @@ export const CurrencySelector: React.FC = () => {
             </select>
         </div>
     );
-};
+}

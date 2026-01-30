@@ -122,9 +122,8 @@ export default function Navbar({ currentUrl, isTransparent = false, hideBottomGr
                     </a>
                 </div>
 
-                {/* Botones visibles en pantallas pequeñas (theme, login y menú) */}
+                    {/* Botones visibles en pantallas pequeñas (theme, login y menú) */}
                 <div className="flex lg:hidden h-8 items-center space-x-2">
-                    <CurrencySelector />
                     <ThemeToggle />
                     <button
                         type="button"
@@ -425,6 +424,16 @@ export default function Navbar({ currentUrl, isTransparent = false, hideBottomGr
                                         </a>
                                     ),
                                 )}
+                            </div>
+                            
+                            {/* Selector de moneda y configuración adicional para móvil */}
+                            <div className="py-6">
+                                <div className="flex items-center gap-x-3">
+                                    <span className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>
+                                        Moneda:
+                                    </span>
+                                    <CurrencySelector />
+                                </div>
                             </div>
                         </div>
                     </div>
