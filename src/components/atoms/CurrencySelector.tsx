@@ -1,31 +1,39 @@
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 
-// Mapa completo de monedas soportadas con su información de display
-// Este mapa contiene todas las monedas que la plataforma puede mostrar
-const CURRENCY_MAP: Record<string, { code: string; label: string; flag: string }> = {
-    'USD': { code: 'USD', label: 'USD ($)', flag: '🇺🇸' },
-    'EUR': { code: 'EUR', label: 'EUR (€)', flag: '🇪🇺' },
-    'MXN': { code: 'MXN', label: 'MXN ($)', flag: '🇲🇽' },
-    'COP': { code: 'COP', label: 'COP ($)', flag: '🇨🇴' },
-    'CLP': { code: 'CLP', label: 'CLP ($)', flag: '🇨🇱' },
-    'PEN': { code: 'PEN', label: 'PEN (S/)', flag: '🇵🇪' },
+// Mapa opcional de banderas para monedas conocidas (solo decorativo)
+// Si la moneda detectada no está aquí, se muestra sin bandera
+const FLAG_MAP: Record<string, string> = {
+    'USD': '🇺🇸', 'EUR': '🇪🇺', 'MXN': '🇲🇽', 'COP': '🇨🇴',
+    'CLP': '🇨🇱', 'PEN': '🇵🇪', 'BRL': '🇧🇷', 'ARS': '🇦🇷',
+    'BOB': '🇧🇴', 'UYU': '🇺🇾', 'PYG': '🇵🇾', 'CRC': '🇨🇷',
+    'GTQ': '🇬🇹', 'HNL': '🇭🇳', 'NIO': '🇳🇮', 'DOP': '🇩🇴',
+    'PAB': '🇵🇦', 'VES': '🇻🇪', 'GBP': '🇬🇧', 'JPY': '🇯🇵',
+    'CAD': '🇨🇦', 'AUD': '🇦🇺',
 };
 
+/**
+ * Selector de moneda en el Navbar.
+ * Muestra la moneda detectada del país del usuario + USD como alternativa.
+ * Acepta cualquier moneda ISO 4217 — no filtra por un mapa de "soportadas".
+ */
 export function CurrencySelector() {
     const { currency, setCurrency, detectedCurrency, isLoading } = useCurrency();
 
     // Calcular opciones disponibles dinámicamente:
-    // - La moneda detectada del país (si está soportada y diferente de USD)
+    // - La moneda detectada del país (cualquier código ISO 4217)
     // - USD como alternativa (siempre disponible)
     const availableCurrencies = useMemo(() => {
-        // Si la moneda detectada es USD o no está en el mapa, solo USD
-        if (detectedCurrency === 'USD' || !CURRENCY_MAP[detectedCurrency]) {
-            return [CURRENCY_MAP['USD']];
+        // Si la moneda detectada es USD, solo mostrar USD
+        if (detectedCurrency === 'USD') {
+            return [{ code: 'USD', flag: FLAG_MAP['USD'] || '💱' }];
         }
         // Mostrar moneda local primero, luego USD
-        return [CURRENCY_MAP[detectedCurrency], CURRENCY_MAP['USD']];
+        return [
+            { code: detectedCurrency, flag: FLAG_MAP[detectedCurrency] || '💱' },
+            { code: 'USD', flag: FLAG_MAP['USD'] || '🇺🇸' },
+        ];
     }, [detectedCurrency]);
 
     // Mientras carga, mostrar placeholder
@@ -37,7 +45,7 @@ export function CurrencySelector() {
         );
     }
 
-    // Si solo hay USD disponible, mostrar un label estático pero visible
+    // Si solo hay USD disponible, mostrar un label estático
     if (availableCurrencies.length <= 1) {
         return (
             <span className="text-[var(--color-text)] text-sm py-1 px-2 border border-transparent">
