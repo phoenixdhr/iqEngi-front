@@ -6,6 +6,7 @@ import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
 import { Icon } from 'astro-icon/components';
 import { CoursePriceDisplay } from '@components/atoms/CoursePriceDisplay';
+import { Formatter } from 'src/utils/formatter';
 
 // Obtener el slug de los parámetros de la URL
 const { slugCurso } = Astro.params;
@@ -88,15 +89,8 @@ const embedUrl = videoId
 const currentPrice = precio || 0;
 const originalPrice = descuento && descuento > 0 ? currentPrice / (1 - (descuento / 100)) : null;
 
-// Formatter para moneda
-const formatPrice = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: currency || 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(amount);
-};
+// Formatter centralizado para moneda (soporta cualquier código ISO 4217)
+const formatPrice = (amount: number) => Formatter.formatPrice(amount, currency || 'USD');
 
 // Calcular total de unidades
 const totalUnidades = modulos?.reduce((acc, modulo) => acc + (modulo.unidades?.length || 0), 0) || 0;

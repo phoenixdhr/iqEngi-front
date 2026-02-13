@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursoDocument } from '@graphql-astro/generated/graphql';
+import { Formatter } from '@utils/formatter';
 
 interface CoursePriceDisplayProps {
     courseId: string;
@@ -29,28 +30,7 @@ export function CoursePriceDisplay({
     const [currentCurrency, setCurrentCurrency] = useState<string>(initialCurrency);
     const [loading, setLoading] = useState(false);
 
-    // Formateador de moneda
-    const formatPrice = (amount: number, currencyCode: string) => {
-        // Mapa de locales para formato de moneda nativo (reutilizado de CourseCard)
-        const localeMap: Record<string, string> = {
-            'USD': 'en-US',
-            'EUR': 'es-ES',
-            'MXN': 'es-MX',
-            'COP': 'es-CO',
-            'CLP': 'es-CL',
-            'PEN': 'es-PE',
-            'ARS': 'es-AR'
-        };
 
-        const locale = localeMap[currencyCode] || 'en-US';
-
-        return new Intl.NumberFormat(locale, {
-            style: 'currency',
-            currency: currencyCode,
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount);
-    };
 
     // Actualizar precio cuando cambia la moneda
     useEffect(() => {
@@ -93,16 +73,17 @@ export function CoursePriceDisplay({
     // PERO la lógica en slugCurso.astro linea 88 dice:
     // const originalPrice = descuento && descuento > 0 ? currentPrice / (1 - (descuento / 100)) : null;
     // Esto sugiere que 'precio' ES el precio con descuento ya aplicado (lo que paga el usuario).
-    
+
     // Usemos la misma lógica:
-    const calculatedOriginalPrice = (descuento && descuento > 0) 
-        ? finalPrice / (1 - (descuento / 100)) 
+    const calculatedOriginalPrice = (descuento && descuento > 0)
+        ? finalPrice / (1 - (descuento / 100))
         : null;
 
-    const displayPrice = finalPrice === 0 ? 'GRATIS' : formatPrice(finalPrice, currentCurrency);
-    const displayOriginalPrice = calculatedOriginalPrice ? formatPrice(calculatedOriginalPrice, currentCurrency) : null;
+    // Usar utilidad centralizada para formatear precios (soporta cualquier moneda ISO 4217)
+    const displayPrice = Formatter.formatPrice(finalPrice, currentCurrency);
+    const displayOriginalPrice = calculatedOriginalPrice ? Formatter.formatPrice(calculatedOriginalPrice, currentCurrency) : null;
     const savings = (calculatedOriginalPrice && finalPrice > 0) ? calculatedOriginalPrice - finalPrice : 0;
-    const displaySavings = savings > 0 ? formatPrice(savings, currentCurrency) : null;
+    const displaySavings = savings > 0 ? Formatter.formatPrice(savings, currentCurrency) : null;
 
     if (loading) {
         return <span className="loading loading-spinner loading-sm text-primary"></span>;
@@ -119,7 +100,7 @@ export function CoursePriceDisplay({
                 <p className={className}>
                     {displayPrice}
                 </p>
-                 {showDiscountLabel && displaySavings && (
+                {showDiscountLabel && displaySavings && (
                     <p className="text-sm text-success font-semibold mt-1">
                         ¡Ahorras {displaySavings}!
                     </p>
@@ -127,20 +108,20 @@ export function CoursePriceDisplay({
             </div>
         );
     }
-    
+
     if (layout === 'row') {
-         return (
-             <div className="flex items-baseline gap-3">
-                 {displayOriginalPrice && (
-                     <span className={originalPriceClassName}>
-                         {displayOriginalPrice}
-                     </span>
-                 )}
-                 <span className={className}>
-                     {displayPrice}
-                 </span>
-             </div>
-         );
+        return (
+            <div className="flex items-baseline gap-3">
+                {displayOriginalPrice && (
+                    <span className={originalPriceClassName}>
+                        {displayOriginalPrice}
+                    </span>
+                )}
+                <span className={className}>
+                    {displayPrice}
+                </span>
+            </div>
+        );
     }
 
     // Default 'simple' layout (just renders logic wrapper mostly, or simple block)
@@ -148,7 +129,7 @@ export function CoursePriceDisplay({
         <div>
             {displayOriginalPrice && (
                 <span className={`${originalPriceClassName} mr-2`}>
-                   {displayOriginalPrice}
+                    {displayOriginalPrice}
                 </span>
             )}
             <span className={className}>

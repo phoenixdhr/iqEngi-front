@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
+import { Formatter } from '@utils/formatter';
 
 interface CourseCardProps extends Partial<Curso> {
   className?: string;
@@ -22,29 +23,6 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   // Calcular el precio actual y el precio original (si hay descuento)
   const currentPrice = precio || 0;
   const originalPrice = descuento ? currentPrice / (1 - (descuento / 100)) : null;
-
-  // Formateador de moneda
-  const formatPrice = (amount: number) => {
-    // Mapa de locales para formato de moneda nativo
-    const localeMap: Record<string, string> = {
-      'USD': 'en-US',
-      'EUR': 'es-ES',
-      'MXN': 'es-MX',
-      'COP': 'es-CO',
-      'CLP': 'es-CL',
-      'PEN': 'es-PE',
-      'ARS': 'es-AR'
-    };
-
-    const locale = localeMap[currency || 'USD'] || 'en-US';
-
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency || 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(amount);
-  };
 
   return (
     <div className="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col group overflow-hidden border border-base-200">
@@ -72,11 +50,11 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             <div className="flex flex-col items-end">
               {originalPrice && (
                 <span className="text-xs text-gray-300 line-through decoration-red-500 decoration-2">
-                  {formatPrice(originalPrice)}
+                  {Formatter.formatPrice(originalPrice, currency)}
                 </span>
               )}
               <span className="text-xl font-bold text-iq-purple-light-mid-200 drop-shadow-sm">
-                {currentPrice === 0 ? 'GRATIS' : formatPrice(currentPrice)}
+                {Formatter.formatPrice(currentPrice, currency)}
               </span>
             </div>
           </div>
