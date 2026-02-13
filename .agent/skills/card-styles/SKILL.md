@@ -1,6 +1,6 @@
 ---
 name: card-styles
-description: Estándares de diseño para tarjetas (Cards) en iqEngi (Cursos, Blog, Productos)
+description: Estándares de diseño para tarjetas (Cards) en iqEngi
 ---
 
 # Sistema de Tarjetas (Cards) - iqEngi
