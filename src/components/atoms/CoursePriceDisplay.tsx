@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursoDocument } from '@graphql-astro/generated/graphql';
-import { Formatter } from '@utils/formatter';
+import { Formatter } from '../../utils/formatter';
 
 interface CoursePriceDisplayProps {
     courseId: string;
@@ -85,13 +85,14 @@ export function CoursePriceDisplay({
     const savings = (calculatedOriginalPrice && finalPrice > 0) ? calculatedOriginalPrice - finalPrice : 0;
     const displaySavings = savings > 0 ? Formatter.formatPrice(savings, currentCurrency) : null;
 
-    if (loading) {
-        return <span className="loading loading-spinner loading-sm text-primary"></span>;
-    }
+    // Clase de transición suave de opacidad durante carga (evita layout shift / parpadeo)
+    const loadingClass = loading
+        ? "opacity-40 transition-opacity duration-300"
+        : "opacity-100 transition-opacity duration-300";
 
     if (layout === 'column') {
         return (
-            <div className="flex flex-col items-center">
+            <div className={`flex flex-col items-center ${loadingClass}`}>
                 {displayOriginalPrice && (
                     <p className={originalPriceClassName}>
                         {displayOriginalPrice}
@@ -111,7 +112,7 @@ export function CoursePriceDisplay({
 
     if (layout === 'row') {
         return (
-            <div className="flex items-baseline gap-3">
+            <div className={`flex items-baseline gap-3 ${loadingClass}`}>
                 {displayOriginalPrice && (
                     <span className={originalPriceClassName}>
                         {displayOriginalPrice}
@@ -124,9 +125,9 @@ export function CoursePriceDisplay({
         );
     }
 
-    // Default 'simple' layout (just renders logic wrapper mostly, or simple block)
+    // Layout 'simple' por defecto
     return (
-        <div>
+        <div className={loadingClass}>
             {displayOriginalPrice && (
                 <span className={`${originalPriceClassName} mr-2`}>
                     {displayOriginalPrice}

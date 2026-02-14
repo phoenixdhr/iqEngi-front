@@ -36,6 +36,8 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   const [allCourses, setAllCourses] = useState<Curso[]>(initialCursos);
   const [hasMoreFromServer, setHasMoreFromServer] = useState(hasMoreInitial);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // Estado para indicar carga al cambiar moneda
+  const [isCurrencyLoading, setIsCurrencyLoading] = useState(false);
 
   // Estados de filtros
   const [searchTerm, setSearchTerm] = useState('');
@@ -89,6 +91,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   useEffect(() => {
     const fetchCoursesInCurrency = async () => {
       if (initialCursos.length > 0 && currency) {
+        setIsCurrencyLoading(true);
         try {
           // We keep the current limit but reset offset to 0 to reload the "first page" of current view
           // Or better, reload the amount of currently loaded courses?
@@ -107,12 +110,17 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
             fetchPolicy: 'network-only'
           });
 
+
           if (data?.Cursos) {
             setAllCourses(data.Cursos as Curso[]);
           }
         } catch (error) {
           console.error("Error updating courses currency:", error);
+        } finally {
+          setIsCurrencyLoading(false);
         }
+      } else {
+        console.log('DEBUG: Skipping currency fetch. Conditions not met.');
       }
     };
 
@@ -121,6 +129,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
 
   // Filter and Sort Logic (sobre todos los cursos cargados)
   const filteredAndSortedCourses = useMemo(() => {
+    console.log('DEBUG: Calculating filtered courses. Total:', allCourses.length, 'Filters:', { searchTerm, selectedCategory, sortOption });
     let result = [...allCourses];
 
     // 1. Filter by Search Term
@@ -152,11 +161,13 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
       return 0; // Default to original order (recent)
     });
 
+    console.log('DEBUG: Resulting filtered courses:', result.length);
     return result;
   }, [allCourses, searchTerm, selectedCategory, sortOption]);
 
   // Resetear a página 1 cuando cambian los filtros
   useEffect(() => {
+    console.log('DEBUG: Resetting to page 1 due to filter change');
     setCurrentPage(1);
   }, [searchTerm, selectedCategory, sortOption, itemsPerPage]);
 
@@ -311,7 +322,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
           {/* Grid con altura mínima para mantener paginación en posición consistente */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px] content-start">
             {paginatedCourses.map(curso => (
-              <CourseCard key={curso._id} {...curso} currency={currency} />
+              <CourseCard key={curso._id} {...curso} currency={currency} isLoading={isCurrencyLoading} />
             ))}
           </div>
 

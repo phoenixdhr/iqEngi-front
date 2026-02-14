@@ -13,10 +13,13 @@ interface FeaturedCoursesProps {
 export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({ initialCourses }) => {
     const { currency } = useCurrency();
     const [courses, setCourses] = useState<Curso[]>(initialCourses);
+    // Estado de carga para evitar flash visual al cambiar moneda
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCourses = async () => {
             if (currency) {
+                setLoading(true);
                 try {
                     const { data } = await clientGql.query({
                         query: CursosDocument,
@@ -32,6 +35,8 @@ export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({ initialCourses
                     }
                 } catch (error) {
                     console.error("Error fetching featured courses:", error);
+                } finally {
+                    setLoading(false);
                 }
             }
         };
@@ -42,7 +47,7 @@ export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({ initialCourses
     return (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((curso) => (
-                <CourseCard key={curso._id} {...curso} currency={currency} />
+                <CourseCard key={curso._id} {...curso} currency={currency} isLoading={loading} />
             ))}
 
             {/* Card "Ver más cursos" estática */}

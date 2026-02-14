@@ -1,9 +1,10 @@
 import React from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
-import { Formatter } from '@utils/formatter';
+import { Formatter } from '../../utils/formatter';
 
 interface CourseCardProps extends Partial<Curso> {
   className?: string;
+  isLoading?: boolean; // Indica si los precios están en proceso de conversión de moneda
 }
 
 // Componente: CourseCard
@@ -18,7 +19,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   precio,
   descuento,
   duracionHoras,
-  currency = 'USD'
+  currency = 'USD',
+  isLoading = false
 }) => {
   // Calcular el precio actual y el precio original (si hay descuento)
   const currentPrice = precio || 0;
@@ -45,7 +47,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           )}
 
           {/* Banda inferior con el precio (Gradiente oscuro para legibilidad) */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12 flex items-end justify-end text-white">
+          {/* Transición suave de opacidad durante conversión de moneda para evitar flash visual */}
+          <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12 flex items-end justify-end text-white transition-opacity duration-300 ${isLoading ? 'opacity-30' : 'opacity-100'}`}>
 
             <div className="flex flex-col items-end">
               {originalPrice && (

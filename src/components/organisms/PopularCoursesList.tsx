@@ -75,7 +75,7 @@ export const PopularCoursesList: React.FC<PopularCoursesListProps> = ({ initialC
 
                 <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${loading ? 'opacity-50' : 'opacity-100'}`}>
                     {popularCourses.map((curso) => (
-                        <CourseCard key={curso._id} {...curso} currency={currency} />
+                        <CourseCard key={curso._id} {...curso} currency={currency} isLoading={loading} />
                     ))}
                 </div>
             </div>

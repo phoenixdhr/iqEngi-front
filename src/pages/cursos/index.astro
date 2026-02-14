@@ -16,7 +16,7 @@ let categorias: Categoria[] = [];
 let coursesJsonLd;
 let hasMoreCourses = false;
 
-// Constante para la carga inicial de cursos
+    // Constante para la carga inicial de cursos
 const INITIAL_COURSES_LIMIT = 24;
 
 try {
@@ -24,6 +24,7 @@ try {
         clientGql.query({
             query: CursosDocument,
             variables: { offset: 0, limit: INITIAL_COURSES_LIMIT },
+            fetchPolicy: 'no-cache'
         }),
         clientGql.query({
             query: CategoriasDocument,
@@ -31,18 +32,12 @@ try {
     ]);
 
     cursos = cursosResult.data?.Cursos || [];
-    // Si se devolvieron exactamente INITIAL_COURSES_LIMIT cursos, probablemente hay más
     hasMoreCourses = cursos.length === INITIAL_COURSES_LIMIT;
     
-    if (cursos.length > 0) {
-        console.log('DEBUG: First course keys:', Object.keys(cursos[0]));
-        console.log('DEBUG: First course precio:', cursos[0].precio);
-    }
     categorias = categoriasResult.data?.Categorias || [];
     
     // MOCK DATA: Inject categories if none found (for development/testing)
     if (categorias.length === 0) {
-        console.warn('DEBUG: No categories found in backend, using mock data.');
         categorias = [
             { _id: 'cat1', nombreCategoria: 'Mecánica', deleted: false, descripcion: 'Cursos de mecánica' },
             { _id: 'cat2', nombreCategoria: 'Procesos', deleted: false, descripcion: 'Ingeniería de procesos' },
