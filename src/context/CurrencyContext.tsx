@@ -45,17 +45,14 @@ export function useCurrency() {
 
                 if (isLocalhost) {
                     // Para facilitar pruebas en desarrollo, forzamos PEN (Soles) en localhost
-                    console.log('[useCurrency] Desarrollo local detectado, usando PEN');
                     detectedCurrencyCode = 'PEN';
                 } else {
                     // En producción, consultamos ipapi.co para obtener la moneda basada en la IP
-                    console.log('[useCurrency] Obteniendo moneda desde ipapi.co...');
                     const response = await fetch('https://ipapi.co/currency/', {
                         signal: AbortSignal.timeout(5000) // Timeout de 5 segundos para no bloquear la UI
                     });
                     if (response.ok) {
                         const rawDetected = await response.text();
-                        console.log('[useCurrency] Moneda detectada (cruda):', rawDetected);
                         // Validamos que sea un código de moneda ISO 4217 válido (3 letras)
                         // Intl.NumberFormat soporta cualquier moneda ISO, no necesitamos filtrar
                         if (rawDetected && rawDetected.length === 3) {
@@ -64,7 +61,6 @@ export function useCurrency() {
                     }
                 }
 
-                console.log('[useCurrency] Moneda detectada final:', detectedCurrencyCode);
 
                 // Guardamos la moneda detectada
                 setDetectedCurrency(detectedCurrencyCode);

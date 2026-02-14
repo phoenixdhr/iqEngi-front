@@ -37,6 +37,10 @@ export default [
                 ...globals.node,
             },
         },
+        rules: {
+            // Prevenir console.log en producción. Se permiten warn, error e info para diagnóstico.
+            'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+        },
     },
 
     // Configuración para Astro

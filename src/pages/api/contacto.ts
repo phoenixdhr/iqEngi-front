@@ -192,7 +192,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             replyTo: formData.email,
         });
 
-        console.log('Email enviado exitosamente:', data);
+        // Registrar éxito del envío para monitoreo del servidor
+        console.info('Email enviado exitosamente:', data);
 
         return new Response(
             JSON.stringify({

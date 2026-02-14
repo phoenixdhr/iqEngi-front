@@ -119,8 +119,6 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
         } finally {
           setIsCurrencyLoading(false);
         }
-      } else {
-        console.log('DEBUG: Skipping currency fetch. Conditions not met.');
       }
     };
 
@@ -129,7 +127,6 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
 
   // Filter and Sort Logic (sobre todos los cursos cargados)
   const filteredAndSortedCourses = useMemo(() => {
-    console.log('DEBUG: Calculating filtered courses. Total:', allCourses.length, 'Filters:', { searchTerm, selectedCategory, sortOption });
     let result = [...allCourses];
 
     // 1. Filter by Search Term
@@ -161,13 +158,13 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
       return 0; // Default to original order (recent)
     });
 
-    console.log('DEBUG: Resulting filtered courses:', result.length);
+
     return result;
   }, [allCourses, searchTerm, selectedCategory, sortOption]);
 
   // Resetear a página 1 cuando cambian los filtros
   useEffect(() => {
-    console.log('DEBUG: Resetting to page 1 due to filter change');
+
     setCurrentPage(1);
   }, [searchTerm, selectedCategory, sortOption, itemsPerPage]);
 
