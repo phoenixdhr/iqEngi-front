@@ -1,57 +1,17 @@
-import React, { useState } from 'react';
-import { useNewsletter_SubscribeMutation, NewsletterSource } from '@graphql-astro/generated/graphql';
+import React from 'react';
+import { NewsletterSource } from '@graphql-astro/generated/graphql';
 import { ApolloProvider } from '@apollo/client';
 import { clientGql } from '@graphql-astro/apolloClient';
+import { useNewsletterSubscription } from '@hooks/useNewsletterSubscription';
 
-// Componente interno con la lógica del formulario de suscripción.
-// Se mantiene separado para garantizar el acceso al contexto de Apollo Client.
+/**
+ * NewsletterBlogContent - Componente interno con la UI del newsletter del blog.
+ * Usa el hook useNewsletterSubscription para la lógica de suscripción.
+ * Separado del wrapper ApolloProvider para acceder al contexto de Apollo Client.
+ */
 function NewsletterBlogContent() {
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [message, setMessage] = useState('');
-
-    // Hook de Apollo generado automáticamente para la mutación
-    const [subscribe, { loading }] = useNewsletter_SubscribeMutation();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        // activamos loading y limpiamos mensajes
-        setStatus('loading');
-        setMessage('');
-
-        try {
-            // Llamamos a la mutación con los variables necesarios
-            const { data } = await subscribe({
-                variables: {
-                    input: {
-                        email: email,
-                        source: NewsletterSource.WebFooter
-                    }
-                }
-            });
-
-            // Si la respuesta es exitosa
-            if (data?.Newsletter_subscribe?.success) {
-                setStatus('success');
-                setMessage(data.Newsletter_subscribe.message || '¡Suscrito correctamente!');
-                setEmail('');
-                // Volvemos al estado inicial tras unos segundos
-                setTimeout(() => {
-                    setStatus('idle');
-                    setMessage('');
-                }, 5000);
-            } else {
-                // Caso de error controlado (ej. correo inválido o ya registrado)
-                setStatus('error');
-                setMessage(data?.Newsletter_subscribe?.message || 'Ocurrió un error al suscribirse.');
-            }
-        } catch (err: any) {
-            // Error de red o inesperado
-            console.error(err);
-            setStatus('error');
-            setMessage(err.message || 'Error de conexión. Inténtalo de nuevo.');
-        }
-    };
+    // Hook reutilizable: maneja email, status, message, loading y handleSubmit
+    const { email, setEmail, status, message, loading, handleSubmit } = useNewsletterSubscription(NewsletterSource.WebFooter);
 
     return (
         <section className="mt-24 mb-12 relative overflow-hidden rounded-3xl bg-base-900 text-white">
@@ -95,10 +55,12 @@ function NewsletterBlogContent() {
             </div>
         </section>
     );
-};
+}
 
-// Componente contenedor que provee el cliente de Apollo.
-// Requerido para evitar errores de "Invalid hook call" al usar useMutation en islas de Astro.
+/**
+ * NewsletterBlog - Componente contenedor que provee el cliente de Apollo.
+ * Requerido para evitar errores de "Invalid hook call" al usar useMutation en islas de Astro.
+ */
 function NewsletterBlog() {
     return (
         <ApolloProvider client={clientGql}>

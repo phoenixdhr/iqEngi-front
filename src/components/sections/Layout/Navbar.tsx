@@ -21,8 +21,8 @@ import {
     NewspaperIcon,
     CalendarIcon,
 } from '@heroicons/react/20/solid';
-import ThemeToggle from '../ui/ThemeToggle';
-import { CurrencySelector } from '../ui/CurrencySelector';
+import ThemeToggle from '@components/ui/ThemeToggle';
+import { CurrencySelector } from '@components/ui/Currency/CurrencySelector';
 
 /**
  * Lista de elementos del menú "Comunidad"

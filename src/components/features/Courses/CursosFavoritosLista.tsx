@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FAVORITOS_CURSOS } from '@const/const-string';
-import CardsFavorite from '@components/molecules/CardsFavorite';
+import CardsFavorite from '@components/molecules/Cards/CardsFavorite';
 import type { CursoFavorito } from 'src/interfaces/cursoFavorito.interface';
 import { BookmarkSlashIcon } from '@heroicons/react/24/outline'; // Adjust path if needed, usually just '24/outline'
 

@@ -1,48 +1,24 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
-import { CursosDocument } from '@graphql-astro/generated/graphql';
-import { clientGql } from '@graphql-astro/apolloClient';
-import { CourseCard } from '../molecules/CourseCard';
-import { useCurrency } from '../../context/CurrencyContext';
+import { CourseCard } from '@components/molecules/Cards/CourseCard';
+import { useFetchCourses } from '@hooks/useFetchCourses';
 
+/**
+ * Props del componente FeaturedCourses.
+ * Recibe los cursos precargados desde el servidor (SSR).
+ */
 interface FeaturedCoursesProps {
     initialCourses: Curso[];
 }
 
-export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({ initialCourses }) => {
-    const { currency } = useCurrency();
-    const [courses, setCourses] = useState<Curso[]>(initialCourses);
-    // Estado de carga para evitar flash visual al cambiar moneda
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        const fetchCourses = async () => {
-            if (currency) {
-                setLoading(true);
-                try {
-                    const { data } = await clientGql.query({
-                        query: CursosDocument,
-                        variables: {
-                            offset: 0,
-                            limit: 5,
-                            currency: currency
-                        },
-                        fetchPolicy: 'network-only'
-                    });
-                    if (data?.Cursos) {
-                        setCourses(data.Cursos as Curso[]);
-                    }
-                } catch (error) {
-                    console.error("Error fetching featured courses:", error);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
-
-        fetchCourses();
-    }, [currency]);
+/**
+ * FeaturedCourses - Muestra los cursos destacados en la página de inicio.
+ * Usa el hook useFetchCourses para re-fetch automático al cambiar moneda.
+ */
+export function FeaturedCourses({ initialCourses }: FeaturedCoursesProps) {
+    // Hook reutilizable: maneja cursos, moneda y estado de carga
+    const { courses, currency, loading } = useFetchCourses(initialCourses, 5);
 
     return (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -68,4 +44,4 @@ export const FeaturedCourses: React.FC<FeaturedCoursesProps> = ({ initialCourses
             </a>
         </div>
     );
-};
+}

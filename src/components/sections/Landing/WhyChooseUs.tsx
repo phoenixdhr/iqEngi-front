@@ -35,7 +35,7 @@ const features: Feature[] = [
     },
 ];
 
-const WhyChooseUs: React.FC = () => {
+export default function WhyChooseUs() {
     // Variantes de animación para el contenedor (stagger effect)
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -159,6 +159,4 @@ const WhyChooseUs: React.FC = () => {
             </div>
         </section>
     );
-};
-
-export default WhyChooseUs;
+}

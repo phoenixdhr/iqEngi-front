@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useCurrency } from '../../context/CurrencyContext';
+import { useCurrency } from '@hooks/useCurrency';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursoDocument } from '@graphql-astro/generated/graphql';
-import { Formatter } from '../../utils/formatter';
+import { Formatter } from '@utils/formatter';
 
 interface CoursePriceDisplayProps {
     courseId: string;

@@ -34,7 +34,7 @@ const steps: Step[] = [
     },
 ];
 
-const HowItWorks: React.FC = () => {
+export default function HowItWorks() {
     // Variantes de animación
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -166,6 +166,4 @@ const HowItWorks: React.FC = () => {
             </div>
         </section>
     );
-};
-
-export default HowItWorks;
+}

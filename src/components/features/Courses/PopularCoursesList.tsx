@@ -1,51 +1,26 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
-import { CursosDocument } from '@graphql-astro/generated/graphql';
-import { clientGql } from '@graphql-astro/apolloClient';
-import { CourseCard } from '../molecules/CourseCard';
-import { useCurrency } from '../../context/CurrencyContext';
+import { CourseCard } from '@components/molecules/Cards/CourseCard';
+import { useFetchCourses } from '@hooks/useFetchCourses';
 
+/**
+ * Props del componente PopularCoursesList.
+ * Recibe los cursos precargados desde el servidor (SSR).
+ */
 interface PopularCoursesListProps {
     initialCourses: Curso[];
 }
 
-export const PopularCoursesList: React.FC<PopularCoursesListProps> = ({ initialCourses }) => {
-    const { currency } = useCurrency();
-    const [courses, setCourses] = useState<Curso[]>(initialCourses);
-    const [loading, setLoading] = useState(false);
+/**
+ * PopularCoursesList - Muestra los 3 cursos más populares ordenados por calificación.
+ * Usa el hook useFetchCourses para re-fetch automático al cambiar moneda.
+ */
+export function PopularCoursesList({ initialCourses }: PopularCoursesListProps) {
+    // Hook reutilizable: maneja cursos, moneda y estado de carga
+    const { courses, currency, loading } = useFetchCourses(initialCourses, 24);
 
-    // Fetch courses when currency changes
-    useEffect(() => {
-        const fetchCourses = async () => {
-            if (currency) {
-                setLoading(true);
-                try {
-                    // Replicamos la query inicial de la página (limit 24) para tener el mismo pool de datos para ordenar
-                    const { data } = await clientGql.query({
-                        query: CursosDocument,
-                        variables: {
-                            offset: 0,
-                            limit: 24,
-                            currency: currency
-                        },
-                        fetchPolicy: 'network-only'
-                    });
-                    if (data?.Cursos) {
-                        setCourses(data.Cursos as Curso[]);
-                    }
-                } catch (error) {
-                    console.error("Error fetching popular courses with currency:", error);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
-
-        fetchCourses();
-    }, [currency]);
-
-    // Sorting logic (same as original CoursesPopular.astro)
+    // Lógica de ordenamiento por popularidad (calificación promedio + número de calificaciones)
     const popularCourses = useMemo(() => {
         return [...courses]
             .filter(c => !c.deleted)
@@ -81,4 +56,4 @@ export const PopularCoursesList: React.FC<PopularCoursesListProps> = ({ initialC
             </div>
         </section>
     );
-};
+}

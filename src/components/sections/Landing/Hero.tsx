@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Hero = () => {
+export default function Hero() {
     // Animation variants for staggered entrance
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -89,6 +89,4 @@ const Hero = () => {
             </motion.div>
         </section>
     );
-};
-
-export default Hero;
+}

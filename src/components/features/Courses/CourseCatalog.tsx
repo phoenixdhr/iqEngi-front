@@ -11,8 +11,8 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import type { Curso, Categoria } from '@graphql-astro/generated/graphql';
 import { CursosDocument } from '@graphql-astro/generated/graphql';
 import { clientGql } from '@graphql-astro/apolloClient';
-import { CourseCard } from '../molecules/CourseCard';
-import { useCurrency } from '../../context/CurrencyContext';
+import { CourseCard } from '@components/molecules/Cards/CourseCard';
+import { useCurrency } from '@hooks/useCurrency';
 
 interface CourseCatalogProps {
   cursos: Curso[];
@@ -26,12 +26,12 @@ const ITEMS_PER_PAGE_OPTIONS = [6, 9, 12, 24];
 const DEFAULT_ITEMS_PER_PAGE = 6;
 const LOAD_MORE_BATCH_SIZE = 24;
 
-export const CourseCatalog: React.FC<CourseCatalogProps> = ({
+export function CourseCatalog({
   cursos: initialCursos,
   categorias,
   hasMoreInitial = false,
   initialLimit = 24
-}) => {
+}: CourseCatalogProps) {
   // Estado para todos los cursos cargados (inicial + fetchMore)
   const [allCourses, setAllCourses] = useState<Curso[]>(initialCursos);
   const [hasMoreFromServer, setHasMoreFromServer] = useState(hasMoreInitial);
@@ -85,7 +85,7 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
   // Filters logic
   // ... (previous logic)
 
-  const { currency } = useCurrency(); // Get global currency
+  const { currency } = useCurrency(); // Moneda global del usuario
 
   // Refetch when currency changes
   useEffect(() => {
@@ -434,4 +434,4 @@ export const CourseCatalog: React.FC<CourseCatalogProps> = ({
       )}
     </div>
   );
-};
+}

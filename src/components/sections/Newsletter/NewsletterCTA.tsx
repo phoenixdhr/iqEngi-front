@@ -1,60 +1,19 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { useNewsletter_SubscribeMutation, NewsletterSource } from '@graphql-astro/generated/graphql';
+import { NewsletterSource } from '@graphql-astro/generated/graphql';
 import { ApolloProvider } from '@apollo/client';
 import { clientGql } from '@graphql-astro/apolloClient';
+import { useNewsletterSubscription } from '@hooks/useNewsletterSubscription';
 
-// Componente interno que maneja la lógica de suscripción y UI.
-// Separamos este componente para poder envolverlo con el ApolloProvider definido abajo.
+/**
+ * NewsletterCTAContent - Componente interno que maneja la UI del newsletter de la página principal.
+ * Usa el hook useNewsletterSubscription para la lógica de suscripción.
+ * Separado del wrapper ApolloProvider para acceder al contexto de Apollo Client.
+ */
 function NewsletterCTAContent() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
-
-  // Hook generado por codegen para ejecutar la mutación de suscripción
-  const [subscribe, { loading }] = useNewsletter_SubscribeMutation();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Iniciamos el estado de carga y limpiamos mensajes anteriores
-    setStatus('loading');
-    setMessage('');
-    
-    try {
-      // Ejecutamos la mutación enviando el email y la fuente
-      const { data } = await subscribe({
-        variables: {
-          input: {
-            email: email,
-            source: NewsletterSource.WebFooter
-          }
-        }
-      });
-
-      // Validamos la respuesta exitosa del backend
-      if (data?.Newsletter_subscribe?.success) {
-        setStatus('success');
-        setMessage(data.Newsletter_subscribe.message || '¡Te has suscrito correctamente!');
-        setEmail('');
-        
-        // Reseteamos el estado visual después de 5 segundos
-        setTimeout(() => {
-           setStatus('idle');
-           setMessage('');
-        }, 5000);
-      } else {
-        // Manejo de errores controlados por el backend (ej. email duplicado)
-        setStatus('error');
-        setMessage(data?.Newsletter_subscribe?.message || 'Ocurrió un error al suscribirse.');
-      }
-    } catch (err: any) {
-      // Manejo de errores de red o excepciones
-      console.error(err);
-      setStatus('error');
-      setMessage(err.message || 'Error de conexión. Inténtalo de nuevo.');
-    }
-  };
+  // Hook reutilizable: maneja email, status, message, loading y handleSubmit
+  const { email, setEmail, status, message, loading, handleSubmit } = useNewsletterSubscription(NewsletterSource.WebFooter);
 
   return (
     <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-bg)]">
@@ -147,16 +106,18 @@ function NewsletterCTAContent() {
           </div>
       </div>
       
-      {/* Decorative gradient blur */}
+      {/* Gradiente decorativo difuminado */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--color-primary)]/5 rounded-full blur-[120px] -z-10 pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--color-secondary)]/5 rounded-full blur-[120px] -z-10 pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
     </section>
   );
-};
+}
 
-// Componente principal exportado.
-// Envuelve el contenido en ApolloProvider para proveer el contexto del cliente GraphQL.
-// Esto es necesario en Astro cuando se usan hooks de Apollo en componentes React hidratados (islas).
+/**
+ * NewsletterCTA - Componente principal exportado.
+ * Envuelve el contenido en ApolloProvider para proveer el contexto del cliente GraphQL.
+ * Esto es necesario en Astro cuando se usan hooks de Apollo en componentes React hidratados (islas).
+ */
 function NewsletterCTA() {
     return (
         <ApolloProvider client={clientGql}>

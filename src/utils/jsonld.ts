@@ -3,7 +3,7 @@ import type {
     Curso,
     Instructor,
 } from '@graphql-astro/generated/graphql';
-import { siteSchema } from '../const/site-schema';
+import { siteSchema } from '@const/site-schema';
 import type { CollectionEntry } from 'astro:content';
 
 // 🏠 JSON-LD para la Página Principal (WebSite)

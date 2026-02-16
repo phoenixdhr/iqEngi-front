@@ -3,11 +3,11 @@ import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, CategoriasDocument, type Curso, type Categoria } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCoursesJsonLd } from '@utils/jsonld';
-import { CourseCatalog } from '@components/features/CourseCatalog';
-import CoursesHero from '@components/sections/CoursesHero.astro';
-import CoursesCategories from '@components/sections/CoursesCategories.astro';
-import CoursesPopular from '@components/sections/CoursesPopular.astro';
-import CoursesTestimonials from '@components/sections/CoursesTestimonials.astro';
+import { CourseCatalog } from '@components/features/Courses/CourseCatalog';
+import CoursesHero from '@components/sections/Courses/CoursesHero.astro';
+import CoursesCategories from '@components/sections/Courses/CoursesCategories.astro';
+import CoursesPopular from '@components/sections/Courses/CoursesPopular.astro';
+import CoursesTestimonials from '@components/sections/Courses/CoursesTestimonials.astro';
 
 export const prerender = true;
 

@@ -1,6 +1,6 @@
 
 import { useMemo } from 'react';
-import { useCurrency } from '../../context/CurrencyContext';
+import { useCurrency } from '@hooks/useCurrency';
 
 // Mapa opcional de banderas para monedas conocidas (solo decorativo)
 // Si la moneda detectada no está aquí, se muestra sin bandera

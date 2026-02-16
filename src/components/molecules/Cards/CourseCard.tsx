@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
-import { Formatter } from '../../utils/formatter';
+import { Formatter } from '@utils/formatter';
 
 interface CourseCardProps extends Partial<Curso> {
   className?: string;
@@ -11,7 +11,7 @@ interface CourseCardProps extends Partial<Curso> {
 // Descripción: Tarjeta que muestra el resumen de un curso (imagen, título, precio, etc.)
 // Se utiliza en los listados de cursos y en la página principal.
 
-export const CourseCard: React.FC<CourseCardProps> = ({
+export function CourseCard({
   courseTitle,
   imagenURL,
   descripcionCorta,
@@ -21,7 +21,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   duracionHoras,
   currency = 'USD',
   isLoading = false
-}) => {
+}: CourseCardProps) {
   // Calcular el precio actual y el precio original (si hay descuento)
   const currentPrice = precio || 0;
   const originalPrice = descuento ? currentPrice / (1 - (descuento / 100)) : null;
