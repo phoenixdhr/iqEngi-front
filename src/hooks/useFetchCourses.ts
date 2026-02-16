@@ -37,7 +37,7 @@ export function useFetchCourses(initialCourses: Curso[], limit: number) {
                             limit,
                             currency: currency
                         },
-                        fetchPolicy: 'network-only' // Forzar fetch del servidor para obtener precios actualizados
+
                     });
                     if (data?.Cursos) {
                         setCourses(data.Cursos as Curso[]);

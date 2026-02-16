@@ -45,7 +45,7 @@ export function CoursePriceDisplay({
                             cursoId: courseId,
                             currency: currency
                         },
-                        fetchPolicy: 'network-only' // Asegurar que traemos el dato fresco
+
                     });
 
                     if (data?.Curso?.precio !== undefined && data?.Curso?.precio !== null) {

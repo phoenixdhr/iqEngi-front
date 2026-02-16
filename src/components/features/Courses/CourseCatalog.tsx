@@ -64,8 +64,7 @@ export function CourseCatalog({
           limit: LOAD_MORE_BATCH_SIZE,
           currency: currency
         },
-        // network-only: siempre obtiene datos frescos del servidor para carga incremental
-        fetchPolicy: 'network-only'
+
       });
 
       if (data?.Cursos) {
@@ -108,7 +107,7 @@ export function CourseCatalog({
               limit: limitToFetch,
               currency: currency // Pass the currency
             },
-            fetchPolicy: 'network-only'
+
           });
 
 
