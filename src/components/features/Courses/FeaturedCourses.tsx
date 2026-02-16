@@ -1,5 +1,4 @@
 
-import React from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
 import { CourseCard } from '@components/molecules/Cards/CourseCard';
 import { useFetchCourses } from '@hooks/useFetchCourses';

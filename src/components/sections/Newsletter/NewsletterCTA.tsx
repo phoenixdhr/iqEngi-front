@@ -1,5 +1,5 @@
 
-import React from 'react';
+
 import { motion } from 'framer-motion';
 import { NewsletterSource } from '@graphql-astro/generated/graphql';
 import { ApolloProvider } from '@apollo/client';

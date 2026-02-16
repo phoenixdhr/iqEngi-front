@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Curso } from '@graphql-astro/generated/graphql';
 import { Formatter } from '@utils/formatter';
 

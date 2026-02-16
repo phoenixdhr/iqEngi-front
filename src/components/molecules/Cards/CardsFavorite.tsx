@@ -1,5 +1,4 @@
 import { FAVORITOS_CURSOS } from '@const/const-string';
-import React from 'react';
 import type { CursoFavorito } from 'src/interfaces/cursoFavorito.interface';
 
 interface CardsFavoriteProps extends CursoFavorito {

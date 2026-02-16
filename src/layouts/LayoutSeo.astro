@@ -35,7 +35,7 @@ const {
 const currentUrl = Astro.url.pathname;
 ---
 
-<html lang="en">
+<html lang="es">
     <head>
         <ClientRouter />
         <Seo
@@ -50,12 +50,27 @@ const currentUrl = Astro.url.pathname;
             name="google-site-verification"
             content="Ev2TdFXtbkht-Jxmbq-7wNtUnlUTWrJgmiPypLEEv1A"
         />
+        <!-- Preconexiones y precarga de Google Fonts para evitar bloqueo de renderizado -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
+            rel="preload"
+            as="style"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+        />
+        <link
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
             rel="stylesheet"
+            media="print"
+            onload="this.media='all'"
         />
+        <!-- Fallback para navegadores sin JS -->
+        <noscript>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+                rel="stylesheet"
+            />
+        </noscript>
         <script
             src="https://challenges.cloudflare.com/turnstile/v0/api.js"
             async
@@ -129,7 +144,4 @@ const currentUrl = Astro.url.pathname;
     </body>
 </html>
 
-<script>
-    // Evento de prueba para detectar navegación (puede eliminarse en producción)
-    window.addEventListener('navigate', () => {});
-</script>
+

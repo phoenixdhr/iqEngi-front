@@ -1,4 +1,3 @@
-import React from 'react';
 import { NewsletterSource } from '@graphql-astro/generated/graphql';
 import { ApolloProvider } from '@apollo/client';
 import { clientGql } from '@graphql-astro/apolloClient';

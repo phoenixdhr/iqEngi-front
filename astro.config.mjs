@@ -23,6 +23,12 @@ export default defineConfig({
     output: 'server',
     site: SITE_URL.href,
 
+    // Precarga de enlaces al hacer hover para navegación más rápida
+    prefetch: {
+        prefetchAll: false,
+        defaultStrategy: 'hover',
+    },
+
     server: {
         host: '0.0.0.0',
     },
@@ -34,25 +40,31 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
         optimizeDeps: {
-            include: ['@apollo/client', '@apollo/client/core', '@apollo/client/cache'],
+            // Pre-bundlea dependencias pesadas para mejor tree-shaking y carga
+            include: [
+                '@apollo/client',
+                '@apollo/client/core',
+                '@apollo/client/cache',
+                'framer-motion',
+            ],
         },
         ssr: {
             // Forzar a Vite a empaquetar Apollo Client en SSR para evitar problemas de ESM/CJS
             noExternal: ['@apollo/client'],
         },
-        // // Eliminar el server cuando se este en produccion
-        // server: {
-        //     // Permitir todos los hosts, incluido el dominio de Cloudflare Tunnel
-        //     hmr: {
-        //         clientPort: 443,
-        //         host: 'ringtones-pete-empire-marijuana.trycloudflare.com',
-        //     },
-        //     // Permitir todos los hosts o especificar el de cloudflare
-        //     allowedHosts: [
-        //         'ringtones-pete-empire-marijuana.trycloudflare.com',
-        //         'all',
-        //     ],
-        // },
+        build: {
+            // Separar vendor chunks para mejor caching en navegadores y CDN
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        'vendor-react': ['react', 'react-dom'],
+                        'vendor-apollo': ['@apollo/client'],
+                        'vendor-motion': ['framer-motion'],
+                        'vendor-headless': ['@headlessui/react'],
+                    },
+                },
+            },
+        },
     },
 
     integrations: [react(), icon(), mdx()],

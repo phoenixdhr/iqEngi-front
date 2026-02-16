@@ -7,7 +7,7 @@
  * - Filtrado y búsqueda client-side sobre los cursos cargados
  * - Paginación client-side sobre los cursos filtrados
  */
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import type { Curso, Categoria } from '@graphql-astro/generated/graphql';
 import { CursosDocument } from '@graphql-astro/generated/graphql';
 import { clientGql } from '@graphql-astro/apolloClient';
@@ -48,6 +48,9 @@ export function CourseCatalog({
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
+  // Moneda global del usuario - debe estar antes de handleLoadMore que la usa
+  const { currency } = useCurrency();
+
   // Función para cargar más cursos del servidor usando clientGql directamente
   const handleLoadMore = useCallback(async () => {
     if (isLoadingMore || !hasMoreFromServer) return;
@@ -61,7 +64,8 @@ export function CourseCatalog({
           limit: LOAD_MORE_BATCH_SIZE,
           currency: currency
         },
-        fetchPolicy: 'network-only' // Forzar fetch del servidor
+        // network-only: siempre obtiene datos frescos del servidor para carga incremental
+        fetchPolicy: 'network-only'
       });
 
       if (data?.Cursos) {
@@ -80,12 +84,9 @@ export function CourseCatalog({
     } finally {
       setIsLoadingMore(false);
     }
-  }, [allCourses.length, hasMoreFromServer, isLoadingMore]);
+  }, [allCourses.length, hasMoreFromServer, isLoadingMore, currency]);
 
   // Filters logic
-  // ... (previous logic)
-
-  const { currency } = useCurrency(); // Moneda global del usuario
 
   // Refetch when currency changes
   useEffect(() => {
