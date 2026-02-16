@@ -1,5 +1,5 @@
 ---
-import Cards from '@components/molecules/Cards.astro';
+import CourseCardStatic from '@components/molecules/CourseCardStatic.astro';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
@@ -28,6 +28,6 @@ try {
     <h1 class="text-2xl font-bold text-center my-6">Comunidad</h1>
 
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
-        {cursos.map((curso) => <Cards {...curso} isBig={false} />)}
+        {cursos.map((curso) => <CourseCardStatic {...curso} />)}
     </section>
 </LayoutSeo>

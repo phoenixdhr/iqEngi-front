@@ -1,6 +1,6 @@
 ---
-import Cards from '@components/molecules/Cards.astro';
-import CursosFavoritosLista from '@components/sections/CursosFavoritosLista';
+import CourseCardStatic from '@components/molecules/CourseCardStatic.astro';
+import CursosFavoritosLista from '@components/features/CursosFavoritosLista';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { CursosDocument, type Curso } from '@graphql-astro/generated/graphql';
 import LayoutSeo from '@layouts/LayoutSeo.astro';
@@ -78,7 +78,7 @@ try {
                     >
                         {cursos.map((curso) => (
                             <div class="snap-center shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-                                <Cards {...curso} isBig={false} />
+                                <CourseCardStatic {...curso} />
                             </div>
                         ))}
                     </div>

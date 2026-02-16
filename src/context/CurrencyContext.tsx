@@ -20,7 +20,9 @@ export function useCurrency() {
     useEffect(() => {
         // Lógica de inicialización: recuperar de localStorage o detectar por IP
         const initCurrency = async () => {
+            // Es la moneda que el usuario decidió ver voluntariamente.
             const storedCurrency = localStorage.getItem('iqengi_currency');
+            // Es la moneda que el sistema detecta automáticamente basándose en dónde está tu computadora (tu IP).
             const storedDetected = localStorage.getItem('iqengi_detected_currency');
 
             // Si ya existe una moneda detectada guardada, la restauramos
@@ -94,7 +96,7 @@ export function useCurrency() {
         return () => window.removeEventListener(CURRENCY_CHANGE_EVENT, handleChange as EventListener);
     }, []);
 
-    // Función expuesta para cambiar la moneda manualmente
+    // Función expuesta para cambiar la moneda manualmente (funcion usada en los botones)
     const setCurrency = (newCurrency: string) => {
         setCurrencyState(newCurrency);
         localStorage.setItem('iqengi_currency', newCurrency);
