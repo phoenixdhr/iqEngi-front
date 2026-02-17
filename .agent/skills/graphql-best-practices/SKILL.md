@@ -5,58 +5,56 @@ description: Best practices for using GraphQL and Apollo Client in the project t
 
 # GraphQL & Apollo Client Best Practices
 
-This skill outlines the mandatory patterns for implementing GraphQL features in this project to avoid "Invalid hook call" errors and import issues.
+Standards for implementing GraphQL features in **iqEngi-front**, aligned with `stack-frontend.md`.
 
-## 1. Wrapping Components with ApolloProvider
+## 1. Workflow de Generación (Strict)
 
-**Context:**
-In Astro's island architecture, **React components** (`.tsx`) running on the client (hydrated islands) do not share a specific global context unless explicitly provided. This rule **does not apply** to `.astro` files where data fetching happens server-side using the client instance directly.
+Para agregar o modificar queries, **NO** edites archivos `.ts` manualmente.
 
-**Rule:**
-When a **React component** uses Apollo hooks (e.g., `useQuery`, `useMutation`), you **MUST** serve it wrapped in an `ApolloProvider` specifically for that island.
+1.  **Editar Source**: Modifica `src/graphql-astro/queries-text.json`.
+2.  **Generar Tipos**: Ejecuta `npm run codegen`.
+3.  **Verificar Imports**: Revisa `src/graphql-astro/generated/graphql.ts` para asegurar `import { gql } from '@apollo/client/core';`.
 
-**Implementation Pattern:**
+## 2. Wrapping Components with ApolloProvider
 
-Separation of specific logic (Content) and the Provider wrapper.
+**Rule:** When a **React component** uses Apollo hooks (e.g., `useQuery`), you **MUST** wrap it in an `ApolloProvider` specifically for that island (if not already provided higher up).
+
+**Pattern:**
 
 ```tsx
-import React, { useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { clientGql } from '@graphql-astro/apolloClient';
 import { useSomeQuery } from '@graphql-astro/generated/graphql';
 
-// 1. Inner component with the logic/hooks
 function MyComponentContent() {
-    const { data, loading } = useSomeQuery();
-    
-    if (loading) return <div>Loading...</div>;
+    const { data } = useSomeQuery();
     return <div>{data?.someField}</div>;
 }
 
-// 2. Exported component wrapped with provider
-function MyComponent() {
+export function MyComponent() {
     return (
         <ApolloProvider client={clientGql}>
             <MyComponentContent />
         </ApolloProvider>
     );
 }
-
-export default MyComponent;
 ```
 
-## 2. Imports in `graphql.ts`
+## 3. Imperative Fetching (Client-Side)
 
-**Rule:**
-If you need to use `gql` tag manually or in `graphql.ts` (or similar utility files), you **MUST** import it from `@apollo/client/core`.
+**Rule:** For event-driven fetching (clicks, submits), use `clientGql` directly instead of hooks to avoid complex provider wrapping if not needed.
 
-**Correct:**
-```typescript
-import { gql } from '@apollo/client/core';
-```
+**Pattern:**
 
-**Incorrect:**
-```typescript
-import { gql } from '@apollo/client';
-import { gql } from 'graphql-tag';
+```tsx
+import { clientGql } from '@graphql-astro/apolloClient';
+import { GetCoursesDocument } from '@graphql-astro/generated/graphql';
+
+// ... inside component
+const handleLoadMore = async () => {
+    const { data } = await clientGql.query({
+        query: GetCoursesDocument,
+        variables: { limit: 10 }
+    });
+};
 ```

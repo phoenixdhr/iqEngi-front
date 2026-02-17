@@ -5,53 +5,46 @@ description: Estándares para crear componentes React usando Function Declaratio
 
 # Estructura de Componentes React
 
-Este skill define el estándar para la creación de componentes React en el proyecto **iqEngi-front**, priorizando el uso de **Function Declarations**.
+Este skill define el estándar para la creación de componentes React en el proyecto **iqEngi-front**, alineado con `stack-frontend.md`.
 
 ## Reglas Principales
 
-1.  **Function Declarations**: SIEMPRE declara componentes usando `function ComponentName() {}`.
-2.  **No Arrow Functions**: EVITA definir componentes como `const ComponentName = () => {}`.
-3.  **Interfaces para Props**: Define explícitamente la interfaz de props justo antes del componente (o impórtala si es compartida).
-4.  **Exports**: Utiliza `export default` para componentes principales de archivo o `export function` para componentes secundarios/utilitarios, según la convención del proyecto.
+1.  **Function Declarations**: SIEMPRE usa `export function ComponentName(props: Props) {}`.
+2.  **Named Exports**: EVITA `export default`. Facilita el refactoring y tree-shaking.
+3.  **Interface de Props**:
+    - Nombre: `interface {ComponentName}Props`
+    - Ubicación: Inmediatamente antes de la función.
+4.  **No Arrow Functions**: ⛔ `const Component = () => {}` está prohibido para componentes.
 
-## Ejemplos
-
-### ✅ Correcto
+## Ejemplo Estándar
 
 ```tsx
 import type { ReactNode } from 'react';
+// Importa tipos compartidos si es necesario
+// import type { Course } from '@types';
 
 interface CardProps {
   title: string;
   children: ReactNode;
   variant?: 'primary' | 'secondary';
+  onClick?: () => void;
 }
 
-export function Card({ title, children, variant = 'primary' }: CardProps) {
+/**
+ * Card - Componente genérico de tarjeta.
+ * @param title - Título de la tarjeta.
+ */
+export function Card({ title, children, variant = 'primary', onClick }: CardProps) {
   return (
-    <div className={`card card-${variant}`}>
+    <div className={`card card-${variant}`} onClick={onClick}>
       <h2>{title}</h2>
       {children}
     </div>
   );
 }
-```
-
-### ❌ Incorrecto
-
-```tsx
-// Evitar Arrow Functions para componentes
-export const Card: React.FC<CardProps> = ({ title, children }) => {
-  return (
-    <div>
-      <h2>{title}</h2>
-      {children}
-    </div>
-  );
-};
 ```
 
 ## Beneficios
-- **Hoisting**: Las declaraciones de función soportan hoisting, lo que puede ser útil en ciertos patrones.
-- **Depuración**: Los nombres de funciones aparecen claramente en los stack traces.
-- **Consistencia**: Mantiene un estilo uniforme en todo el codebase.
+- **Consistencia**: El mismo patrón en todo el proyecto.
+- **Mantenibilidad**: Interfaces claras y documentadas.
+- **Debugging**: Mejores stack traces con nombres de función.
