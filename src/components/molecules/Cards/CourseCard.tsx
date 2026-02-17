@@ -40,7 +40,7 @@ export function CourseCard({
 
           {/* Badge de Descuento (Esquina superior derecha) */}
           {descuento && descuento > 0 && (
-            <div className="absolute top-3 right-3 bg-red-500 text-white font-bold px-3 py-1 rounded-full text-sm shadow-md animate-pulse">
+            <div className="absolute top-3 right-3 bg-[var(--color-danger)] text-white font-bold px-3 py-1 rounded-full text-sm shadow-md animate-pulse">
               -{descuento}% OFF
             </div>
           )}
@@ -51,12 +51,12 @@ export function CourseCard({
 
             <div className="flex flex-col items-end">
               {originalPrice && (
-                <span className="text-xs text-gray-300 line-through decoration-red-500 decoration-2">
-                  {Formatter.formatPrice(originalPrice, currency)}
+                <span className="text-xs text-gray-300 line-through decoration-[var(--color-danger)] decoration-2">
+                  {Formatter.formatPrice(originalPrice, currency || 'USD')}
                 </span>
               )}
-              <span className="text-xl font-bold text-iq-purple-light-mid-200 drop-shadow-sm">
-                {Formatter.formatPrice(currentPrice, currency)}
+              <span className="text-xl font-bold text-[var(--color-primary)] drop-shadow-sm">
+                {Formatter.formatPrice(currentPrice, currency || 'USD')}
               </span>
             </div>
           </div>
@@ -66,7 +66,7 @@ export function CourseCard({
       {/* Sección de Contenido: Título, metadatos y botones */}
       <div className="card-body p-5 flex flex-col flex-grow gap-2">
         <div className="flex justify-between items-start gap-2">
-          <a href={`/cursos/${slug}`} className="hover:text-primary transition-colors">
+          <a href={`/cursos/${slug}`} className="hover:text-[var(--color-primary)] transition-colors">
             <h2 className="card-title text-lg font-bold leading-tight line-clamp-2" title={courseTitle || ''}>
               {courseTitle}
             </h2>
@@ -75,7 +75,7 @@ export function CourseCard({
 
 
         {/* Duración y otros metadatos */}
-        <div className="flex items-center gap-4 text-xs text-base-content/70 mt-1">
+        <div className="flex items-center gap-4 text-xs text-[var(--color-text-muted)] mt-1">
           {duracionHoras && (
             <div className="flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,7 +88,7 @@ export function CourseCard({
           {/* Aquí se pueden agregar más metadatos (ej. número de lecciones) */}
         </div>
 
-        <p className="text-sm text-base-content/80 line-clamp-2 mt-2 flex-grow">
+        <p className="text-sm text-[var(--color-text-muted)] line-clamp-2 mt-2 flex-grow">
           {descripcionCorta}
         </p>
 
