@@ -83,18 +83,18 @@ export function PaymentMethodSelector({ selected, onSelect }: PaymentMethodSelec
                         <span className="text-2xl">{method.icon}</span>
                         
                         {/* Textos del método de pago (Nombre y Descripción) */}
-                        <div className="flex-1">
-                            <p className="font-semibold" style={{ color: 'var(--color-text)' }}>
+                        <div className="flex-1 min-w-0">
+                            <p className="font-semibold truncate" style={{ color: 'var(--color-text)' }}>
                                 {method.name}
                             </p>
-                            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                            <p className="text-sm truncate" style={{ color: 'var(--color-text-muted)' }}>
                                 {method.description}
                             </p>
                         </div>
                         
                         {/* Indicador visual de selección (Radio button simulado) */}
                         <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                                 selected === method.id
                                     ? 'border-[var(--color-primary)]' // Borde coloreado si está activo
                                     : 'border-[var(--color-border)]' // Borde gris si está inactivo

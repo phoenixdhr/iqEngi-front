@@ -209,13 +209,13 @@ export function CheckoutPage() {
 
             <div className="grid lg:grid-cols-5 gap-8">
                 {/* Columna izquierda: Resumen del carrito */}
-                <div className="lg:col-span-3 space-y-6">
+                <div className="lg:col-span-3 space-y-6 min-w-0">
                     <CartSummary items={items} onRemove={removeItem} isUpdatingCurrency={isUpdatingCurrency} />
                 </div>
 
                 {/* Columna derecha: Método de pago + acción */}
                 {items.length > 0 && (
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-2 space-y-6 min-w-0">
                         <PaymentMethodSelector
                             selected={selectedMethod}
                             onSelect={setSelectedMethod}
