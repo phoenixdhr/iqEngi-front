@@ -1644,9 +1644,11 @@ query Ordenes {
       courseTitle
       descuento
       cursoId
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1661,9 +1663,11 @@ mutation Ordenes_create($arrayCursosIds: [ID!]!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1678,9 +1682,11 @@ query Orden($ordenId: ID!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1695,9 +1701,11 @@ query Ordenes_findAllByUsuarioId($idUsuario: ID!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1712,9 +1720,11 @@ query Ordenes_findAllByCursoId($idCurso: ID!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1729,9 +1739,11 @@ mutation Ordenes_update($ordenesUpdateId: ID!, $updateCategoriaInput: UpdateOrde
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1746,9 +1758,11 @@ query Ordenes_findSoftDeleted {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1763,9 +1777,11 @@ mutation Ordenes_softDelete($idRemove: ID!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1780,9 +1796,11 @@ mutation Ordenes_restore($idRestore: ID!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1797,9 +1815,11 @@ mutation Ordenes_hardDelete($ordenesHardDeleteId: ID!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1821,9 +1841,11 @@ mutation Ordenes_pullCurso($ordenId: ID!, $arrayCursosIds: [ID!]!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -1838,9 +1860,11 @@ mutation Ordenes_pushCurso($ordenId: ID!, $arrayCursosIds: [ID!]!) {
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -2639,3 +2663,59 @@ query Newsletter_allActive {
 query Newsletter_countActive {
   Newsletter_countActive
 }
+
+# Operation p4y-iniciar-pago-001
+mutation Payment_iniciarPago($input: IniciarPagoInput!) {
+  Payment_iniciarPago(input: $input) {
+    _id
+    ordenId
+    usuarioId
+    provider
+    externalId
+    status
+    amount
+    currency
+    paymentUrl
+    idempotencyKey
+    createdAt
+    deleted
+  }
+}
+
+# Operation p4y-historial-003
+query Payment_miHistorial($limit: Int, $offset: Int) {
+  Payment_miHistorial(limit: $limit, offset: $offset) {
+    _id
+    ordenId
+    provider
+    status
+    amount
+    currency
+    paymentUrl
+    createdAt
+    deleted
+  }
+}
+
+# Operation p4y-mis-ordenes-004
+query Ordenes_misOrdenes($limit: Int, $offset: Int) {
+  Ordenes_misOrdenes(limit: $limit, offset: $offset) {
+    _id
+    usuarioId
+    listaCursos {
+      cursoId
+      precio
+      courseTitle
+      descuento
+      currency
+    }
+    montoTotal
+    estado_orden
+    currency
+    paymentMethod
+    externalPaymentId
+    paymentUrl
+    deleted
+  }
+}
+

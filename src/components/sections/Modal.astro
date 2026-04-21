@@ -78,6 +78,7 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
         hideElement,
         clearFields,
     } from '@services/closeOpenLogin';
+    import { OPEN_LOGIN_MODAL_EVENT } from '@const/const-string';
 
     function closeModal() {
         showElement('loginModalDiv');
@@ -138,9 +139,22 @@ import Bienvenida from '@components/molecules/login/Bienvenida.astro';
                 hideElement('login-modal');
             });
 
-        window.addEventListener('listener-login-modal', () => {
+        window.addEventListener(OPEN_LOGIN_MODAL_EVENT, (e) => {
             showElement('login-modal');
             showElement('loginModalDiv');
+
+            const customEvent = e as CustomEvent;
+            const checkoutMessage = document.getElementById('checkout-context-message');
+            
+            if (checkoutMessage) {
+                if (customEvent.detail && customEvent.detail.showCheckoutBanner) {
+                    checkoutMessage.classList.remove('hidden');
+                    checkoutMessage.classList.add('flex');
+                } else {
+                    checkoutMessage.classList.remove('flex');
+                    checkoutMessage.classList.add('hidden');
+                }
+            }
         });
     }
 

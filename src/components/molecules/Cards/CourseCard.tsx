@@ -1,16 +1,25 @@
 import type { Curso } from '@graphql-astro/generated/graphql';
 import { Formatter } from '@utils/formatter';
+import { useCart } from '@hooks/useCart';
 
 interface CourseCardProps extends Partial<Curso> {
   className?: string;
   isLoading?: boolean; // Indica si los precios están en proceso de conversión de moneda
 }
 
-// Componente: CourseCard
-// Descripción: Tarjeta que muestra el resumen de un curso (imagen, título, precio, etc.)
-// Se utiliza en los listados de cursos y en la página principal.
+/**
+ * Componente: CourseCard
+ * Tarjeta de resumen de un curso (imagen, título, precio, botón de compra).
+ * Se utiliza en los listados de cursos y en la página principal.
+ *
+ * Props heredadas de Curso (Partial): _id, courseTitle, imagenURL, slug, precio, etc.
+ * Props propias:
+ *   - className: Clases CSS adicionales para el contenedor.
+ *   - isLoading: Atenúa la opacidad del precio durante conversión de moneda.
+ */
 
 export function CourseCard({
+  _id,
   courseTitle,
   imagenURL,
   descripcionCorta,
@@ -21,9 +30,28 @@ export function CourseCard({
   currency = 'USD',
   isLoading = false
 }: CourseCardProps) {
-  // Calcular el precio actual y el precio original (si hay descuento)
+  const { addItem, items } = useCart();
+
+  // Precio actual del curso y precio original (antes del descuento, para mostrar tachado)
   const currentPrice = precio || 0;
   const originalPrice = descuento ? currentPrice / (1 - (descuento / 100)) : null;
+
+  // Verificamos si el curso ya fue agregado al carrito (el hook useCart mantiene este estado sincronizado)
+  const isInCart = items.some((i) => i.cursoId === _id);
+
+  // Agrega el curso al carrito. Si ya está, no hace nada (doble protección junto con el disabled del botón).
+  const handleAddToCart = () => {
+    if (!_id || isInCart) return;
+    addItem({
+      cursoId: _id,
+      courseTitle: courseTitle || '',
+      precio: currentPrice,
+      currency: currency || 'USD',
+      descuento: descuento || 0,
+      imagenURL: { url: imagenURL?.url || '', alt: imagenURL?.alt || '' },
+      slug: slug || '',
+    });
+  };
 
   return (
     <div className="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col group overflow-hidden border border-base-200">
@@ -45,8 +73,8 @@ export function CourseCard({
             </div>
           )}
 
-          {/* Banda inferior con el precio (Gradiente oscuro para legibilidad) */}
-          {/* Transición suave de opacidad durante conversión de moneda para evitar flash visual */}
+          {/* Banda inferior con el precio (gradiente oscuro para legibilidad sobre la imagen) */}
+          {/* Se atenúa la opacidad durante la conversión de moneda para evitar un flash visual */}
           <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-12 flex items-end justify-end text-white transition-opacity duration-300 ${isLoading ? 'opacity-30' : 'opacity-100'}`}>
 
             <div className="flex flex-col items-end">
@@ -92,7 +120,7 @@ export function CourseCard({
           {descripcionCorta}
         </p>
 
-        {/* Botones de Acción: Ver Detalles y Comprar */}
+        {/* Botones de Acción: "Ver Detalles" (outline) y "Comprar" / "Agregado" (primario/success) */}
         <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-base-200">
           <a
             href={`/cursos/${slug}`}
@@ -100,8 +128,16 @@ export function CourseCard({
           >
             Ver Detalles
           </a>
-          <button className="btn btn-primary h-10 min-h-[40px] text-white shadow-md shadow-primary/20 hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:shadow-lg hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.03] uppercase font-bold tracking-wide rounded-xl transition-all duration-300">
-            Comprar
+          <button
+            onClick={handleAddToCart}
+            disabled={isInCart}
+            className={`btn h-10 min-h-[40px] text-white shadow-md rounded-xl transition-all duration-300 uppercase font-bold tracking-wide ${
+              isInCart
+                ? 'btn-success'
+                : 'btn-primary shadow-primary/20 hover:bg-[var(--color-btn-hover)] hover:border-[var(--color-btn-hover)] hover:shadow-lg hover:shadow-[var(--color-btn-hover)]/40 hover:scale-[1.03]'
+            }`}
+          >
+            {isInCart ? 'Agregado' : 'Comprar'}
           </button>
         </div>
       </div>

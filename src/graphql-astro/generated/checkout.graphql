@@ -1,0 +1,7 @@
+query CursoPrecioCheckout($cursoId: ID!, $currency: String) {
+  Curso(id: $cursoId) {
+    _id
+    precio(currency: $currency)
+    currency(currency: $currency)
+  }
+}

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client/core';
+import { gql } from '@apollo/client/core'
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -312,6 +312,16 @@ export enum EstadoOrden {
   Reembolsada = 'Reembolsada'
 }
 
+/** Estados de un pago */
+export enum EstadoPago {
+  Aprobado = 'Aprobado',
+  Cancelado = 'Cancelado',
+  EnProceso = 'EnProceso',
+  Pendiente = 'Pendiente',
+  Rechazado = 'Rechazado',
+  Reembolsado = 'Reembolsado'
+}
+
 export type ImageInput = {
   alt: Scalars['String']['input'];
   url: Scalars['String']['input'];
@@ -321,6 +331,12 @@ export type ImageObjectType = {
   __typename?: 'ImageObjectType';
   alt: Scalars['String']['output'];
   url: Scalars['String']['output'];
+};
+
+export type IniciarPagoInput = {
+  currency?: InputMaybe<Scalars['String']['input']>;
+  cursosIds: Array<Scalars['ID']['input']>;
+  metodoPago: MetodoPago;
 };
 
 export type Instructor = {
@@ -348,6 +364,13 @@ export type Material = {
   materialTitle: Scalars['String']['output'];
   url: Scalars['String']['output'];
 };
+
+/** Proveedores de pago disponibles */
+export enum MetodoPago {
+  Bitpay = 'BITPAY',
+  Dlocal = 'DLOCAL',
+  Mercadopago = 'MERCADOPAGO'
+}
 
 export type Modulo = {
   __typename?: 'Modulo';
@@ -435,6 +458,7 @@ export type Mutation = {
   Ordenes_restore: Orden;
   Ordenes_softDelete: Orden;
   Ordenes_update: Orden;
+  Payment_iniciarPago: Payment;
   Pregunta_create: Pregunta;
   Pregunta_hardDelete: Pregunta;
   Pregunta_hardDeleteAllSoftDeleted: Array<Pregunta>;
@@ -818,6 +842,11 @@ export type MutationOrdenes_UpdateArgs = {
 };
 
 
+export type MutationPayment_IniciarPagoArgs = {
+  input: IniciarPagoInput;
+};
+
+
 export type MutationPregunta_CreateArgs = {
   createPreguntaInput: CreatePreguntaInput;
   idCuestionario: Scalars['ID']['input'];
@@ -1027,19 +1056,42 @@ export type Opcion = {
 export type Orden = {
   __typename?: 'Orden';
   _id: Scalars['ID']['output'];
+  currency?: Maybe<Scalars['String']['output']>;
   deleted: Scalars['Boolean']['output'];
   estado_orden: EstadoOrden;
+  externalPaymentId?: Maybe<Scalars['String']['output']>;
   listaCursos: Array<OrdenCursoItem>;
   montoTotal: Scalars['Float']['output'];
+  paymentMethod?: Maybe<Scalars['String']['output']>;
+  paymentUrl?: Maybe<Scalars['String']['output']>;
   usuarioId: Scalars['ID']['output'];
 };
 
 export type OrdenCursoItem = {
   __typename?: 'OrdenCursoItem';
   courseTitle: Scalars['String']['output'];
+  currency?: Maybe<Scalars['String']['output']>;
   cursoId: Scalars['ID']['output'];
   descuento?: Maybe<Scalars['Float']['output']>;
   precio: Scalars['Float']['output'];
+};
+
+export type Payment = {
+  __typename?: 'Payment';
+  _id: Scalars['ID']['output'];
+  amount: Scalars['Float']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency: Scalars['String']['output'];
+  deleted: Scalars['Boolean']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  externalId?: Maybe<Scalars['String']['output']>;
+  idempotencyKey?: Maybe<Scalars['String']['output']>;
+  ordenId: Scalars['ID']['output'];
+  paymentUrl?: Maybe<Scalars['String']['output']>;
+  provider: MetodoPago;
+  status: EstadoPago;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  usuarioId: Scalars['ID']['output'];
 };
 
 export type Perfil = {
@@ -1119,6 +1171,9 @@ export type Query = {
   Ordenes_findAllByCursoId: Array<Orden>;
   Ordenes_findAllByUsuarioId: Array<Orden>;
   Ordenes_findSoftDeleted: Array<Orden>;
+  Ordenes_misOrdenes: Array<Orden>;
+  Payment_miHistorial: Array<Payment>;
+  Payment_obtenerPorId: Payment;
   Pregunta: Pregunta;
   Pregunta_findSoftDeleted: Array<Pregunta>;
   Preguntas: Array<Pregunta>;
@@ -1412,6 +1467,23 @@ export type QueryOrdenes_FindAllByUsuarioIdArgs = {
 export type QueryOrdenes_FindSoftDeletedArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryOrdenes_MisOrdenesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryPayment_MiHistorialArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryPayment_ObtenerPorIdArgs = {
+  paymentId: Scalars['ID']['input'];
 };
 
 
@@ -1796,6 +1868,14 @@ export type UsuarioOutput = {
   roles: Array<RolEnumGql>;
   status: UserStatus;
 };
+
+export type CursoPrecioCheckoutQueryVariables = Exact<{
+  cursoId: Scalars['ID']['input'];
+  currency?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CursoPrecioCheckoutQuery = { __typename?: 'Query', Curso: { __typename?: 'CursoOutput', _id: string, precio?: number | null, currency?: string | null } };
 
 export type ExampleQueryQueryVariables = Exact<{
   usuarioId: Scalars['ID']['input'];
@@ -2525,35 +2605,35 @@ export type Opcion_HardDeleteMutation = { __typename?: 'Mutation', Opcion_hardDe
 export type OrdenesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OrdenesQuery = { __typename?: 'Query', Ordenes: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', precio: number, courseTitle: string, descuento?: number | null, cursoId: string }> }> };
+export type OrdenesQuery = { __typename?: 'Query', Ordenes: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', precio: number, courseTitle: string, descuento?: number | null, cursoId: string, currency?: string | null }> }> };
 
 export type Ordenes_CreateMutationVariables = Exact<{
   arrayCursosIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
 }>;
 
 
-export type Ordenes_CreateMutation = { __typename?: 'Mutation', Ordenes_create: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_CreateMutation = { __typename?: 'Mutation', Ordenes_create: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type OrdenQueryVariables = Exact<{
   ordenId: Scalars['ID']['input'];
 }>;
 
 
-export type OrdenQuery = { __typename?: 'Query', Orden: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type OrdenQuery = { __typename?: 'Query', Orden: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Ordenes_FindAllByUsuarioIdQueryVariables = Exact<{
   idUsuario: Scalars['ID']['input'];
 }>;
 
 
-export type Ordenes_FindAllByUsuarioIdQuery = { __typename?: 'Query', Ordenes_findAllByUsuarioId: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> }> };
+export type Ordenes_FindAllByUsuarioIdQuery = { __typename?: 'Query', Ordenes_findAllByUsuarioId: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> }> };
 
 export type Ordenes_FindAllByCursoIdQueryVariables = Exact<{
   idCurso: Scalars['ID']['input'];
 }>;
 
 
-export type Ordenes_FindAllByCursoIdQuery = { __typename?: 'Query', Ordenes_findAllByCursoId: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> }> };
+export type Ordenes_FindAllByCursoIdQuery = { __typename?: 'Query', Ordenes_findAllByCursoId: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> }> };
 
 export type Ordenes_UpdateMutationVariables = Exact<{
   ordenesUpdateId: Scalars['ID']['input'];
@@ -2562,33 +2642,33 @@ export type Ordenes_UpdateMutationVariables = Exact<{
 }>;
 
 
-export type Ordenes_UpdateMutation = { __typename?: 'Mutation', Ordenes_update: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_UpdateMutation = { __typename?: 'Mutation', Ordenes_update: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Ordenes_FindSoftDeletedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type Ordenes_FindSoftDeletedQuery = { __typename?: 'Query', Ordenes_findSoftDeleted: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> }> };
+export type Ordenes_FindSoftDeletedQuery = { __typename?: 'Query', Ordenes_findSoftDeleted: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> }> };
 
 export type Ordenes_SoftDeleteMutationVariables = Exact<{
   idRemove: Scalars['ID']['input'];
 }>;
 
 
-export type Ordenes_SoftDeleteMutation = { __typename?: 'Mutation', Ordenes_softDelete: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_SoftDeleteMutation = { __typename?: 'Mutation', Ordenes_softDelete: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Ordenes_RestoreMutationVariables = Exact<{
   idRestore: Scalars['ID']['input'];
 }>;
 
 
-export type Ordenes_RestoreMutation = { __typename?: 'Mutation', Ordenes_restore: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_RestoreMutation = { __typename?: 'Mutation', Ordenes_restore: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Ordenes_HardDeleteMutationVariables = Exact<{
   ordenesHardDeleteId: Scalars['ID']['input'];
 }>;
 
 
-export type Ordenes_HardDeleteMutation = { __typename?: 'Mutation', Ordenes_hardDelete: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_HardDeleteMutation = { __typename?: 'Mutation', Ordenes_hardDelete: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Ordenes_HardDeleteAllSoftDeletedMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2601,7 +2681,7 @@ export type Ordenes_PullCursoMutationVariables = Exact<{
 }>;
 
 
-export type Ordenes_PullCursoMutation = { __typename?: 'Mutation', Ordenes_pullCurso: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_PullCursoMutation = { __typename?: 'Mutation', Ordenes_pullCurso: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Ordenes_PushCursoMutationVariables = Exact<{
   ordenId: Scalars['ID']['input'];
@@ -2609,7 +2689,7 @@ export type Ordenes_PushCursoMutationVariables = Exact<{
 }>;
 
 
-export type Ordenes_PushCursoMutation = { __typename?: 'Mutation', Ordenes_pushCurso: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null }> } };
+export type Ordenes_PushCursoMutation = { __typename?: 'Mutation', Ordenes_pushCurso: { __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> } };
 
 export type Pregunta_UpdateMutationVariables = Exact<{
   idCuestionario: Scalars['ID']['input'];
@@ -2936,7 +3016,73 @@ export type Newsletter_CountActiveQueryVariables = Exact<{ [key: string]: never;
 
 export type Newsletter_CountActiveQuery = { __typename?: 'Query', Newsletter_countActive: number };
 
+export type Payment_IniciarPagoMutationVariables = Exact<{
+  input: IniciarPagoInput;
+}>;
 
+
+export type Payment_IniciarPagoMutation = { __typename?: 'Mutation', Payment_iniciarPago: { __typename?: 'Payment', _id: string, ordenId: string, usuarioId: string, provider: MetodoPago, externalId?: string | null, status: EstadoPago, amount: number, currency: string, paymentUrl?: string | null, idempotencyKey?: string | null, createdAt?: any | null, deleted: boolean } };
+
+export type Payment_MiHistorialQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type Payment_MiHistorialQuery = { __typename?: 'Query', Payment_miHistorial: Array<{ __typename?: 'Payment', _id: string, ordenId: string, provider: MetodoPago, status: EstadoPago, amount: number, currency: string, paymentUrl?: string | null, createdAt?: any | null, deleted: boolean }> };
+
+export type Ordenes_MisOrdenesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type Ordenes_MisOrdenesQuery = { __typename?: 'Query', Ordenes_misOrdenes: Array<{ __typename?: 'Orden', _id: string, usuarioId: string, montoTotal: number, estado_orden: EstadoOrden, currency?: string | null, paymentMethod?: string | null, externalPaymentId?: string | null, paymentUrl?: string | null, deleted: boolean, listaCursos: Array<{ __typename?: 'OrdenCursoItem', cursoId: string, precio: number, courseTitle: string, descuento?: number | null, currency?: string | null }> }> };
+
+
+export const CursoPrecioCheckoutDocument = gql`
+    query CursoPrecioCheckout($cursoId: ID!, $currency: String) {
+  Curso(id: $cursoId) {
+    _id
+    precio(currency: $currency)
+    currency(currency: $currency)
+  }
+}
+    `;
+
+/**
+ * __useCursoPrecioCheckoutQuery__
+ *
+ * To run a query within a React component, call `useCursoPrecioCheckoutQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCursoPrecioCheckoutQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCursoPrecioCheckoutQuery({
+ *   variables: {
+ *      cursoId: // value for 'cursoId'
+ *      currency: // value for 'currency'
+ *   },
+ * });
+ */
+export function useCursoPrecioCheckoutQuery(baseOptions: Apollo.QueryHookOptions<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables> & ({ variables: CursoPrecioCheckoutQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables>(CursoPrecioCheckoutDocument, options);
+      }
+export function useCursoPrecioCheckoutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables>(CursoPrecioCheckoutDocument, options);
+        }
+export function useCursoPrecioCheckoutSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables>(CursoPrecioCheckoutDocument, options);
+        }
+export type CursoPrecioCheckoutQueryHookResult = ReturnType<typeof useCursoPrecioCheckoutQuery>;
+export type CursoPrecioCheckoutLazyQueryHookResult = ReturnType<typeof useCursoPrecioCheckoutLazyQuery>;
+export type CursoPrecioCheckoutSuspenseQueryHookResult = ReturnType<typeof useCursoPrecioCheckoutSuspenseQuery>;
+export type CursoPrecioCheckoutQueryResult = Apollo.QueryResult<CursoPrecioCheckoutQuery, CursoPrecioCheckoutQueryVariables>;
 export const ExampleQueryDocument = gql`
     query ExampleQuery($usuarioId: ID!) {
   usuario(id: $usuarioId) {
@@ -7647,9 +7793,11 @@ export const OrdenesDocument = gql`
       courseTitle
       descuento
       cursoId
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7696,9 +7844,11 @@ export const Ordenes_CreateDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7739,9 +7889,11 @@ export const OrdenDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7789,9 +7941,11 @@ export const Ordenes_FindAllByUsuarioIdDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7839,9 +7993,11 @@ export const Ordenes_FindAllByCursoIdDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7889,9 +8045,11 @@ export const Ordenes_UpdateDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7934,9 +8092,11 @@ export const Ordenes_FindSoftDeletedDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -7983,9 +8143,11 @@ export const Ordenes_SoftDeleteDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -8026,9 +8188,11 @@ export const Ordenes_RestoreDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -8069,9 +8233,11 @@ export const Ordenes_HardDeleteDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -8144,9 +8310,11 @@ export const Ordenes_PullCursoDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -8188,9 +8356,11 @@ export const Ordenes_PushCursoDocument = gql`
       precio
       courseTitle
       descuento
+      currency
     }
     montoTotal
     estado_orden
+    currency
     deleted
   }
 }
@@ -10363,3 +10533,152 @@ export type Newsletter_CountActiveQueryHookResult = ReturnType<typeof useNewslet
 export type Newsletter_CountActiveLazyQueryHookResult = ReturnType<typeof useNewsletter_CountActiveLazyQuery>;
 export type Newsletter_CountActiveSuspenseQueryHookResult = ReturnType<typeof useNewsletter_CountActiveSuspenseQuery>;
 export type Newsletter_CountActiveQueryResult = Apollo.QueryResult<Newsletter_CountActiveQuery, Newsletter_CountActiveQueryVariables>;
+export const Payment_IniciarPagoDocument = gql`
+    mutation Payment_iniciarPago($input: IniciarPagoInput!) {
+  Payment_iniciarPago(input: $input) {
+    _id
+    ordenId
+    usuarioId
+    provider
+    externalId
+    status
+    amount
+    currency
+    paymentUrl
+    idempotencyKey
+    createdAt
+    deleted
+  }
+}
+    `;
+export type Payment_IniciarPagoMutationFn = Apollo.MutationFunction<Payment_IniciarPagoMutation, Payment_IniciarPagoMutationVariables>;
+
+/**
+ * __usePayment_IniciarPagoMutation__
+ *
+ * To run a mutation, you first call `usePayment_IniciarPagoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayment_IniciarPagoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentIniciarPagoMutation, { data, loading, error }] = usePayment_IniciarPagoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePayment_IniciarPagoMutation(baseOptions?: Apollo.MutationHookOptions<Payment_IniciarPagoMutation, Payment_IniciarPagoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Payment_IniciarPagoMutation, Payment_IniciarPagoMutationVariables>(Payment_IniciarPagoDocument, options);
+      }
+export type Payment_IniciarPagoMutationHookResult = ReturnType<typeof usePayment_IniciarPagoMutation>;
+export type Payment_IniciarPagoMutationResult = Apollo.MutationResult<Payment_IniciarPagoMutation>;
+export type Payment_IniciarPagoMutationOptions = Apollo.BaseMutationOptions<Payment_IniciarPagoMutation, Payment_IniciarPagoMutationVariables>;
+export const Payment_MiHistorialDocument = gql`
+    query Payment_miHistorial($limit: Int, $offset: Int) {
+  Payment_miHistorial(limit: $limit, offset: $offset) {
+    _id
+    ordenId
+    provider
+    status
+    amount
+    currency
+    paymentUrl
+    createdAt
+    deleted
+  }
+}
+    `;
+
+/**
+ * __usePayment_MiHistorialQuery__
+ *
+ * To run a query within a React component, call `usePayment_MiHistorialQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePayment_MiHistorialQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePayment_MiHistorialQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function usePayment_MiHistorialQuery(baseOptions?: Apollo.QueryHookOptions<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>(Payment_MiHistorialDocument, options);
+      }
+export function usePayment_MiHistorialLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>(Payment_MiHistorialDocument, options);
+        }
+export function usePayment_MiHistorialSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>(Payment_MiHistorialDocument, options);
+        }
+export type Payment_MiHistorialQueryHookResult = ReturnType<typeof usePayment_MiHistorialQuery>;
+export type Payment_MiHistorialLazyQueryHookResult = ReturnType<typeof usePayment_MiHistorialLazyQuery>;
+export type Payment_MiHistorialSuspenseQueryHookResult = ReturnType<typeof usePayment_MiHistorialSuspenseQuery>;
+export type Payment_MiHistorialQueryResult = Apollo.QueryResult<Payment_MiHistorialQuery, Payment_MiHistorialQueryVariables>;
+export const Ordenes_MisOrdenesDocument = gql`
+    query Ordenes_misOrdenes($limit: Int, $offset: Int) {
+  Ordenes_misOrdenes(limit: $limit, offset: $offset) {
+    _id
+    usuarioId
+    listaCursos {
+      cursoId
+      precio
+      courseTitle
+      descuento
+      currency
+    }
+    montoTotal
+    estado_orden
+    currency
+    paymentMethod
+    externalPaymentId
+    paymentUrl
+    deleted
+  }
+}
+    `;
+
+/**
+ * __useOrdenes_MisOrdenesQuery__
+ *
+ * To run a query within a React component, call `useOrdenes_MisOrdenesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrdenes_MisOrdenesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrdenes_MisOrdenesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useOrdenes_MisOrdenesQuery(baseOptions?: Apollo.QueryHookOptions<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>(Ordenes_MisOrdenesDocument, options);
+      }
+export function useOrdenes_MisOrdenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>(Ordenes_MisOrdenesDocument, options);
+        }
+export function useOrdenes_MisOrdenesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>(Ordenes_MisOrdenesDocument, options);
+        }
+export type Ordenes_MisOrdenesQueryHookResult = ReturnType<typeof useOrdenes_MisOrdenesQuery>;
+export type Ordenes_MisOrdenesLazyQueryHookResult = ReturnType<typeof useOrdenes_MisOrdenesLazyQuery>;
+export type Ordenes_MisOrdenesSuspenseQueryHookResult = ReturnType<typeof useOrdenes_MisOrdenesSuspenseQuery>;
+export type Ordenes_MisOrdenesQueryResult = Apollo.QueryResult<Ordenes_MisOrdenesQuery, Ordenes_MisOrdenesQueryVariables>;

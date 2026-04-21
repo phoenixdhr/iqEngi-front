@@ -1,0 +1,13 @@
+---
+import LayoutSeo from '@layouts/LayoutSeo.astro';
+import { CheckoutPage } from '@components/features/Checkout/CheckoutPage';
+---
+
+<LayoutSeo
+    tituloPagina="Checkout"
+    description="Completa tu compra de cursos en IQEngi"
+    slug="checkout"
+    seoJsonLd={null}
+>
+    <CheckoutPage client:load />
+</LayoutSeo>

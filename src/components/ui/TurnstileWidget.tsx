@@ -1,4 +1,5 @@
 import { Turnstile } from '@marsidev/react-turnstile';
+import { TURNSTILE_TOKEN_EVENT } from '@const/const-string';
 
 export default function TurnstileWidget() {
     const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
@@ -10,7 +11,7 @@ export default function TurnstileWidget() {
 
     const handleSuccess = (token: string) => {
         // Dispatch custom event so the Astro/Vanilla script can capture the token
-        const event = new CustomEvent('turnstile-token', { detail: { token } });
+        const event = new CustomEvent(TURNSTILE_TOKEN_EVENT, { detail: { token } });
         window.dispatchEvent(event);
     };
 

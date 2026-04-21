@@ -1,0 +1,35 @@
+---
+import LayoutSeo from '@layouts/LayoutSeo.astro';
+---
+
+<LayoutSeo
+    tituloPagina="Pago Cancelado"
+    description="Tu pago fue cancelado"
+    slug="checkout/cancelacion"
+    seoJsonLd={null}
+>
+    <div class="max-w-2xl mx-auto px-4 py-16 text-center">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-danger/10 flex items-center justify-center">
+            <svg class="w-10 h-10 text-[var(--color-danger)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+
+        <h1 class="text-3xl font-extrabold text-base-content mb-4">
+            Pago Cancelado
+        </h1>
+
+        <p class="text-lg text-base-content/70 mb-8">
+            Tu pago fue cancelado o no se pudo completar. No se realizó ningún cobro.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/checkout" class="btn btn-primary text-white">
+                Intentar de Nuevo
+            </a>
+            <a href="/cursos" class="btn btn-outline">
+                Volver a Cursos
+            </a>
+        </div>
+    </div>
+</LayoutSeo>

@@ -25,7 +25,7 @@ export function CoursePriceDisplay({
     showDiscountLabel = false,
     layout = 'simple'
 }: CoursePriceDisplayProps) {
-    const { currency } = useCurrency();
+    const { currency, isLoading: isCurrencyLoading } = useCurrency();
     const [price, setPrice] = useState<number>(initialPrice);
     const [currentCurrency, setCurrentCurrency] = useState<string>(initialCurrency);
     const [loading, setLoading] = useState(false);
@@ -86,8 +86,12 @@ export function CoursePriceDisplay({
     const displaySavings = savings > 0 ? Formatter.formatPrice(savings, currentCurrency) : null;
 
     // Clase de transición suave de opacidad durante carga (evita layout shift / parpadeo)
-    const loadingClass = loading
-        ? "opacity-40 transition-opacity duration-300"
+    
+    // Si la moneda del contexto está cargando, o estamos obteniendo un nuevo precio, ocultamos para evitar parpadeo
+    const isComponentLoading = loading || isCurrencyLoading || (currency && currency !== currentCurrency);
+
+    const loadingClass = isComponentLoading
+        ? "opacity-0 transition-opacity duration-300"
         : "opacity-100 transition-opacity duration-300";
 
     if (layout === 'column') {

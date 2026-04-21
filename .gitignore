@@ -25,6 +25,8 @@ pnpm-debug.log*
 eliminame.md
 eliminame*
 
+*.patch
+
 # macOS-specific files
 .DS_Store
 

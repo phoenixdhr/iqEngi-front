@@ -6,7 +6,6 @@ import LayoutSeo from '@layouts/LayoutSeo.astro';
 import { getCourseJsonLd } from 'src/utils/jsonld';
 import { Icon } from 'astro-icon/components';
 import { CoursePriceDisplay } from '@components/ui/Currency/CoursePriceDisplay';
-import { Formatter } from 'src/utils/formatter';
 
 // Obtener el slug de los parámetros de la URL
 const { slugCurso } = Astro.params;
@@ -68,11 +67,11 @@ const {
     urlVideo,
 } = curso;
 
-// Helper para extraer ID de YouTube
+// Extrae el ID de 11 caracteres de una URL de YouTube (soporta youtu.be, embed, watch, etc.)
 const getYouTubeId = (url: string | null | undefined) => {
     if (!url) return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = (url as string).match(regExp);
+    const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
 };
 
@@ -85,26 +84,15 @@ const embedUrl = videoId
     ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` 
     : null;
 
-// Calcular precios
+// Precio actual del curso (0 si no tiene precio definido = GRATIS)
 const currentPrice = precio || 0;
+// Precio original antes del descuento (para mostrar tachado). Se calcula inversamente a partir del porcentaje.
 const originalPrice = descuento && descuento > 0 ? currentPrice / (1 - (descuento / 100)) : null;
 
-// Formatter centralizado para moneda (soporta cualquier código ISO 4217)
-const formatPrice = (amount: number) => Formatter.formatPrice(amount, currency || 'USD');
-
-// Calcular total de unidades
+// Suma total de lecciones (unidades) a lo largo de todos los módulos del curso
 const totalUnidades = modulos?.reduce((acc, modulo) => acc + (modulo.unidades?.length || 0), 0) || 0;
 
-// Nivel en español
-const nivelTexto: Record<string, string> = {
-    'Principiante': 'Principiante',
-    'Intermedio': 'Intermedio',
-    'Avanzado': 'Avanzado',
-    'PRINCIPIANTE': 'Principiante',
-    'INTERMEDIO': 'Intermedio',
-    'AVANZADO': 'Avanzado',
-};
-
+// Datos estructurados JSON-LD para SEO (schema.org Course)
 const courseJsonLd = getCourseJsonLd(curso);
 ---
 
@@ -253,8 +241,18 @@ const courseJsonLd = getCourseJsonLd(curso);
                     originalPriceClassName="text-base-content/50 line-through text-sm"
                 />
             </div>
-            <button class="btn btn-primary flex-1 max-w-xs text-white font-bold shadow-lg shadow-primary/30 rounded-xl">
-                🛒 Comprar Ahora
+            <button
+                id="btn-add-cart-mobile"
+                class="btn btn-primary flex-1 max-w-xs text-white font-bold shadow-lg shadow-primary/30 rounded-xl"
+                data-id={_id}
+                data-title={courseTitle}
+                data-precio={currentPrice}
+                data-currency={currency || 'USD'}
+                data-descuento={descuento || 0}
+                data-imagen={JSON.stringify(imagenURL)}
+                data-slug={slug}
+            >
+                Agregar al Carrito
             </button>
         </div>
     </div>
@@ -521,8 +519,18 @@ const courseJsonLd = getCourseJsonLd(curso);
                                 </div>
 
                                 <!-- Botón de Acción Principal (CTA) -->
-                                <button class="btn btn-primary btn-lg w-full text-white font-bold text-lg shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300 rounded-xl">
-                                    🛒 Comprar Ahora
+                                <button
+                                    id="btn-add-cart-sidebar"
+                                    class="btn btn-primary btn-lg w-full text-white font-bold text-lg shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300 rounded-xl"
+                                    data-id={_id}
+                                    data-title={courseTitle}
+                                    data-precio={currentPrice}
+                                    data-currency={currency || 'USD'}
+                                    data-descuento={descuento || 0}
+                                    data-imagen={JSON.stringify(imagenURL)}
+                                    data-slug={slug}
+                                >
+                                    Agregar al Carrito
                                 </button>
                                 
                                 <!-- Lista de Características Incluidas -->
@@ -609,28 +617,6 @@ const courseJsonLd = getCourseJsonLd(curso);
                             </div>
                         </div>
 
-                        <!-- Información Adicional Resumida -->
-                        <!-- <div class="bg-base-100 rounded-2xl shadow-lg p-6 border border-base-200">
-                            <h3 class="font-semibold text-base-content mb-4">Información Adicional</h3>
-                            <ul class="space-y-3 text-sm text-base-content/70">
-                                <li class="flex justify-between">
-                                    <span>Nivel</span>
-                                    <span class="font-medium text-base-content">{nivelTexto[nivel || ''] || 'Todos los niveles'}</span>
-                                </li>
-                                <li class="flex justify-between">
-                                    <span>Duración</span>
-                                    <span class="font-medium text-base-content">{duracionHoras || 'N/A'} horas</span>
-                                </li>
-                                <li class="flex justify-between">
-                                    <span>Idioma</span>
-                                    <span class="font-medium text-base-content">Español</span>
-                                </li>
-                                <li class="flex justify-between">
-                                    <span>Certificado</span>
-                                    <span class="font-medium text-success">Sí</span>
-                                </li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -657,15 +643,24 @@ const courseJsonLd = getCourseJsonLd(curso);
                         originalPriceClassName="text-white/60 line-through text-xl font-medium"
                     />
                 </div>
-                <button class="btn btn-lg bg-white text-primary hover:bg-white/90 border-0 font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 rounded-xl px-10">
-                    🛒 Comprar Ahora
+                <button
+                    id="btn-add-cart-cta"
+                    class="btn btn-lg bg-white text-primary hover:bg-white/90 border-0 font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 rounded-xl px-10"
+                    data-id={_id}
+                    data-title={courseTitle}
+                    data-precio={currentPrice}
+                    data-currency={currency || 'USD'}
+                    data-descuento={descuento || 0}
+                    data-imagen={JSON.stringify(imagenURL)}
+                    data-slug={slug}
+                >
+                    Agregar al Carrito
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Video Modal -->
-    <!-- Video Modal -->
+    <!-- Modal de Video: Iframe de YouTube que se abre al hacer clic en las miniaturas del trailer -->
     <dialog id="video_modal" class="modal modal-middle backdrop-blur-sm">
         <div class="modal-box w-11/12 max-w-7xl bg-black p-0 overflow-hidden relative shadow-2xl rounded-2xl border border-white/10">
             <div class="relative pt-[56.25%] bg-black">
@@ -690,10 +685,48 @@ const courseJsonLd = getCourseJsonLd(curso);
         </form>
     </dialog>
 
+    <!--
+        Script inline ANTI-FLICKER (Patrón de inicialización síncrona)
+        ──────────────────────────────────────────────────────────────
+        PROPÓSITO: Evitar que los botones "Agregar al Carrito" parpadeen brevemente
+        con su estado por defecto (activo) antes de que el script module (más abajo)
+        se cargue y los deshabilite.
 
+        CÓMO FUNCIONA: Este script es `is:inline`, se ejecuta de forma SÍNCRONA
+        durante el parseo del HTML, antes de que el navegador pinte el frame.
+        Lee localStorage y deshabilita los botones inmediatamente si el curso
+        ya está en el carrito.
+
+        NOTA: Esta lógica se DUPLICA intencionalmente en el script module de abajo
+        (función handleAddToCartButtons, paso 7). Ambos son necesarios:
+        - Este: cubre el primer render (antes de que los módulos ES se carguen).
+        - El module: cubre las navegaciones con View Transitions de Astro.
+    -->
+    <script is:inline define:vars={{ courseId: _id }}>
+        if (typeof window !== 'undefined') {
+            try {
+                const stored = localStorage.getItem('carritoCursos');
+                if (stored) {
+                    const cart = JSON.parse(stored);
+                    if (cart.some(item => item.cursoId === courseId)) {
+                        const buttons = document.querySelectorAll(
+                            '#btn-add-cart-mobile, #btn-add-cart-sidebar, #btn-add-cart-cta'
+                        );
+                        buttons.forEach((b) => {
+                            b.textContent = 'Ya en el carrito';
+                            b.classList.add('bg-base-300', 'text-base-content/70', 'border-0', 'opacity-70', 'cursor-not-allowed', 'pointer-events-none');
+                            b.classList.remove('btn-primary', 'bg-white', 'text-primary', 'btn-success');
+                            b.disabled = true;
+                        });
+                    }
+                }
+            } catch(e) {}
+        }
+    </script>
 </LayoutSeo>
 
 <script>
+    // ── LÓGICA DE VIDEO MODAL + FAVORITOS ──
     import { FAVORITOS_CURSOS } from '@const/const-string';
     import type { CursoFavorito } from 'src/interfaces/cursoFavorito.interface';
 
@@ -729,29 +762,36 @@ const courseJsonLd = getCourseJsonLd(curso);
     
     document.addEventListener('astro:page-load', setupVideoModal);
 
-    // Maneja la lógica de favoritos: guardar en localStorage y actualizar la UI
+    // Maneja la lógica de favoritos: guardar en localStorage y actualizar la UI de manera persistente
     function handleFavoritos() {
+        // 1. Buscamos el botón de favoritos en la página
         const btnFavorito = document.getElementById('btn-favorito') as HTMLButtonElement;
-        if (!btnFavorito) return;
+        if (!btnFavorito) return; // Si no existe el botón (por ej. en otra vista), abortamos
 
+        // 2. Extraemos los metadatos del curso a partir de los atributos data-* del DOM
         const _id = btnFavorito?.dataset.id ?? '';
         const courseTitle = btnFavorito?.dataset.coursetitle ?? '';
         const imagenURL = JSON.parse(btnFavorito?.dataset.imagenurl ?? '{}');
         const descripcionCorta = btnFavorito?.dataset.descripcioncorta ?? '';
         const slug = btnFavorito?.dataset.slug ?? '';
 
+        // 3. Obtenemos las referencias a los dos iconos SVG (corazón vacío y corazón lleno)
         const iconHeartFull = btnFavorito?.querySelector(`#heart-full-${_id}`) as HTMLElement;
         const iconHeartLine = btnFavorito?.querySelector(`#heart-line-${_id}`) as HTMLElement;
 
+        // 4. Inicializamos la lista de favoritos desde localStorage
         let favoritosCursos: CursoFavorito[] = JSON.parse(
             localStorage.getItem(FAVORITOS_CURSOS) || '[]'
         );
 
+        // Agrega o remueve el curso actual de la lista de favoritos en almacenamiento local
         function toggleFavorito() {
             const isFavorito = favoritosCursos.some((favorito) => favorito._id == _id);
             if (isFavorito) {
+                // Si ya es favorito, lo filtramos hacia afuera
                 favoritosCursos = favoritosCursos.filter((favorito) => favorito._id !== _id);
             } else {
+                // Si no, lo agregamos construyendo su objeto
                 favoritosCursos.push({
                     _id,
                     courseTitle,
@@ -763,22 +803,120 @@ const courseJsonLd = getCourseJsonLd(curso);
             localStorage.setItem(FAVORITOS_CURSOS, JSON.stringify(favoritosCursos));
         }
 
+        // Valida el estado inicial y aplica los estilos visuales correctos en cuanto carga la página
         function handleheart() {
             const isFavorito = favoritosCursos.some((favorito) => favorito._id == _id);
             if (isFavorito) {
-                iconHeartFull?.classList.remove('hidden');
-                iconHeartLine?.classList.add('hidden');
+                iconHeartFull?.classList.remove('hidden'); // Muestra corazón pintado
+                iconHeartLine?.classList.add('hidden'); // Oculta corazón de borde
             }
         }
 
+        // Aplicar estado visual inicial inmediatamente
         handleheart();
 
+        // 5. Asignar el listener del evento click
         btnFavorito?.addEventListener('click', () => {
+            // Animamos la transición ocultando y mostrando según corresponda
             iconHeartFull?.classList.toggle('hidden');
             iconHeartLine?.classList.toggle('hidden');
+            // Procesamos los datos hacia localStorage
             toggleFavorito();
         });
     }
 
+    // Se "engancha" la función al ciclo de vida de View Transitions de Astro
     document.addEventListener('astro:page-load', handleFavoritos);
+</script>
+
+<script>
+    // ── LÓGICA DE CARRITO (Vanilla JS) ──
+    // Se usa Vanilla JS (en lugar de una Astro Island React) para manejar los botones de "Agregar al Carrito"
+    // porque son elementos estáticos con interacción mínima, evitando la carga de un runtime de framework.
+    import { CARRITO_CURSOS, CART_CHANGE_EVENT } from '@const/const-string';
+    import type { CarritoItem } from '@interfaces/carrito-item.interface';
+
+    function handleAddToCartButtons() {
+        // 1. Obtenemos las tres versiones del botón "Agregar al carrito" en esta vista (móvil, barra lateral, CTA final).
+        const buttons = document.querySelectorAll<HTMLButtonElement>(
+            '#btn-add-cart-mobile, #btn-add-cart-sidebar, #btn-add-cart-cta'
+        );
+
+        // Función auxiliar para actualizar el estado visual permanente si está en el carrito
+        const setButtonsAsInCart = () => {
+            buttons.forEach((b) => {
+                b.textContent = 'Ya en el carrito';
+                b.classList.add('bg-base-300', 'text-base-content/70', 'border-0', 'opacity-70', 'cursor-not-allowed', 'pointer-events-none');
+                b.classList.remove('btn-primary', 'bg-white', 'text-primary', 'btn-success');
+                b.disabled = true; // Deshabilitamos el botón
+            });
+        };
+
+        // 2. Adjuntamos la lógica de compra a cada botón encontrado
+        buttons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id || '';
+                const stored = localStorage.getItem(CARRITO_CURSOS);
+                let cart: CarritoItem[] = stored ? JSON.parse(stored) : [];
+
+                // 3. Verificamos si el curso ya fue agregado previamente para evitar duplicados en el carrito
+                if (cart.some((item) => item.cursoId === id)) {
+                    // Si por alguna razón sigue habilitado pero ya está adentro
+                    setButtonsAsInCart();
+                    return;
+                }
+
+                // 4. Extraemos la información relevante del curso almacenada en los data-attributes mapeados en el HTML.
+                const imagenData = btn.dataset.imagen ? JSON.parse(btn.dataset.imagen) : { url: '', alt: '' };
+
+                const newItem: CarritoItem = {
+                    cursoId: id,
+                    courseTitle: btn.dataset.title || '',
+                    precio: parseFloat(btn.dataset.precio || '0'),
+                    currency: btn.dataset.currency || 'USD',
+                    descuento: parseFloat(btn.dataset.descuento || '0'),
+                    imagenURL: imagenData,
+                    slug: btn.dataset.slug || '',
+                };
+
+                // 5. Agregamos el nuevo curso a nuestro arreglo y guardamos los cambios en el LocalStorage
+                cart.push(newItem);
+                localStorage.setItem(CARRITO_CURSOS, JSON.stringify(cart));
+                
+                // IMPORTANTE: Disparamos un Custom Event a nivel global. Esto permite que otros componentes 
+                // (como React Islands de Navbar) escuchen la actualización y re-rendericen el nuevo estado global
+                // sin necesidad de recargar la página completamente.
+                window.dispatchEvent(new CustomEvent(CART_CHANGE_EVENT, { detail: cart }));
+
+                // 6. Proporcionamos un Feedback Visual de "Éxito" simultáneamente a todos los botones que haya en pantalla
+                buttons.forEach((b) => {
+                    b.textContent = 'Agregado';
+                    b.classList.add('btn-success', 'text-white', 'border-0');
+                    b.classList.remove('btn-primary', 'bg-white', 'text-primary');
+                    b.disabled = true; // Deshabilitamos de inmediato para evitar clics dobles
+                });
+                
+                // Tras 2 segundos, establecemos el estilo permanente de "Ya en el carrito"
+                setTimeout(() => {
+                    setButtonsAsInCart();
+                }, 2000);
+            });
+        });
+
+        // 7. Verificación inicial al montar (complemento del script inline anti-flicker).
+        // El script inline cubre el PRIMER render; este bloque cubre las navegaciones
+        // posteriores con View Transitions, donde el script inline no vuelve a ejecutarse.
+        const stored = localStorage.getItem(CARRITO_CURSOS);
+        if (stored) {
+            const cart: CarritoItem[] = JSON.parse(stored);
+            const id = buttons[0]?.dataset.id;
+            if (id && cart.some((item) => item.cursoId === id)) {
+                setButtonsAsInCart();
+            }
+        }
+    }
+
+    // Usamos 'astro:page-load' en lugar de un Window Event clásico para que el script se inicialice de forma segura
+    // cuando el usuario navegue hacia y desde la vista usando las View Transitions de Client-Side Routing de Astro.
+    document.addEventListener('astro:page-load', handleAddToCartButtons);
 </script>

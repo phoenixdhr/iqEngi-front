@@ -34,5 +34,6 @@
         "typescriptreact"
     ],
     "css.lint.unknownAtRules": "ignore",
-    "scss.lint.unknownAtRules": "ignore"
+    "scss.lint.unknownAtRules": "ignore",
+    "markdown.preview.fontSize": 13.5
 }

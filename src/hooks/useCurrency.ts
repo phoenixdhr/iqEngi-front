@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { CURRENCY_CHANGE_EVENT } from '@const/const-string';
 
 // Evento custom para sincronizar el cambio de moneda entre islas de Astro
 // Esto es necesario porque las islas son componentes de React independientes
-const CURRENCY_CHANGE_EVENT = 'iqengi:currency-change';
 
 /**
  * Hook personalizado para manejar la moneda del usuario.
@@ -10,19 +10,20 @@ const CURRENCY_CHANGE_EVENT = 'iqengi:currency-change';
  * Sincroniza el estado entre islas de Astro mediante CustomEvents del navegador.
  */
 export function useCurrency() {
-    // Estado para la moneda seleccionada actualmente
+    // Estado para la moneda actual que se va a mostrar en la interfaz (empieza por defecto en 'USD')
     const [currency, setCurrencyState] = useState<string>('USD');
-    // Estado para la moneda detectada automáticamente según el país del usuario
+    // Estado para la moneda que el sistema detectó basada en el país o la ubicación original del usuario.
     const [detectedCurrency, setDetectedCurrency] = useState<string>('USD');
-    // Estado de carga durante la detección inicial
+    // Estado de carga, un indicador (true o false) de que si el hook aún está cargando la lógica de detección o ya finalizó.
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+
         // Lógica de inicialización: recuperar de localStorage o detectar por IP
-        const initCurrency = async () => {
-            // Es la moneda que el usuario decidió ver voluntariamente.
+        async function initCurrency() {
+            // Es la moneda que el usuario decidió ver voluntariamente (elección manual del usuario).
             const storedCurrency = localStorage.getItem('iqengi_currency');
-            // Es la moneda que el sistema detecta automáticamente basándose en dónde está tu computadora (tu IP).
+            // Es la moneda que el sistema detecta automáticamente basándose en dónde está tu computadora (tu IP), (la moneda detectada en sesiones pasadas).
             const storedDetected = localStorage.getItem('iqengi_detected_currency');
 
             // Si ya existe una moneda detectada guardada, la restauramos
@@ -40,6 +41,8 @@ export function useCurrency() {
 
             // Intentar detectar moneda por IP si no hay datos guardados
             try {
+
+                //Ambas condiciones (estar en un navegador y estar en una URL local) deben cumplirse para que el resultado final sea verdadero
                 const isLocalhost = typeof window !== 'undefined' &&
                     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
@@ -70,7 +73,6 @@ export function useCurrency() {
 
                 // Si el usuario no tenía una preferencia explícita, usamos la detectada
                 if (!storedCurrency) {
-                    setCurrencyState(detectedCurrencyCode);
                     localStorage.setItem('iqengi_currency', detectedCurrencyCode);
                     // Emitimos evento para notificar a otras islas
                     window.dispatchEvent(new CustomEvent(CURRENCY_CHANGE_EVENT, { detail: detectedCurrencyCode }));
@@ -86,23 +88,29 @@ export function useCurrency() {
 
         initCurrency();
 
+
+
         // Sincronización con eventos de ventana para mantenerse actualizado con otras islas
-        const handleChange = (e: CustomEvent) => {
+        function handleChange(e: CustomEvent) {
             if (e.detail) setCurrencyState(e.detail);
-        };
+        }
+
+
         window.addEventListener(CURRENCY_CHANGE_EVENT, handleChange as EventListener);
 
         // Limpieza del listener al desmontar
-        return () => window.removeEventListener(CURRENCY_CHANGE_EVENT, handleChange as EventListener);
+        return function() {
+            window.removeEventListener(CURRENCY_CHANGE_EVENT, handleChange as EventListener);
+        };
     }, []);
 
     // Función expuesta para cambiar la moneda manualmente (funcion usada en los botones)
-    const setCurrency = (newCurrency: string) => {
+    function setCurrency(newCurrency: string) {
         setCurrencyState(newCurrency);
         localStorage.setItem('iqengi_currency', newCurrency);
         // Notificar a otras islas del cambio
         window.dispatchEvent(new CustomEvent(CURRENCY_CHANGE_EVENT, { detail: newCurrency }));
-    };
+    }
 
     return { currency, setCurrency, isLoading, detectedCurrency };
 }

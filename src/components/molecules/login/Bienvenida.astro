@@ -39,6 +39,7 @@
 
 <script>
     import { hideElement, clearFields } from '@services/closeOpenLogin';
+    import { AUTH_SUCCESS_EVENT } from '@const/const-string';
 
     function closeModal_bienvenida() {
         hideElement('loginCreatePasswordDiv');
@@ -78,12 +79,14 @@
             );
 
             newBtn.addEventListener('click', () => {
-                // Aquí puedes agregar la lógica para redirigir al usuario a la página principal o a donde desees
-
+                // Cerrar todos los modales de login/bienvenida
                 closeModal_bienvenida();
                 hideElement('loginModalDiv');
                 hideElement('bienvenidaDiv');
                 hideElement('login-modal');
+
+                // Emitir evento para que componentes como Checkout reinteneten acciones pendientes
+                window.dispatchEvent(new CustomEvent(AUTH_SUCCESS_EVENT));
             });
         }
     }

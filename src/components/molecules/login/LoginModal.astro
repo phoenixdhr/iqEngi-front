@@ -5,8 +5,19 @@ import TurnstileWidget from '@components/ui/TurnstileWidget';
 const googleUrlLogin = siteInfo.googleUrlLogin;
 ---
 
+<!-- Mensaje contextual para el Checkout (oculto por defecto) -->
+<div id="checkout-context-message" class="hidden flex-col items-center p-4 mb-6 rounded-2xl border" style="background-color: var(--color-surface); border-color: var(--color-primary);">
+    <div class="text-3xl mb-2">🛍️</div>
+    <p class="font-bold text-center text-sm mb-1" style="color: var(--color-text);">
+        Para completar tu compra, necesitas iniciar sesión o crear una cuenta
+    </p>
+    <p class="text-xs text-center" style="color: var(--color-text-muted);">
+        ¡Es rápido! Tu carrito se mantendrá intacto.
+    </p>
+</div>
+
 <!-- Título del modal que indica la acción a realizar -->
-<h2 class="text-xl font-semibold mb-6 text-center">
+<h2 id="login-modal-title" class="text-xl font-semibold mb-6 text-center">
     Ingresa o crea una cuenta con:
 </h2>
 <!-- Contenedor del formulario de login -->
@@ -97,6 +108,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
     } from '@graphql-astro/generated/graphql';
 
     import { showElement, hideElement } from '@services/closeOpenLogin';
+    import { TURNSTILE_TOKEN_EVENT } from '@const/const-string';
 
     // Flag para evitar múltiples listeners
     let isSetup = false;
@@ -113,7 +125,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
 
         // Remover listener anterior si existe
         if (turnstileHandler) {
-            window.removeEventListener('turnstile-token', turnstileHandler);
+            window.removeEventListener(TURNSTILE_TOKEN_EVENT, turnstileHandler);
         }
 
         // Escuchar el evento del token de Turnstile
@@ -134,7 +146,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
                 }
             }
         };
-        window.addEventListener('turnstile-token', turnstileHandler);
+        window.addEventListener(TURNSTILE_TOKEN_EVENT, turnstileHandler);
 
         // Manejar submit del formulario sin clonar (preserva el widget React de Turnstile)
         form.addEventListener('submit', async (event: SubmitEvent) => {
@@ -199,7 +211,7 @@ const googleUrlLogin = siteInfo.googleUrlLogin;
     document.addEventListener('astro:before-swap', () => {
         isSetup = false;
         if (turnstileHandler) {
-            window.removeEventListener('turnstile-token', turnstileHandler);
+            window.removeEventListener(TURNSTILE_TOKEN_EVENT, turnstileHandler);
             turnstileHandler = null;
         }
     });

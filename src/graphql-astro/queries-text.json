@@ -160,5 +160,8 @@
     "a1b2c3d4-newsletter-subscribe-001": "mutation Newsletter_subscribe($input: CreateSubscriberInput!) {\r\n  Newsletter_subscribe(input: $input) {\r\n    success\r\n    message\r\n    email\r\n  }\r\n}",
     "a1b2c3d4-newsletter-unsubscribe-002": "mutation Newsletter_unsubscribe($email: String!) {\r\n  Newsletter_unsubscribe(email: $email) {\r\n    success\r\n    message\r\n    email\r\n  }\r\n}",
     "a1b2c3d4-newsletter-allactive-003": "query Newsletter_allActive {\r\n  Newsletter_allActive {\r\n    _id\r\n    email\r\n    name\r\n    isActive\r\n    source\r\n    createdAt\r\n    updatedAt\r\n  }\r\n}",
-    "a1b2c3d4-newsletter-countactive-004": "query Newsletter_countActive {\r\n  Newsletter_countActive\r\n}"
+    "a1b2c3d4-newsletter-countactive-004": "query Newsletter_countActive {\r\n  Newsletter_countActive\r\n}",
+    "p4y-iniciar-pago-001": "mutation Payment_iniciarPago($input: IniciarPagoInput!) {\n  Payment_iniciarPago(input: $input) {\n    _id\n    ordenId\n    usuarioId\n    provider\n    externalId\n    status\n    amount\n    currency\n    paymentUrl\n    idempotencyKey\n    createdAt\n    deleted\n  }\n}",
+    "p4y-historial-003": "query Payment_miHistorial($limit: Int, $offset: Int) {\n  Payment_miHistorial(limit: $limit, offset: $offset) {\n    _id\n    ordenId\n    provider\n    status\n    amount\n    currency\n    paymentUrl\n    createdAt\n    deleted\n  }\n}",
+    "p4y-mis-ordenes-004": "query Ordenes_misOrdenes($limit: Int, $offset: Int) {\n  Ordenes_misOrdenes(limit: $limit, offset: $offset) {\n    _id\n    usuarioId\n    listaCursos {\n      cursoId\n      precio\n      courseTitle\n      descuento\n      currency\n    }\n    montoTotal\n    estado_orden\n    currency\n    paymentMethod\n    externalPaymentId\n    paymentUrl\n    deleted\n  }\n}"
 }
