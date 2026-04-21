@@ -231,21 +231,34 @@ export function CheckoutPage() {
                             </div>
                         )}
 
-                        {/* Botón principal de pago */}
-                        <button
-                            onClick={handleCheckout}
-                            disabled={loading || isUpdatingCurrency}
-                            className={`btn btn-primary btn-lg w-full text-white font-bold text-lg rounded-xl ${
-                                (loading || isUpdatingCurrency) ? '' : 'shadow-lg shadow-primary/30'
-                            }`}
-                        >
-                            {loading || isUpdatingCurrency ? (
-                                <span className="loading loading-spinner" />
-                            ) : (
-                                'Proceder al Pago'
-                            )}
-                        </button>
+                        <div className="flex flex-col gap-3 w-full">
+                            {/* Botón principal de pago */}
+                            <button
+                                onClick={handleCheckout}
+                                disabled={loading || isUpdatingCurrency}
+                                className={`btn btn-primary btn-lg w-full text-white font-bold text-lg rounded-xl ${
+                                    (loading || isUpdatingCurrency) ? '' : 'shadow-lg shadow-primary/30'
+                                }`}
+                            >
+                                {loading || isUpdatingCurrency ? (
+                                    <span className="loading loading-spinner" />
+                                ) : (
+                                    'Proceder al Pago'
+                                )}
+                            </button>
 
+                            {/* Botón para seguir explorando/comprando */}
+                            <a 
+                                href="/cursos#catalogo" 
+                                className="btn btn-outline btn-lg w-full font-bold text-lg rounded-xl border-2 hover:bg-base-200 hover:text-base-content"
+                                style={{
+                                    borderColor: 'var(--color-border)',
+                                    color: 'var(--color-text)',
+                                }}
+                            >
+                                Explorar más cursos
+                            </a>
+                        </div>
 
                         <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
                             Al proceder, serás redirigido al proveedor de pago seleccionado para completar la transacción de forma segura.
